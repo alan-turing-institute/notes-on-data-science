@@ -6,8 +6,12 @@
 \usepackage{microtype}
 \usepackage[margin=0.51in]{geometry}
 %%
+%\setlength{\parindent}{1em}
+\setlength{\parskip}{\smallskipamount}
+%%
 \newcommand{\defn}[1]{\textbf{#1}}
 \newcommand{\eg}{\emph{Example:}\relax}
+\DeclareMathOperator{\id}{id}
 %%
 %% Terminology from set theory
 %%
@@ -41,15 +45,21 @@ primes.\footnote{There is a question of where “things” come from in the firs
   element and $\{\emptyset, \{\emptyset\}\}$ is a set containing two elements. One might go so far as to \emph{define}
   0 to be $\emptyset$, 1 to be $\{\emptyset\}$, and so on.}
 
+If every element of $B$ is also an element of $A$, we write $B \subset A$ and say that
+$B$ is a \defn{subset} of~$A$. The set of all subsets of $B$ is called the
+\defn{power set} of $B$ and written $\mathcal{P}(B)$.
+
+\eg\ $\emptyset \subset B$ for any $B$. $\emptyset \in \mathcal{P}(B)$ for any $B$.
+
 The \defn{union} of two sets, $X$ and $Y$, written $X \cup Y$, is the set of all
 elements in either $X$ or $Y$. The \defn{intersection} of two sets, written $X \cap
 Y$, is the set of all elements in both $X$ and $Y$. The \defn{difference} of two
 sets, written $Y \setminus X$ (or sometimes $Y-X$) is the set of all elements that are
 in $Y$ but not in $X$. Sometimes there is a set $U$ that is understood to be the
 “set of all things presently under consideration.” In that case, the
-\defn{complement} of $X$, written $X^c$ (or sometimes $\bar{X}$) is the set of
-all things in $U$ but not in $X$; that is, $X^c \equiv U \setminus X$. There are many
-identities involving these operations that follow from the definitions.
+\defn{complement} of $X$, written $X^c$ is the set of all things in $U$ but not
+in $X$; that is, $X^c \equiv U \setminus X$. There are many identities involving these
+operations that follow from the definitions.
 
 \eg\ $X\cap(A\cup B) = (X\cap A)\cup (X\cap B)$.
 
@@ -61,20 +71,28 @@ to each element $x \in X$, an element $f(x) \in Y$.\footnote{The term “functio
 $Y$ is called the \defn{codomain}. Maps are the principal way by which we
 compare sets and much of the subject of set theory is really the study of maps.
 
-\eg\ For $X$ any set, there is a unique map $\emptyset \to X$. For any set $X$, the identity
-map, $\operatorname{id}_X : X \to X$, maps every point to itself.
+\eg\ For $X$ any set, there is a unique map $\emptyset \to X$.
+\eg\ For any set $X$, the
+identity map, $\id_X : X \to X$, is the map $f(x) = x$ for every
+$x\in X$. Where the set $X$ is implicitly known, we write simply “$\id$.” 
 
 A map is said to be \defn{one-to-one} (or \defn{injective}) if every point in
-the domain is mapped to a unique point in the codomain. A map is said to be
-\defn{onto} (or \defn{surjective}) if every point in the codomain is mapped to
-from some point in the domain. Let $f:X \to Y$ be a map. The \defn{image} of $f$,
-written $f(X)$, is the set $\{y \in Y \mid \text{$y = f(x)$ for some $x$}\}$. For any
-$y \in f(X)$ we define $f^{-1}(y)$ as the set of all $x \in X$ that are mapped to
-$y$ by~$f$. That is, $f^{-1}(y) = \{ x\in X\mid f(x) = y\}$.
+the domain is mapped to a unique point in the codomain. The \defn{image} of $f$,
+written $f(X)$, is the set $f(X) = \{y \in Y \mid \text{$y = f(x)$ for some
+  $x$}\}$. If the image of $f$ is the codomain, the map is said to be \defn{onto} (or \defn{surjective}). 
 
-if $f^{-a}$ has to “do something” with \emph{every} element of
-the domain.
+For two maps $f:B \to C$ and $g:A \to B$, their \defn{composition}, $f\circ g: A \to C$
+(read “$f$ after $g$”) is the map defined by $(f\circ g)(x) = f(g(x))$.
 
+\eg\ $f\circ\id = \id\circ f = f$ for any map $f$. 
+
+If, given $f:X \to Y$, there exists a $g:Y \to X$ such that $f\circ g = \id_Y$ and $g\circ f
+= \id_X$, then we say that $f$ is an \defn{isomorphism} and that $X$ and $Y$ are
+isomorphic. We often write $g = f^{-1}$.
+
+\eg\ A map $f$ is an isomorphism if and only if it is both one-to-one and onto. 
+
+\eg\ (\defn{Cantor's theorem}) There is no isomorphism between $A$ and $\mathcal{P}(A)$. 
 
 We sometimes do want to talk about collections of things where the order
 matters. A \defn{pair} (sometimes “ordered pair”) is a collection of two things
@@ -88,18 +106,19 @@ defined in terms of sets. Here is one way to do so: Suppose we happen to have
 distinct things 1 and~2. Then we may define $(x, y) \equiv \{\{1, x\}, \{2,
 y\}\}$. (This construction is called a “tagged union.”)
 
-Suppose $X$ and $Y$ are sets. The \defn{Cartesian product} 
+A \defn{finite tuple} is an ordered list of things, possible repeated. One may
+define a 3-tuple, $(a, b, c)$ say, as a pair whose second element is a pair:
+$(a, (b, c))$. 
 
+Suppose $X$ and $Y$ are sets. Their \defn{Cartesian product}, $X \times Y$, is the
+set of all pairs $(x, y)$ where $x \in X$ and $y \in Y$. The Cartesian product comes
+with two natural \defn{projection} maps; namely, $\pi_X : X \times Y \to X$ and $\pi_Y : X
+\times Y \to Y$.
 
-A \defn{finite tuple} is a pair where the second element may also be a pair. A
-tuple $(a, (b, (c, d)))$ is written $(a, b, c, d)$. 
+\eg\ $(\pi_X p, \pi_Y p) = p$ for any $p \in X \times Y$.
 
-
-
-
-
-
-
-
+The Cartesian product is associative, in the sense that there is a natural
+isomporphism between $X \times (Y \times Z)$ and $(X \times Y) \times Z$. Because of this, we
+normally write simply $X \times Y \times Z$.
 
 \end{document}
