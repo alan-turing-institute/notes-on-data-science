@@ -7,6 +7,7 @@
 \usepackage[margin=0.51in]{geometry}
 %%
 \newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\eg}{\emph{Example:}\relax}
 %%
 %% Terminology from set theory
 %%
@@ -18,23 +19,27 @@ of the subject.
 A \defn{set} is a “collection of things.” The term “collection” is not
 defined. The things are called the \defn{elements} of the set. There are two
 important facts about sets: within a set, the elements are unique; and there is
-no order to the elements.
-
-The set with no elements is called the \defn{empty set} and written as
-$\emptyset$. There is only one empty set.
+no order to the elements. To show that an element, $x$, is a member of some set,
+$A$, write “$x \in A$”.
 
 To describe a concrete set, with given elements, surround the elements with
-braces. Thus, $\{0, 1, 2\}$ is the set containing the numbers 0, 1, and~2. It is
-the same set as $\{2,0,1\}$. The expression $\{1, 1\}$ does not describe a
-set. To show that an element is a member of some set, use “$\in$”. For example,
-$1\in\{0,1,2\}$. To describe a set containing those elements of another set, $X$,
-which satisfy some predicate $P(x)$, write $\{x \in X \mid P(x)\}$. For example, $\{x
-\in \mathbb{N} \mid \text{$x$ is prime}\}$ is the set of primes.\footnote{There is a
-  question of where “things” come from in the first place. Quite a lot of
-  mathematics can be constructed out of the empty set. For example, $\{\emptyset\}$ is a
-  set containing one element and $\{\emptyset, \{\emptyset\}\}$ is a set containing two
-  elements. One might go so far as to \emph{define} 0 to be $\emptyset$, 1 to be
-  $\{\emptyset\}$, and so on.}
+braces. To describe a set containing those elements of another set, $X$, which
+satisfy some predicate $P(x)$, write $\{x \in X \mid P(x)\}$. The set with no
+elements is called the \defn{empty set} and written as $\emptyset$. There is only one
+empty set.
+
+\eg\ $\{0, 1, 2\}$ is the set containing the numbers 0, 1, and~2. It is the same
+set as $\{2,0,1\}$.
+
+\eg\ The expression $\{1, 1\}$ does not describe a set.
+
+\eg\ $1\in\{0,1,2\}$.
+
+\eg\ $\{x \in \mathbb{N} \mid \text{$x$ is prime}\}$ is the set of
+primes.\footnote{There is a question of where “things” come from in the first place. Quite a lot of
+  mathematics can be constructed out of the empty set. For example, $\{\emptyset\}$ is a set containing one
+  element and $\{\emptyset, \{\emptyset\}\}$ is a set containing two elements. One might go so far as to \emph{define}
+  0 to be $\emptyset$, 1 to be $\{\emptyset\}$, and so on.}
 
 The \defn{union} of two sets, $X$ and $Y$, written $X \cup Y$, is the set of all
 elements in either $X$ or $Y$. The \defn{intersection} of two sets, written $X \cap
@@ -43,10 +48,10 @@ sets, written $Y \setminus X$ (or sometimes $Y-X$) is the set of all elements th
 in $Y$ but not in $X$. Sometimes there is a set $U$ that is understood to be the
 “set of all things presently under consideration.” In that case, the
 \defn{complement} of $X$, written $X^c$ (or sometimes $\bar{X}$) is the set of
-all things in $U$ but not in $X$; that is, $X^c \equiv U \setminus X$.
+all things in $U$ but not in $X$; that is, $X^c \equiv U \setminus X$. There are many
+identities involving these operations that follow from the definitions.
 
-There are many identities involving these operations that follow from the
-definitions. For example: $X\cap(A\cup B) = (X\cap A)\cup (X\cap B)$. 
+\eg\ $X\cap(A\cup B) = (X\cap A)\cup (X\cap B)$.
 
 Given two sets, $X$ and $Y$, a \defn{map}, $f : X \to Y$, is a rule that assigns,
 to each element $x \in X$, an element $f(x) \in Y$.\footnote{The term “function” is
@@ -56,7 +61,7 @@ to each element $x \in X$, an element $f(x) \in Y$.\footnote{The term “functio
 $Y$ is called the \defn{codomain}. Maps are the principal way by which we
 compare sets and much of the subject of set theory is really the study of maps.
 
-For $X$ any set, there is a unique map $\emptyset \to X$. For any set $X$, the identity
+\eg\ For $X$ any set, there is a unique map $\emptyset \to X$. For any set $X$, the identity
 map, $\operatorname{id}_X : X \to X$, maps every point to itself.
 
 A map is said to be \defn{one-to-one} (or \defn{injective}) if every point in
