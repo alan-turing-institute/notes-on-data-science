@@ -15,8 +15,8 @@ Set theory contains much of the vocabulary of mathematics. There is very little
 content but there are quite a few concepts and these concepts permeate the rest
 of the subject.
 
-A \defn{set} is a “collection of things.” The things are called the
-\defn{elements} of the set. The term “collection” is not defined. There are two
+A \defn{set} is a “collection of things.” The term “collection” is not
+defined. The things are called the \defn{elements} of the set. There are two
 important facts about sets: within a set, the elements are unique; and there is
 no order to the elements.
 
@@ -24,7 +24,7 @@ The set with no elements is called the \defn{empty set} and written as
 $\emptyset$. There is only one empty set.
 
 To describe a concrete set, with given elements, surround the elements with
-braces. Thus, $\{0, 1, 2\}$ is the set containing the numbers 1, 2, and~3. It is
+braces. Thus, $\{0, 1, 2\}$ is the set containing the numbers 0, 1, and~2. It is
 the same set as $\{2,0,1\}$. The expression $\{1, 1\}$ does not describe a
 set. To show that an element is a member of some set, use “$\in$”. For example,
 $1\in\{0,1,2\}$. To describe a set containing those elements of another set, $X$,
@@ -48,9 +48,33 @@ all things in $U$ but not in $X$; that is, $X^c \equiv U \setminus X$.
 There are many identities involving these operations that follow from the
 definitions. For example: $X\cap(A\cup B) = (X\cap A)\cup (X\cap B)$. 
 
-A \defn{pair} (sometimes “ordered pair”) is a collection of two things where the
-order of the things matters and the two things might be the same thing. For two
-things $x$ and $y$, a pair is written $(x, y)$. If $(x, y)$ We call $x$ the
+Given two sets, $X$ and $Y$, a \defn{map}, $f : X \to Y$, is a rule that assigns,
+to each element $x \in X$, an element $f(x) \in Y$.\footnote{The term “function” is
+  sometimes used to mean “map”; sometimes “function” means a map where the
+  codomain is a number; sometimes “map” means a certain kind of
+  structure-preserving map.} The set $X$ is called the \defn{domain} and the set
+$Y$ is called the \defn{codomain}. Maps are the principal way by which we
+compare sets and much of the subject of set theory is really the study of maps.
+
+For $X$ any set, there is a unique map $\emptyset \to X$. For any set $X$, the identity
+map, $\operatorname{id}_X : X \to X$, maps every point to itself.
+
+A map is said to be \defn{one-to-one} (or \defn{injective}) if every point in
+the domain is mapped to a unique point in the codomain. A map is said to be
+\defn{onto} (or \defn{surjective}) if every point in the codomain is mapped to
+from some point in the domain. Let $f:X \to Y$ be a map. The \defn{image} of $f$,
+written $f(X)$, is the set $\{y \in Y \mid \text{$y = f(x)$ for some $x$}\}$. For any
+$y \in f(X)$ we define $f^{-1}(y)$ as the set of all $x \in X$ that are mapped to
+$y$ by~$f$. That is, $f^{-1}(y) = \{ x\in X\mid f(x) = y\}$.
+
+if $f^{-a}$ has to “do something” with \emph{every} element of
+the domain.
+
+
+We sometimes do want to talk about collections of things where the order
+matters. A \defn{pair} (sometimes “ordered pair”) is a collection of two things
+where the order of the things matters and the two things might be the same
+thing. For two things $x$ and $y$, a pair is written $(x, y)$. We call $x$ the
 “first element” and $y$ the “second element”. The main property of pairs is that
 $(x,y)=(p,q)$ if and only if $x=p$ and $y=q$.
 
@@ -59,17 +83,14 @@ defined in terms of sets. Here is one way to do so: Suppose we happen to have
 distinct things 1 and~2. Then we may define $(x, y) \equiv \{\{1, x\}, \{2,
 y\}\}$. (This construction is called a “tagged union.”)
 
-A \emph{finite tuple} is a pair where the second element may also be a pair. A
+Suppose $X$ and $Y$ are sets. The \defn{Cartesian product} 
+
+
+A \defn{finite tuple} is a pair where the second element may also be a pair. A
 tuple $(a, (b, (c, d)))$ is written $(a, b, c, d)$. 
 
 
 
-Given a pair of sets, $X$ and $Y$, a \defn{map}, $f : X \to Y$, is a rule that
-assigns, to each element $x \in X$, an element $f(x) \in Y$. The set $X$ is called
-the \defn{domain} and the set $Y$ is called the \defn{codomain}.\footnote{The
-  term “function” is sometimes used to mean “map”; sometimes “function” means a
-  map where the codomain is a number; sometimes “map” means a certain kind of
-  structure-preserving map.}
 
 
 
