@@ -9,14 +9,25 @@
 %\setlength{\parindent}{1em}
 \setlength{\parskip}{\smallskipamount}
 %%
+\newcommand{\R}{\mathbb{R}}
 \newcommand{\defn}[1]{\textbf{#1}}
 \newcommand{\eg}{\emph{Example:}\relax}
 %%
 %% Vector spaces
 %%
 \begin{document}
-The study of vectors is the study of linearity. Vector spaces are “things that look just the same over
-there as they do over here.”
+The study of vector spaces is the study of linearity. As with other mathematical
+objects, it is often the maps between the objects that are of interest. For
+vector spaces, that means linear maps.
 
-
+A \defn{vector space} is a set, $V$, together with two operations: ${+}:V\times V \to
+V$ (“addition”) and ${\cdot}:\R \times V \to V$ (“multiplication by a
+scalar”). The two operations must satisfy the following rules:
+\begin{enumerate}
+\item
+  For all $u, v, w \in V$,
+  \begin{equation*}    
+    v+w = w+v
+  \end{equation*}
+\end{enumerate}
 \end{document}
