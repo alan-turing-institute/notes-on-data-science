@@ -14,20 +14,88 @@
 \newcommand{\eg}{\emph{Example:}\relax}
 %%
 %% Vector spaces
+%% This note was written by James Geddes
+%% It is based on Chapter 9 of Geroch, Mathematical Physics
 %%
 \begin{document}
 The study of vector spaces is the study of linearity. As with other mathematical
 objects, it is often the maps between the objects that are of interest. For
 vector spaces, that means linear maps.
 
-A \defn{vector space} is a set, $V$, together with two operations: ${+}:V\times V \to
-V$ (“addition”) and ${\cdot}:\R \times V \to V$ (“multiplication by a
-scalar”). The two operations must satisfy the following rules:
+A \defn{real vector space} is a set, $V$, together with two operations: ${+}:V \times V \to V$ (“addition”)
+and ${\cdot}:\R \times V \to V$ (“multiplication by a scalar”), and a distinguished element $ 0\in V$, satisfying
+the following rules:
 \begin{enumerate}
 \item
-  For all $u, v, w \in V$,
-  \begin{equation*}    
-    v+w = w+v
+  For every $u, v, w \in V$,
+  \begin{equation*}
+    \begin{gathered}
+      v + w = w + v, \\
+      (u + v) + w = u + (v + w), \\
+      0 + v = v + 0 = v;
+      \end{gathered}
+  \end{equation*}
+\item For every $v \in V$ there must exist an element $-v$ such that
+  \begin{equation*}
+    v + (-v) = 0; 
+  \end{equation*}
+\item For every $\alpha, \beta \in \R$ and $v, w \in V$,
+  \begin{equation*}
+    \begin{gathered}
+      1 \cdot v = v \\
+      \alpha \cdot (\beta \cdot v) = (\alpha \beta) \cdot v, \\
+      (\alpha + \beta) \cdot v = \alpha \cdot v + \beta \cdot v, \\
+      \alpha \cdot (v + w) = \alpha \cdot v + \alpha \cdot w.
+    \end{gathered}
   \end{equation*}
 \end{enumerate}
+The operations of addition and multiplication by numbers are just what one would expect of such
+things. It is usual to omit the “$\cdot$” and write, for example $\alpha v$ rather than $\alpha \cdot v$.
+
+\eg\ Let $V$ be the set of all pairs of real numbers, $V = \R \times \R$, and define addition and
+multiplication “component-wise:” $(a, b) + (x, y) = (a + x, b + y)$ and $\alpha \cdot (x, y) = (\alpha x, \alpha y)$. We
+thereby obtain a real vector space. The zero vector is the pair $(0, 0)$.
+
+In some sense, $\R^n$, with addition and multiplication defined component-wise, is the “canonical”
+example of a finite-dimensional vector space.\footnote{We have not yet given the definition of
+  “finite-dimensional.”}
+
+\eg\ Let $\Pi_3$ be the set of all polynomial functions of degree at most~3. Define addition and
+multiplication “pointwise:” $(f + g)(x) = f(x) + f(y)$ and $(\alpha \cdot f)(x) = \alpha f(x)$. This $\mathcal{P}_3$ is a vector
+space, noting that the sum of two cubic polynomials is also a cubic polynomial.
+
+\eg\ Let $\mathcal{F}$ be the set of all (or all continuous, or all smooth) functions on the reals. With
+addition and multiplication defined pointwise, $\mathcal{F}$ is a vector space.
+
+\eg\ Let $L^2$ be the set of all functions on the reals for which the integral $\int |f(x)|^2\,dx$
+is finite. With addition and multiplication defined pointwise, we obtain a vector space.  
+
+A \defn{subspace} of $V$ is a subset of $V$ that is a vector space in its own right, with the
+operations of addition and multiplication “inherited” from $V$.
+
+Let $V$ be a vector space and let $K$ be a set of vectors in $V$ (i.e., a sub\emph{set} of $V$). The
+set $K$ is said to be \defn{linearly independent} if, whenever $k_1, k_2, \dotsc, k_N$ are finitely
+many vectors in $K$, and $\alpha_1, \alpha_2, \dotsc, \alpha_N$ are numbers such that $\alpha_1 k_1 + \alpha_2 k_2 + \dotsb +
+\alpha_N k_N = 0$, then, necessarily, $\alpha_1 = \alpha_2 = \dotsb = 0$. Linearly independent sets of vectors are
+ones in which none of the vectors is a finite linear sum of the others.
+
+A subset $K \subset V$ is said to \defn{span} $V$ if every vector in $V$ can be written as a finite linear sum
+of vectors from $K$.\footnote{All of these sums are finite because that is all that is available from
+  the definition of a vector space---we do not know how to take limits, for example.}
+
+A \defn{basis} for $V$ is a linearly independent subset of $V$ that spans $V$. 
+
+\eg\ The set containing the polynomials $(1-x)^3$, $3x(1-x)^2$, $3x^2(1-x)$, and $x^3$ is a
+basis for $\Pi_3$. (A more common basis for $\Pi_3$ is the set $\{1, x, x^2, x^3\}$.) 
+
+\emph{Theorem:} Every vector space has a basis. (This theorem is not trivial.)
+
+\emph{Theorem:} If both $K_1$ and $K_2$ are bases for $V$, then they are isomorphic as sets. Hence, if
+a basis for $V$ is finite, then so is every other basis for $V$ and, moreover, the number of elements
+is the same in every basis. A vector space is \defn{finite-dimensional} if its basis is finite; the
+\defn{dimension} of $V$ is the number of elements of the basis.   
+
+
 \end{document}
+
+
