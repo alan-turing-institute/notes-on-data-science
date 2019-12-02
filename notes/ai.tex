@@ -5,6 +5,10 @@
 \usepackage{amsmath}
 \usepackage{microtype}
 \usepackage[margin=0.51in]{geometry}
+%
+\usepackage{url}
+\usepackage[citestyle=verbose-ibid]{biblatex}
+\addbibresource{references.bib}
 %%
 %\setlength{\parindent}{1em}
 \setlength{\parskip}{\smallskipamount}
@@ -18,28 +22,68 @@
 \title{Artifical Intelligence}
 \begin{document}\maketitle
 
-The term ``Artifical Intelligence'' covers at least three different
-\emph{categories} of subject:
+Definitions of ``Artifical Intelligence'' seem to fall into one of two
+categories.
 \begin{enumerate}
-\item\label{item:ai-goals} A general \emph{goal}: to make computers that do
-  things that require ``intelligence,'' whatever that is. 
-\item\label{item:ai-problems} An open set of exemplar \emph{problems}, the
-  solution of which one might interpret as requiring intelligence.
-\item\label{item:ai-methods} An evolving set of \emph{methods}.
+\item\label{item:ai-goals} A very broad \emph{goal}: to make computers do things
+  that require ``intelligence'' (whatever that is) or behave in certain
+  ways. For example, in their preface, Russell and Norvig~\footcite{ai:rn} say,
+  \begin{quote}
+    We define AI as the study of agents that receive percepts from the
+    environment and perform actions. 
+  \end{quote}
+  Sometimes a list of the kinds of activies thought to make up intelligence are
+  given, usually without any claim of completeness. For example, A recent House
+  of Lords report\footcite{ai:lords} quotes the UK Government's Industrial
+  Strategy White Paper as explaining AI to be,
+  \begin{quote}
+    Technologies with the ability to perform tasks that would otherwise require
+    human intelligence, such as visual perception, speech recognition, and
+    language translation.
+  \end{quote}
+  To take another example, the EPSRC lists examples of intelligent activies
+  as\footnote{\url{https://epsrc.ukri.org/research/ourportfolio/researchareas/ait/}}
+  \begin{quote}
+  [including] learning and adaptation; sensory understanding and interaction;
+  reasoning and planning; search and optimisation; autonomy; and creativity.
+  \end{quote}
+\item\label{item:ai-methods} An evolving set of \emph{methods:} specific
+  computational techniques applied to specific problems. In this category, one
+  might hear about optimisation, constraint satisfaction, tree searching,
+  ``Bayesian networks,'' ``deep learning,'' and so on. These have the virtue of
+  being well-defined techniques. On the other hand, it is sometimes hard to see
+  how they get at the problems above, or whether they generalise beyond very
+  specific problems.
 \end{enumerate}
 
-Discussions of AI are prone to ambguity about which category is
-meant. Furthmore, most discussion start with category~\ref{item:ai-goals}---which
-is rather broad and anyway no-one knows what intelligence is---and move on to
-category~\ref{item:ai-methods}, which is rather detailed. I think it might be
-helpful to focus on the middle category.
+I think it might be helpful to focus on a third category: an open set of
+exemplar, well-defined problems, the solution of which one might interpret as
+requiring intelligence.
 
-One very broad class of problems is exemplified by noughts-and-crosses (or, if
-you like, Connect Four, or chess) and characterised by the property that
-everything about the system under study is known. There are only finitely many
-possible allocations of a nought, a cross, or a space to nine positions; and in
-principle it is straightforward to enumerate all of them. Given such an
-allocation, it
+One very broad class of problems is exemplified by chess (or, if you like,
+noughts-and-crosses). It is reasonably straightforward to write a computer
+program that could play perfect chess if only it had enough time and memory: the
+problem is simply that we it doesn't have enough time or memory.\footnote{Here
+  is the program. Given a chessboard position, evaluate the position in the
+  following way. Score the position $+1$ if it is a win for you (i.e., you have
+  just given mate); $-1$ if it is a win for your opponent; or $0$ if it is a
+  stalemate. (This is a mechanical test, simply following the rules.) If none of
+  these conditions apply, then do the following: (1) enumerate and score all
+  possible moves from this position; (2) if it is your turn from this position
+  take the maximum of all these numbers; if it is your opponent's turn, take the
+  minimum of all the numbers. (Thus, on your turn, score $+1$ if \emph{any} move
+  scores $+1$, and score $-1$ if \emph{all} moves score $-1$.)
+
+  Finally, assuming it is your move, choose any move that leads to a position
+  with a score of $+1$.}
+
+and characterised by the property that everything about the
+system under study is known. There are only finitely many possible allocations
+of a nought, a cross, or a space to nine positions; and in principle it is
+straightforward to enumerate all of them. Given such an allocation, it
+
+
+
 
 
 
@@ -57,6 +101,5 @@ allocation, it
 
 
 
-
-
+\printbibliography%
 \end{document}
