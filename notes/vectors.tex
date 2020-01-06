@@ -12,6 +12,10 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\defn}[1]{\textbf{#1}}
 \newcommand{\eg}{\emph{Example:}\relax}
+\DeclareMathOperator{\dimension}{dim}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\image}{Im}
+\DeclareMathOperator{\kernel}{Ker}
 %%
 %% Vector spaces
 %% This note was written by James Geddes
@@ -21,9 +25,10 @@
 \begin{document}\maketitle
 
 \section{Vector spaces}
-The study of vector spaces is the study of linearity. As with other mathematical
-objects, it is often the maps between the objects that are of interest. For
-vector spaces, that means linear maps.
+The study of vector spaces is the study of linearity. Vectors are “things you
+can add together and multiply by numbers.” As with other mathematical objects,
+it is often the maps \emph{between} the objects that are of interest. For vector
+spaces, that means linear maps.
 
 \subsection{Definition}
 A \defn{real vector space} is a set, $V$, together with two operations: ${+}:V \times
@@ -53,62 +58,299 @@ distinguished element $ 0\in V$, satisfying the following rules:
     \end{gathered}
   \end{equation*}
 \end{enumerate}
-The operations of addition and multiplication by numbers are just what one would expect of such
-things. It is usual to omit the “$\cdot$” and write, for example $\alpha v$ rather than $\alpha \cdot v$.
+The operations of addition and multiplication by numbers are just what one would
+expect of such things. It is usual to omit the “$\cdot$” and write, for example $\alpha
+v$ rather than $\alpha \cdot v$.
 
-\eg\ Let $V$ be the set of all pairs of real numbers, $V = \R \times \R$, and define addition and
-multiplication “component-wise:” $(a, b) + (x, y) = (a + x, b + y)$ and $\alpha \cdot (x, y) = (\alpha x, \alpha y)$. We
-thereby obtain a real vector space. The zero vector is the pair $(0, 0)$.
+\eg\ Let $\R^2 = \R \times \R$ be the set of all pairs of real numbers, with addition
+and multiplication defined “component-wise:” $(a, b) + (x, y) = (a + x, b + y)$
+and $\alpha \cdot (x, y) = (\alpha x, \alpha y)$. We thereby obtain a real vector space. The zero
+vector is the pair $(0, 0)$.
 
-In some sense, $\R^n$, with addition and multiplication defined component-wise, is the “canonical”
-example of a finite-dimensional vector space.\footnote{We have not yet given the definition of
-  “finite-dimensional.”}
+In some sense, $\R^n$, with addition and multiplication defined component-wise,
+is the “canonical” example of a finite-dimensional vector space.\footnote{We
+  have not yet given the definition of “finite-dimensional.”}
 
-\eg\ Let $\Pi_3$ be the set of all polynomial functions of degree at most~3. Define addition and
-multiplication “pointwise:” $(f + g)(x) = f(x) + f(y)$ and $(\alpha \cdot f)(x) = \alpha f(x)$. This $\Pi_3$ is a vector
-space, noting that the sum of two cubic polynomials is also a cubic polynomial.
+\eg\ Let $\Pi_3$ be the set of all polynomial functions of degree at
+most~3. Define addition and multiplication “pointwise:” $(f + g)(x) = f(x) +
+f(y)$ and $(\alpha \cdot f)(x) = \alpha f(x)$. This $\Pi_3$ is a vector space, noting that the
+sum of two cubic polynomials is also a cubic polynomial.
 
-\eg\ Let $\mathcal{F}$ be the set of all (or all continuous, or all smooth) functions on the reals. With
-addition and multiplication defined pointwise, $\mathcal{F}$ is a vector space.
+\eg\ Let $\mathcal{F}$ be the set of all functions on the reals. With addition
+and multiplication defined pointwise, $\mathcal{F}$ is a vector space. Other
+vector spaces are obtained on replacing “all functions” with “all continuous
+functions” or “all smooth functions.”
 
-\eg\ Let $L^2$ be the set of all functions on the reals for which the integral $\int |f(x)|^2\,dx$
-is finite. With addition and multiplication defined pointwise, we obtain a vector space.  
+\eg\ Let $L^2(\R)$ be the set of all functions on the reals for which the integral
+$\int |f(x)|^2\,dx$ is finite. With addition and multiplication defined pointwise,
+we obtain a vector space.
 
-A \defn{subspace} of $V$ is a subset of $V$ that is a vector space in its own right, with the
-operations of addition and multiplication “inherited” from $V$.
+Let $V$ be a vector space. A \defn{subspace} of $V$ is a subset $W \subset V$, such
+that $0\in W$ and, for any $w_1$ and $w_2$ in $W$ and number $\alpha$, the sum $w_1 + \alpha
+w_2$ is in $W$. A subspace of $V$ is a subset of $V$ that is a vector space in
+its own right, with the operations of addition and multiplication “inherited”
+from $V$.
+
+Let $W$ be a subspace of $V$. A \defn{coset} of $W$ in $V$ is a subset of $V$ of
+the form $v + W$ for some $v\in V$. That is, it is the set of all vectors that can
+be formed by adding all elements of $W$ to some particular vector~$v$. Cosets
+are “just like $W$, only shifted by $v$.” Every $v$ in $V$ is in some coset of
+$W$ in $V$ and that coset is unique.
+
+The set of all cosets is denoted $V/W$. We endow $V/W$ with the structure of a
+vector space: for $v+W$ and $v'+W$ two cosets, their sum is $(v+W)+(v'+W) \equiv
+(v+v')+W$; for $\alpha$ a number, $\alpha\cdot(v+W)\equiv \alpha v+W$. The \defn{quotient} of $V$ by a
+subspace $W$ is $V/W$ with the vector space structure just described.
+
+If one replaces, in the definition of a real vector space, the real numbers,
+$\R$, with the complex numbers, $\mathbb{C}$, one obtains a \defn{complex vector
+  space}. With some exceptions, almost everything in this note translates to
+complex vector spaces.
 
 
 \subsection{Bases}
-Let $V$ be a vector space and let $K$ be a set of vectors in $V$ (i.e., a sub\emph{set} of $V$). The
-set $K$ is said to be \defn{linearly independent} if, whenever $k_1, k_2, \dotsc, k_N$ are finitely
-many vectors in $K$, and $\alpha_1, \alpha_2, \dotsc, \alpha_N$ are numbers such that $\alpha_1 k_1 + \alpha_2 k_2 + \dotsb +
-\alpha_N k_N = 0$, then, necessarily, $\alpha_1 = \alpha_2 = \dotsb = 0$. Linearly independent sets of vectors are
-ones in which none of the vectors is a finite linear sum of the others.
 
-A subset $K \subset V$ is said to \defn{span} $V$ if every vector in $V$ can be written as a finite linear sum
-of vectors from $K$.\footnote{All of these sums are finite because that is all that is available from
-  the definition of a vector space---we do not know how to take limits, for example.}
+It is common to think of a vector as “a tuple of numbers.” This section explains
+why.
+
+Let $V$ be a vector space and let $K$ be a set of vectors in $V$ (i.e., a
+sub\emph{set} of $V$). The set $K$ is said to be \defn{linearly independent} if,
+whenever $k_1, k_2, \dotsc, k_N$ are finitely many vectors in $K$, and $\alpha_1,
+\alpha_2, \dotsc, \alpha_N$ are numbers such that $\alpha_1 k_1 + \alpha_2 k_2 + \dotsb + \alpha_N k_N =
+0$, then, necessarily, $\alpha_1 = \alpha_2 = \dotsb = 0$. Linearly independent sets of
+vectors are ones in which none of the vectors is a finite linear sum of the
+others.
+
+A subset $K \subset V$ is said to \defn{span} $V$ if every vector in $V$ can be
+written as a finite linear sum of vectors from $K$.\footnote{All of these sums
+  are finite because that is all that is available from the definition of a
+  vector space---we do not know how to take limits, for example.}
 
 A \defn{basis} for $V$ is a linearly independent subset of $V$ that spans $V$. 
 
-\eg\ The set containing the polynomials $(1-x)^3$, $3x(1-x)^2$, $3x^2(1-x)$, and $x^3$ is a
-basis for $\Pi_3$. (A more common basis for $\Pi_3$ is the set $\{1, x, x^2, x^3\}$.) 
+\eg\ The set containing the polynomials $(1-x)^3$, $3x(1-x)^2$, $3x^2(1-x)$, and
+$x^3$ is a basis for $\Pi_3$. (A more common basis for $\Pi_3$ is the set $\{1, x,
+x^2, x^3\}$.)
 
-\emph{Theorem:} Every vector space has a basis. (This theorem is not trivial.)
+\emph{Theorem:} Every vector space has a basis. (This theorem is not trivial!
+What is a basis for $L^2(\R)$, for example?)
 
-\emph{Theorem:} If both $K_1$ and $K_2$ are bases for $V$, then they are
+\emph{Theorem:} If $K_1$ and $K_2$ are both bases for $V$, then they are
 isomorphic as sets. Hence, if a basis for $V$ is finite, then so is every other
 basis for $V$ and, moreover, the number of elements is the same in every
 basis. A vector space is \defn{finite-dimensional} if its basis is finite; the
-\defn{dimension} of $V$ is the number of elements of the basis.
+\defn{dimension} of $V$, written $\dimension(V)$, is the number of elements of
+the basis.
+
+\eg\ $\R^2$ has dimension two; $\Pi_3$ has dimension three; and none of
+the~$\mathcal{F}$ are finite-dimensional.
+
+It is common in applications to fix a convenient basis for the vector space with
+which one is working and to express every vector as a linear combination of the
+basis vectors. Suppose $V$ is $n$-dimensional, and we have chosen vectors $e_1,
+\dotsc, e_n$ that form a basis for $V$. Given any vector $v$, since the $e_i$
+are a basis, there are numbers $v^1, \dotsc, v^n$ such that\footnote{The indices
+  on the $v$'s are written as superscripts rather than subscripts for reasons
+  explained below.}
+\begin{equation}
+v = v^1 e_1 + v^2 e_2 + \dotsb + v^n e_n.
+\end{equation}
+Furthermore, the numbers $v^i$ are unique (can you see why?). They are known as
+the \defn{components} of~$v$. Since the basis is fixed, one typically writes the
+coefficients in the linear sum as a tuple of numbers, omitting the basis vectors
+themselves, as $(v^1, \dotsc, v^n)$. Such a tuple is known as a “column vector”
+(though note that it is the linear sum that is a vector, not the tuple of
+numbers, unless one's vector space really is~$\R^n$).
+
+\subsection{Direct sum}
+
+The direct sum is one way to make new vector spaces out of existing ones. Let
+$V$ and $W$ be vector spaces and consider their Cartesian product, $V \times W$; that
+is, the set of all pairs $(v, w)$ where $v\in V$ and $w\in W$. We endow this set
+with the structure of a vector space. For addition, define $(v_1, w_1) + (v_2,
+w_2) \equiv (v_1 + v_2, w_1 + w_2)$; for scalar multiplication, define $\alpha \cdot (v, w) \equiv
+(\alpha\cdot v, \alpha\cdot w)$. On the right-hand sides of these definitions, the operations of
+addition and multiplication are taken in $V$ or $W$.
+
+The \defn{direct sum} of $V$ and $W$, written $V \oplus W$, is the set $V \times W$
+together with the operations of addition and multiplication defined above.
+
+\eg\ The space $\R \oplus \R$ is just $\R^2$, with addition and multiplcation defined
+componentwise.
+
+Note that the set that forms the direct sum is the Cartesian
+\emph{product}. However, we have: suppose $\{e_1, \dotsc, e_m\}$ is a basis for
+$V$ and $\{f_1, \dotsc, f_n\}$ is a basis for $W$. Then the set $\{(e_1, 0),
+\dotsc, (e_m, 0), (0, f_1), \dotsc, (0, f_n) \}$ is a basis for $V \oplus W$. In this
+sense, the direct sum is “sum-like.”
+
+The sets $\{(v, 0) \mid v\in V\}$ and $\{(0, w) \mid w\in W\}$ form subspaces of
+$V \oplus W$.
 
 \subsection{Linear maps}
-\subsection{Duals}
-\subsection{Tensor product space}
-\subsection{Direct sum space}
-\subsection{Isomporphisms}
-\subsection{Components}
+
+In some sense, we need vector spaces so we can talk about linear maps. Linear
+maps are maps between vector spaces that “respect the linear structure.” Let $V$
+and $W$ be vector spaces. A \defn{linear map}, $f$, is a map $f:V \to W$ such
+that:
+\begin{enumerate}
+\item $f(\alpha\cdot v) = \alpha\cdot f(v)$; and
+\item $f(v_1 + v_2) = f(v_1) + f(v_2)$.  
+\end{enumerate}
+Note that on the left hand sides of these equations, the operations of addition
+and scalar multiplication are taken in $V$, whereas, on the right hand sides,
+these operations are taken in~$W$. A more explicit notation would be to
+distinguish the two by writing, for example, $+_V$ and $+_W$, but in practice it
+is usually clear which vector space is meant. However, the operations really are
+distinct: there is no natural way to add a vector in $V$ to a vector in $W$,
+even if they have the same dimension.
+
+\eg\ The \emph{identity map}, $\id : V \to V$, defined by $\id(v) = v$, is a
+linear map.
+
+Perhaps the most salient feature of linear maps is that they themselves form a
+vector space. Let $\mathcal{L}(V; W)$ be the space of \emph{all} linear maps
+from $V$ to $W$. For any two such linear maps, $f,g \in \mathcal{L}(V; W)$, define
+their sum, $f + g$ as that linear map whose action on any $v \in V$ is $(f+g)(v) \equiv
+f(v) + g(v)$, noting that the result is an element of~$W$. Likewise, for any
+number $\alpha$ define $(\alpha \cdot f)(v) \equiv \alpha\cdot f(v)$. The zero element of $\mathcal{L}(V;
+W)$ is given by $0(v) \equiv 0$. We thereby obtain a vector space. (Although you have
+to check that the conditions hold.)
+
+Let $f : V\to W$ be a linear map. The subspace of $W$ consisting of all elements
+mapped to by $f$ from some element of $V$ is called the \defn{image} of
+$f$. That is $\image(f) \equiv \{ w\in W\mid w = f(v)\,\text{for some $v$}\}$. (Note that
+$\image(f)$ is indeed a subspace since $f(0) = 0 \in \image(f)$ and, for any $w_1
+= f(v_1)$ and $w_2 = f(v_2)$ and number $\alpha$, $f(v_1 + \alpha v_2) = w_1 + \alpha w_2 \in
+\image(f)$.)
+
+The subspace of $V$ consisting of all these elements which map, under $f$, to
+the zero element in $W$ is called the \defn{kernel} of~$f$, written
+$\kernel(f)$. That is, $\kernel(f) \equiv \{ v\in V\mid f(v) = 0 \}$.
+
+
+\subsection{The dual space}
+
+A particularly common example of the preceding construction arises by taking the
+target of the linear map to be~$\R$. For $V$ a vector space, the \defn{dual} of
+$V$ is the vector space $V^* \equiv \mathcal{L}(V, \R)$. A dual vector, $\tilde{w} \in
+V^*$, takes a vector, $v \in V$, and produces a number, $\tilde{w}(v)$ (and, of
+course, acts linearly).
+
+Suppose $K = \{e_1, \dotsc, e_n\}$ is a basis for $V$ and $\tilde{v} \in V^*$ is an
+element of the dual of $V$. Then $\tilde{v}$ defines a real-valued function on
+$K$ (whose values are $\tilde{v}(e_i)$) and all element of the dual arise in
+this way.
+
+The \defn{dual basis} for $V^*$ is the set $\{\tilde{e}^1, \dotsc,
+\tilde{e}^n\}$ of vectors in $V^*$ defined by:
+\begin{equation*}
+  \tilde{e}^i(e_j) = \begin{cases}
+    1 &\text{if $i = j$,} \\
+    0 &\text{otherwise.}
+  \end{cases}
+\end{equation*}
+Thus, for any $\tilde{w} \in V^*$, there are unique numbers $\tilde{w}_1, \dotsc,
+\tilde{w}_n$ such that $\tilde{w} = \tilde{w}_1 \tilde{e}^1 + \dotsb +
+\tilde{w}_n \tilde{e}^n$. The tuple of numbers $(\tilde{w}_1, \dotsc,
+\tilde{w}_n)$ is sometimes called a “column vector” (but, again, it is that
+linear combination of the $\tilde{e}^i$ that is a vector, not the tuple).
+
+If $v \in V$ has components $v^i$ and $\tilde{w} \in V^*$
+has components $\tilde{w}_i$ (in the dual basis) then it follows that
+\begin{equation*}
+  \tilde{w}(v) = \tilde{w}_1 v^1 + \tilde{w}_2 v^2 + \dotsb + \tilde{w}_n v^ n
+  = \sum_{i=1}^n \tilde{w}_i v^i.
+\end{equation*}
+This is the usual formula for the “dot product of a row vector and a column
+vector” in components. There is a convention, known as the \defn{Einstein
+  summation convention}, often adopted to shorten this kind of component-wise
+expression: when one encounters an index that is repeated, once as a superscript
+(“up”) and once as a subscript (“down”), a summation over that index is
+implied. Thus the previous formula may be written $\tilde{w}(v) = \tilde{w}_i
+v^i$.
+
+
+\subsection{Isomorphisms}
+
+When are two vector spaces “the same”? An \defn{isomorphism} between two vector
+spaces, $V$ and $W$, is a pair of linear maps $f:V \to W$ and $g:W \to V$, such that
+$g \circ f$ is the identity map on $V$ and $f \circ g$ is the identity map on
+$W$.\footnote{In this case, it is conventional to write $g$ as $f^{-1}$.} There
+are many isomorphisms between vector spaces that have the same dimension and
+none between vector spaces with different (finite) dimentions. In this sense,
+all $n$-dimensional vector spaces are “essentially the same,” which is why we
+often think of them as being simply $\R^n$. However, just as it is useful to
+distinguish isomorphic sets, it is useful to distinguish isomorphic vector
+spaces. (The set of integers is isomorphic to the set of rational numbers, but
+it is nonetheless useful to know which set one is working with.)
+
+In the finite-dimensional case, a vector space has the same dimension as its
+dual, and there are many isomorphisms between them. But they are not isomorphic
+in any “natural” way, just as there is no preferred basis for a vector space.
+
+However, there \emph{is} a natural way to associate an element $v\in V$ with an
+element of $(V^*)^*$, the dual of the dual of~$V$. Given a vector $v\in V$,
+consider the linear map that takes an element $\tilde{v} \in V^*$ to the number
+$\tilde{v}(v)$. This is an element of $(V^*)^*$.
+
+In the finite-dimensional case (and only in this case), this map, $V\to (V^*)^*$,
+is an isomorphism. (In the infinite-dimensional case it is an injection but not
+an isomorphism.) So we may, and often do, consider $V$ and $(V^*)^*$ to be
+essentially the same. It turns out that \emph{lots} of apparently different
+vector spaces are naturally isomorphic (in the finite-dimensional case) and it
+would be useful to have a notation designed to keep track of which. Such a
+notation is described at the end of this note.
+
+\subsection{Multilinear maps and the tensor product}
+
+In programming, we deal with functions between types. Typically, these functions
+are functions of several arguments. However, you may know that it is possible to
+identify a function of multiple arguments with a function from the \emph{product
+  type} of the arguments. That is, a product type is a way of “combining two
+types, such that a function of the two arguments can be replaced by a function
+of a single argument, whose type is the product type.” 
+
+Fix $n$ vector spaces $V_1$, $V_2$, ..., $V_n$ and vector space~$W$. A
+\defn{multilinear map} $\phi:V_1\times\dotsb\times V_n \to W$ is a map such that
+\begin{equation*}
+  \begin{aligned}
+  \phi(\alpha v_1 + v'_1, v_2, \dotsc, v_n) &= \alpha \phi(v_1, v_2, \dotsc, v_n) + \phi(v'_1, v_2,
+  \dotsc, v_n) \\
+  \phi(v_1, \alpha v_2 + v'_2, \dotsc, v_n) &= \alpha \phi(v_1, v_2, \dotsc, v_n) + \phi(v_1, v'_2,
+  \dotsc, v_n) \\
+  \dotsm &\dots \\
+  \phi(v_1, v_2, \dotsc, \alpha v_n + v'_n) &= \alpha \phi(v_1, v_2, \dotsc, v_n) + \phi(v_1, v_2,
+  \dotsc, v'_n)  
+  \end{aligned}
+  \end{equation*}
+for all $v_1, v'_1\in V_1$, $v_2, v'_2 \in V_2$, ..., $v_n, v'_n \in V_n$ and
+number~$\alpha$. That is, a multilinear map is “a map of $n$ argments, which is
+linear in each argument seperately, holding the other arguments constant.”
+
+
+
+
+As noted above, the set, $\mathcal{L}(V;W)$, of all linear maps from $V$ to~$W$,
+with the obvious operations of addition and multiplication, is itself a vector
+space. Can we say something about the structure of this space? Suppose $w$ is an
+element of $W$, and $\tilde{v}$ is an element of~$V$. We denote by $w \otimes
+\tilde{v}$ that linear map whose action on $v\in V$ is
+\begin{equation*}
+(w \otimes \tilde{v})(v) = \tilde{v}(v) \cdot w.
+\end{equation*}
+Note that, on the right, $\tilde{v}(v)$ is a number.
+
+
+
+
+
+
+
+
+
 \subsection{Notation} 
+
 
 
 \end{document}

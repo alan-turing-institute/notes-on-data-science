@@ -62,17 +62,18 @@ requiring intelligence.
 
 One very broad class of problems is exemplified by chess (or, if you like,
 noughts-and-crosses). It is reasonably straightforward to write a computer
-program that could play perfect chess if only it had enough time and memory: the
-problem is simply that we it doesn't have enough time or memory.\footnote{Here
-  is the program. Given a chessboard position, evaluate the position in the
-  following way. Score the position $+1$ if it is a win for you (i.e., you have
-  just given mate); $-1$ if it is a win for your opponent; or $0$ if it is a
-  stalemate. (This is a mechanical test, simply following the rules.) If none of
-  these conditions apply, then do the following: (1) enumerate and score all
-  possible moves from this position; (2) if it is your turn from this position
-  take the maximum of all these numbers; if it is your opponent's turn, take the
-  minimum of all the numbers. (Thus, on your turn, score $+1$ if \emph{any} move
-  scores $+1$, and score $-1$ if \emph{all} moves score $-1$.)
+program that could play perfect chess if only it were to be given enough time
+and memory: the problem is simply that it doesn't have enough time or
+memory.\footnote{Here is the program. Given a chessboard position, evaluate the
+  position in the following way. Score the position $+1$ if it is a win for you
+  (i.e., you have just given mate); $-1$ if it is a win for your opponent; or
+  $0$ if it is a stalemate. (This is a mechanical test, simply following the
+  rules.) If none of these conditions apply, then do the following: (1)
+  enumerate and score all possible moves from this position; (2) if it is your
+  turn from this position take the maximum of all these numbers; if it is your
+  opponent's turn, take the minimum of all the numbers. (Thus, on your turn,
+  score $+1$ if \emph{any} move scores $+1$, and score $-1$ if \emph{all} moves
+  score $-1$.)
 
   Finally, assuming it is your move, choose any move that leads to a position
   with a score of $+1$.}
