@@ -1,0 +1,49 @@
+\documentclass[10pt, a4paper, twocolumn]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{microtype}
+\usepackage[margin=0.51in]{geometry}
+%%
+%\setlength{\parindent}{1em}
+\setlength{\parskip}{\smallskipamount}
+%%
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\eg}{\emph{Example:}\relax}
+\DeclareMathOperator{\dimension}{dim}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\image}{Im}
+\DeclareMathOperator{\kernel}{Ker}
+%%
+%% Multivariate Gaussians
+%% This note was written by James Geddes
+%%
+\title{The Multivariate Gaussian}
+\begin{document}\maketitle
+The normal (or Gaussian) distribution is a probability distribution on $\R$,
+parameterised by $\mu\in\R$ (the “mean”) and $\sigma>0 \in\R$ (the “standard deviation”),
+and defined by its probability density function,\footnote{Sometimes we allow
+  $\sigma=0$, when the distribution is then $\delta(x-\mu)$.}
+\begin{equation*}
+  \N(\mu, \sigma) \sim \frac{1}{\sigma\sqrt{2\pi}} e^{-(x-\mu)^2/2\sigma^2}.
+\end{equation*}
+
+Fix a finite-dimensional vector space,~$V$ and let $\mu$ be a probability
+distribution on $V$. For $w:V\to\R$ any element of the dual of~$V$ we obtain a
+probability distribution, $\mu_*$, on $\R$ in the following way: the probability
+measure of some set $I\in\R$ is given by $\mu_*(I) = \mu(w^{-1}(I))$.\footnote{We are
+  ignoring all questions of which sets are measurable.} This probability
+distribution is called the “push-forward” of $\mu$ by~$w$.
+
+A \defn{multivariate Gaussian} is a probability distribution on $V$ whose
+push-foward to $\R$ by any element of the dual is a Gaussian distribution.
+
+
+
+
+
+
+\end{document}
