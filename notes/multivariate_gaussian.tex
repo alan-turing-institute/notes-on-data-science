@@ -1,3 +1,4 @@
+%
 \documentclass[10pt, a4paper, twocolumn]{article}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
@@ -10,6 +11,7 @@
 \setlength{\parskip}{\smallskipamount}
 %%
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
 \newcommand{\N}{\mathcal{N}}
 \newcommand{\defn}[1]{\textbf{#1}}
 \newcommand{\eg}{\emph{Example:}\relax}
@@ -23,23 +25,64 @@
 %%
 \title{The Multivariate Gaussian}
 \begin{document}\maketitle
+
+\section{Definition}
+
 The normal (or Gaussian) distribution is a probability distribution on $\R$,
-parameterised by $\mu\in\R$ (the “mean”) and $\sigma>0 \in\R$ (the “standard deviation”),
+parameterised by $\mu\in\R$ (the “mean”) and $\sigma^2>0 \in\R$ (the “variance”),
 and defined by its probability density function,\footnote{Sometimes we allow
-  $\sigma=0$, when the distribution is then $\delta(x-\mu)$.}
+  $\sigma^2=0$, when the distribution is then $\delta(x-\mu)$.}
 \begin{equation*}
   \N(\mu, \sigma) \sim \frac{1}{\sigma\sqrt{2\pi}} e^{-(x-\mu)^2/2\sigma^2}.
 \end{equation*}
 
-Fix a finite-dimensional vector space,~$V$ and let $\mu$ be a probability
-distribution on $V$. For $w:V\to\R$ any element of the dual of~$V$ we obtain a
-probability distribution, $\mu_*$, on $\R$ in the following way: the probability
-measure of some set $I\in\R$ is given by $\mu_*(I) = \mu(w^{-1}(I))$.\footnote{We are
-  ignoring all questions of which sets are measurable.} This probability
-distribution is called the “push-forward” of $\mu$ by~$w$.
+Fix a finite-dimensional vector space,~$V$ and let $w:V\to\R$ be an element of
+the dual of~$V$. For $I\subset\R$ some set in $\R$, consider the set of all $v\in V$
+such that $w(v)\in I$. We call this the “pullback” of $I$ by $w$, and write it as
+$w^{-1}(I)$. 
+
+Now let $\mu$ be a probability distribution on $V$. For any set $I\subset\R$, denote by
+$\mu_*(I)$ the measure of the pullback of~$I$. That is, $\mu_*(I) =
+\mu(w^{-1}(I))$.\footnote{We are ignoring all questions of which sets are
+  measurable.} We obtain a probability distribution $\mu_*$ on~$R$, called the
+“pushforward” of $\mu$ by~$w$.
+
+Alternatively, let $f$ be any real-valued function on $\R$. Then, given $w_a\in
+V^*$ we obtain a real-valued function $f^*$ on $V$ by $f^*(v^a) = f(w_a
+v^a)$. The pushforward of the probability distribution can be defined as that
+probability distribution for which the expectation of any function is given by
+$\E_{\mu_*}(f) = \E_\mu(f^*)$.
 
 A \defn{multivariate Gaussian} is a probability distribution on $V$ whose
-push-foward to $\R$ by any element of the dual is a Gaussian distribution.
+pushfoward to $\R$ by any element of the dual is a Gaussian distribution.
+
+A multivariate Gaussian is uniquely determined by two parameters: a vector $m^a\in
+V$, called the mean, and a two-index tensor, $\Sigma^{ab}\in V\otimes V$, that is symmetric
+and positive definite, called the \emph{covariance}. A two-index tensor $\Sigma^{ab}$
+is \emph{symmetric} if $\Sigma^{ab}u_a w_b = \Sigma^{ba} u_a w_b$ for any $u, w\in V^*$ and
+\emph{positive definite} if $\Sigma^{ab}w_a w_b = 0$ implies $w_a = 0$.
+
+For $w_a$ any dual vector, the pushfoward to $\R$ of a multivariate Gaussian has
+mean $w_a m^a$ and variance $w_a w_b \Sigma^{ab}$.
+
+\section{Some identities}
+
+
+
+
+\section{Short, informal proofs}
+
+Fix a multivariate Gaussian, $\mathcal{G}$, on $V$. For any dual vector $w\in V^*$
+we obtain a Gaussian distribution $\N_w$ on $\R$ (by definition). Denote the
+mean of this Gaussian by $m(w)$. Then $m(w) = \E_{\N_w}(x) = \E_\mathcal{G}(w_a
+v^a)$. But this expression is linear in $w_a$; hence $m(w)$ is an
+element of $(V^*)^*$, which is naturally isomorphic to is $V$ since $V$ is
+finite-dimensional. Thus, there is some $m^a\in V$ (also called the mean) such
+that the mean of the pushforward by $w_a$ is given by $w_a m^a$.
+
+
+
+
 
 
 
