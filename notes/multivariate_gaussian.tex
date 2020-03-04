@@ -35,16 +35,16 @@ and defined by its probability density function,
   \N(\mu, \sigma) \sim \frac{1}{\sigma\sqrt{2\pi}} e^{-(x-\mu)^2/2\sigma^2}.
 \end{equation*}
 
-Fix a finite-dimensional vector space,~$V$ and let $\mu$ be a probability
+Fix a finite-dimensional vector space,~$V$ and let $p$ be a probability
 distribution on~$V$. For any $w_a \in V^*$ define a probability distribution,
-$\mu_*$ on $\R$ in the folllowing way: it is that distribution for which the
+$p_*$ on $\R$ in the folllowing way: it is that distribution for which the
 expectation of any function $f$ on $\R$ is
 \begin{equation*}
-\E_{\mu_*}(f) = \E_\mu\bigl(f(w_a x^a)\bigr). 
+\E_{p_*}(f) = \E_p\bigl(f(w_a x^a)\bigr). 
 \end{equation*}
-On the left is the expectation of $f$ with respect to $\mu_*$; on the right is the
-expectation with respect to $\mu$ of the function on $V$ given by $x^ a\mapsto f(w_a
-x^a)$. This $\mu_*$ is called the \emph{pushforward} of $\mu$ by the map~$w_a$.
+On the left is the expectation of $f$ with respect to $p_*$; on the right is the
+expectation with respect to $p$ of the function on $V$ given by $x^ a\mapsto f(w_a
+x^a)$. This $p_*$ is called the \emph{pushforward} of $p$ by the map~$w_a$.
 
 A \defn{multivariate Gaussian} is a probability distribution on $V$ whose
 pushfoward to $\R$ by any element of the dual is a Gaussian distribution.
@@ -52,17 +52,16 @@ pushfoward to $\R$ by any element of the dual is a Gaussian distribution.
 A multivariate Gaussian is uniquely determined by two parameters: a vector $m^a\in
 V$, called the mean, and a symmetric, positive-definite, two-index tensor,
 $\Sigma^{ab}\in V\otimes V$, called the \emph{covariance}. A two-index tensor $\Sigma^{ab}$ is
-\emph{symmetric} if $\Sigma^{ab}u_a w_b = \Sigma^{ba} u_a w_b$ for any $u, w\in V^*$ and
+\emph{symmetric} if $\Sigma^{ab}u_a w_b = \Sigma^{ba} u_a w_b$ for any $u_a, w_a \in V^*$ and
 \emph{positive definite} if $\Sigma^{ab}w_a w_b > 0$ for all $w_a\neq 0$.
 
 For $w_a$ any dual vector, the pushfoward to $\R$ of a multivariate Gaussian has
 mean $w_a m^a$ and variance $w_a w_b \Sigma^{ab}$.
 
-FIXME: Proof?
-
-FIXME: Proof that multivariate Gaussians exist.
 
 \section{Calculation of expectations}
+
+
 
 
 
@@ -87,6 +86,8 @@ where $\id^a{}_b$ is the identity map on~$V$.
 
 
 \section{Short, informal proofs}
+
+FIXME: Proof that multivariate Gaussians exist.
 
 Fix a multivariate Gaussian, $\mathcal{G}$, on $V$. For any dual vector $w\in V^*$
 we obtain a Gaussian distribution $\N_w$ on $\R$ (by definition). Denote the
