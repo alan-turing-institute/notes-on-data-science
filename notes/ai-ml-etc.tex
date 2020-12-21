@@ -1,0 +1,105 @@
+\documentclass[10pt, a4paper, twocolumn]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{microtype}
+\usepackage[margin=0.51in]{geometry}
+%
+\usepackage{hyperref}
+\usepackage[citestyle=verbose-ibid]{biblatex}
+\addbibresource{references.bib}
+%%
+%\setlength{\parindent}{1em}
+\setlength{\parskip}{\smallskipamount}
+%%
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\eg}{\emph{Example:}\relax}
+%%
+%% Artifical Intelligence, Machine Learning, and all that
+%% This note was written by James Geddes
+%%
+\title{Artificial Intelligence, Machine Learning, and All That \\ DRAFT v0.1}
+\author{James Geddes}
+\begin{document}\maketitle
+\begin{quote}
+``Intelligence is whatever machines haven't done yet.'' ---Lawrence Tesler
+\end{quote}
+This note is an opinionated abridgement of what at present constitutes AI,
+broadly construed. It is particularly concerned with the characteristics of the
+kinds of problems one might think to address with `state-of-the-art' AI\@. It is
+not at all concerned with the specifics of particular algorithms, nor with the
+niceties that distinguish one field from another. My hope is that the reader
+will be better able to answer the question, ``will AI help with my problem?''
+
+We seem to be in the middle of the third golden age of AI: the age of `machine
+learning.' The first age (`good old-fashioned AI') lasted from the 1950s until
+perhaps the Lighthill report of 1974. The second---continuing the same themes as
+the first but having logical reasoning, among other things, as a domain of
+application---lasted from about 1980 until the ends of the Alvey Programme, the
+Fifth Generation Computing Project, and the Lisp Machine market around the end
+of the decade.\footnote{See, for example,
+\url{https://en.wikipedia.org/wiki/History_of_artificial_intelligence}. I am
+omitting a great deal of history. In particular, the ideas behind `deep
+learning' were formed in the early days of AI; and the ideas behind
+probabilistic inference arguably date back to the 18th century.} In each of
+these ages---and also during the `AI winters' which separated them---there were
+genuine advances in AI: in planning and search, automated reasoning and theorem
+proving, expert systems, image and speech recognition, and others. Yet there
+were also many unrealistic expectations of the breadth of application of these
+breakthroughs. I think it is worth trying to understand what it is that made
+particular problems tractable and what is still to be done.
+
+The field is extremely broad: it is really many different fields and I am not an
+expert in any of them. Comments and corrections on this draft are therefore very
+welcome.
+
+\section{Good Old-fashioned AI}
+
+To state the nature of a particular class of problems it is necessary to answer
+three questions: \emph{First,} what problem are we trying to solve?
+\emph{Second,} what is the universe of possibilities from which a solution might
+be drawn? \emph{Third,} what would consititute a solution to that problem?
+
+I think it's fair to say that the problems which have so far been successfully
+attacked by AI turn out to have very precise answers to these three
+questions. By way of an example, consider the problem of playing a game of
+noughts-and-crosses (\emph{a.k.a.}, tic-tac-toe). From any position, we would
+like to find a winning move. The universe of possibilities might be described as
+`all possible arrangements of noughts and crosses on a $3\times3$ grid and the legal
+moves from one to anothger.' A \emph{winning move} is a move such that it is
+always possible to reply to any move by one's opponent with a move that either
+wins the game immediately, or is another winning move.
+
+In fact, this description is \emph{so} precise, it is immediate how to obtain a
+solution: starting with the current position, one writes down all possible
+moves, all possible replies to those moves, and so on. Then one labels them as
+winning or not, starting at the end of the game and working backwards. Finally,
+one choses a winning move. Of course, there is a snag: there are \emph{lots} of
+possible games. While it is possible to enumerate all positions in
+noughts-and-crosses, there is no hope of doing so for chess or indeed most
+problems of interest. That is why the subject is not trivial: clever ways around
+this so-called `combinatorial explosion' must be found.
+
+The sort of AI that was developed in the 20th century ``Good old-fashioned AI,'' (or GOFAI) The kinds of problems that were in the
+first and second phases of AI in the 20th century were of this ilk: it is
+possible to describe, completely and precisely, the set of possibilities from
+which one is choosing as well as the the nature of a possibility that would
+consitute a `solution.'  Moreover, it is clear how one would solve the problem
+if only one had sufficient time and a computer with enough memory.
+
+
+
+
+
+
+
+
+\section{Automation in general}
+
+\section{The future}
+
+The first thing to say is that there is, at present, no such thing as ``general
+artifical intelligence.''
+
+\end{document}
