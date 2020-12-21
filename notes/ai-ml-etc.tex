@@ -42,13 +42,15 @@ of the decade.\footnote{See, for example,
 \url{https://en.wikipedia.org/wiki/History_of_artificial_intelligence}. I am
 omitting a great deal of history. In particular, the ideas behind `deep
 learning' were formed in the early days of AI; and the ideas behind
-probabilistic inference arguably date back to the 18th century.} In each of
-these ages---and also during the `AI winters' which separated them---there were
-genuine advances in AI: in planning and search, automated reasoning and theorem
-proving, expert systems, image and speech recognition, and others. Yet there
-were also many unrealistic expectations of the breadth of application of these
-breakthroughs. I think it is worth trying to understand what it is that made
-particular problems tractable and what is still to be done.
+probabilistic inference arguably date back to the 18th century. I'm also
+ignoring situated cognition, various kinds of knowledge representation, and
+sub-symbolic cognition.} In each of these ages---and also during the `AI winters'
+which separated them---there were genuine advances in AI: in planning and search,
+automated reasoning and theorem proving, expert systems, image and speech
+recognition, and others. Yet there were also many unrealistic expectations of
+the breadth of application of these breakthroughs. I think it is worth trying to
+understand what it is that made particular problems tractable and what is still
+to be done.
 
 The field is extremely broad: it is really many different fields and I am not an
 expert in any of them. Comments and corrections on this draft are therefore very
@@ -72,21 +74,41 @@ always possible to reply to any move by one's opponent with a move that either
 wins the game immediately, or is another winning move.
 
 In fact, this description is \emph{so} precise, it is immediate how to obtain a
-solution: starting with the current position, one writes down all possible
-moves, all possible replies to those moves, and so on. Then one labels them as
-winning or not, starting at the end of the game and working backwards. Finally,
-one choses a winning move. Of course, there is a snag: there are \emph{lots} of
-possible games. While it is possible to enumerate all positions in
-noughts-and-crosses, there is no hope of doing so for chess or indeed most
-problems of interest. That is why the subject is not trivial: clever ways around
-this so-called `combinatorial explosion' must be found.
+solution: starting with the current position, write down all possible moves, all
+possible replies to those moves, and so on. Then label each move as winning or
+not, starting at the end of the game and working backwards. Finally, chose a
+winning move. Of course, there is a snag: there are \emph{lots} of possible
+games. While it is possible to enumerate all positions in noughts-and-crosses,
+there is no hope of doing so for chess or indeed most problems of interest. That
+is why the subject is not trivial: clever ways around this so-called
+`combinatorial explosion' must be found.
 
-The sort of AI that was developed in the 20th century ``Good old-fashioned AI,'' (or GOFAI) The kinds of problems that were in the
-first and second phases of AI in the 20th century were of this ilk: it is
-possible to describe, completely and precisely, the set of possibilities from
-which one is choosing as well as the the nature of a possibility that would
-consitute a `solution.'  Moreover, it is clear how one would solve the problem
-if only one had sufficient time and a computer with enough memory.
+Nonetheless, the kinds of problems that were explored in the first and second
+phases of AI were of this ilk: it is possible to describe, completely and
+precisely, the set of possibilities from which one is choosing as well as the
+the nature of a possibility that would consitute a `solution.' Moreover, it is
+clear how one could, in principle, solve the problem if only one had sufficient
+time and a computer with enough memory. These problems include solving logic
+puzzles, finding shortest paths through a network, playing games with perfect
+information, various kinds of optimisation problems, and so on.
+
+\section{Machine Learning}
+
+The first kind of AI both succeeded and failed. It succeeded in the sense that
+your satnav finds a shortest route out of a huge number of possibilities. But it
+failed because in many real-world problems the universe of possibilities cannot
+be precisely codified. These real-world problems include such things as image
+and speech recognition, `common sense reasoning,' and perception.
+
+The problem seemed to be that GOFAI was too fragile when it came to the
+messiness of the real world: there were too many rules and too many exceptions
+to the rules. As an example, consider the problem of recongising a handwritten
+digit. It is hard to write down a set of precise rules to describe the shape of
+a `7,' and how it differs from a `1,' for example.
+
+Machine learning gives up on trying to compute an answer from first principles. 
+
+
 
 
 
