@@ -7,8 +7,8 @@
 \usepackage[margin=0.51in]{geometry}
 %
 \usepackage{hyperref}
-\usepackage[citestyle=verbose-ibid]{biblatex}
-\addbibresource{references.bib}
+%\usepackage[citestyle=verbose-ibid]{biblatex}
+%\addbibresource{references.bib}
 %%
 %\setlength{\parindent}{1em}
 \setlength{\parskip}{\smallskipamount}
@@ -19,44 +19,50 @@
 %% Artifical Intelligence, Machine Learning, and all that
 %% This note was written by James Geddes
 %%
-\title{Artificial Intelligence, Machine Learning, and All That \\ DRAFT v0.1}
+\title{The Problems of AI \\ === DRAFT v0.1 ===}
 \author{James Geddes}
 \begin{document}\maketitle
+\thispagestyle{empty}\pagestyle{empty}
 \begin{quote}
 ``Intelligence is whatever machines haven't done yet.'' ---Lawrence Tesler
 \end{quote}
-This note is an opinionated abridgement of what at present constitutes AI,
-broadly construed. It is particularly concerned with the characteristics of the
-kinds of problems one might think to address with `state-of-the-art' AI\@. It is
-not at all concerned with the specifics of particular algorithms, nor with the
-niceties that distinguish one field from another. My hope is that the reader
-will be better able to answer the question, ``will AI help with my problem?''
+There is as yet no artifical system that posesses \emph{general}
+intelligence. However, there certainly exist many `weaker' artificial
+intelligences: specialised kinds of AI, suited to particular kinds of
+problem. This note attempts to describe the characteristics of those kinds of
+problems; problems that one might plausibly address with `state-of-the-art'
+AI\@. My hope is that the reader will be better able to answer the question,
+``will AI help with my problem?''
 
-We seem to be in the middle of the third golden age of AI: the age of `machine
-learning.' The first age (`good old-fashioned AI') lasted from the 1950s until
-perhaps the Lighthill report of 1974. The second---continuing the same themes as
-the first but having logical reasoning, among other things, as a domain of
-application---lasted from about 1980 until the ends of the Alvey Programme, the
-Fifth Generation Computing Project, and the Lisp Machine market around the end
-of the decade.\footnote{See, for example,
+We seem to be in the middle of the third golden age of AI, at least as measured
+by research funding and public interest in `machine learning.' The first age
+(roughly, `good old-fashioned AI') lasted from the 1950s until perhaps the
+Lighthill report of 1974. The second---continuing the themes of the first but
+having logical reasoning, among other things, as a domain of application---lasted
+from about 1980 until the end of the Alvey Programme, the end of the Fifth
+Generation Computing Project, and the collapse of the Lisp Machine market, all
+towards the end of that decade.\footnote{See, for example,
 \url{https://en.wikipedia.org/wiki/History_of_artificial_intelligence}. I am
 omitting a great deal of history. In particular, the ideas behind `deep
 learning' were formed in the early days of AI; and the ideas behind
 probabilistic inference arguably date back to the 18th century. I'm also
-ignoring situated cognition, various kinds of knowledge representation, and
-sub-symbolic cognition.} In each of these ages---and also during the `AI winters'
-which separated them---there were genuine advances in AI: in planning and search,
-automated reasoning and theorem proving, expert systems, image and speech
-recognition, and others. Yet there were also many unrealistic expectations of
-the breadth of application of these breakthroughs. I think it is worth trying to
-understand what it is that made particular problems tractable and what is still
-to be done.
+ignoring, \emph{inter alia}, embodied cognition, various models of knowledge
+representation, and fuzzy logic.} In each of these ages---and also during the `AI
+winters' which separated them---there were genuine advances in AI: in planning and
+search, automated reasoning and theorem proving, expert systems, image and
+speech recognition, and others. Yet there were also many unrealistic
+expectations of the breadth of application of these breakthroughs. I think it is
+worth trying to understand what it is that made particular problems tractable
+and what is still to be done.
 
-The field is extremely broad: it is really many different fields and I am not an
-expert in any of them. Comments and corrections on this draft are therefore very
-welcome.
+The field of AI is extremely broad: to some extent, it might best be thought of
+as a number of different, related fields. The discussion here will be
+opinionated and abridged. I will not be concerned with the specifics of
+particular algorithms, nor with the niceties that distinguish one field from
+another. Comments and corrections on this draft are therefore very welcome.
 
-\section{Good Old-fashioned AI}
+
+\section{Good Old-Fashioned AI}
 
 To state the nature of a particular class of problems it is necessary to answer
 three questions: \emph{First,} what problem are we trying to solve?
@@ -77,11 +83,13 @@ In fact, this description is \emph{so} precise, it is immediate how to obtain a
 solution: starting with the current position, write down all possible moves, all
 possible replies to those moves, and so on. Then label each move as winning or
 not, starting at the end of the game and working backwards. Finally, chose a
-winning move. Of course, there is a snag: there are \emph{lots} of possible
-games. While it is possible to enumerate all positions in noughts-and-crosses,
-there is no hope of doing so for chess or indeed most problems of interest. That
-is why the subject is not trivial: clever ways around this so-called
-`combinatorial explosion' must be found.
+winning move.
+
+Of course, there is a snag: there are \emph{lots} of possible games. While it is
+possible to enumerate all positions in noughts-and-crosses, there is no hope of
+doing so for chess or indeed most problems of interest. That is why the subject
+is not trivial: clever ways around this so-called `combinatorial explosion' must
+be found.
 
 Nonetheless, the kinds of problems that were explored in the first and second
 phases of AI were of this ilk: it is possible to describe, completely and
@@ -90,23 +98,80 @@ the nature of a possibility that would consitute a `solution.' Moreover, it is
 clear how one could, in principle, solve the problem if only one had sufficient
 time and a computer with enough memory. These problems include solving logic
 puzzles, finding shortest paths through a network, playing games with perfect
-information, various kinds of optimisation problems, and so on.
+information, various kinds of optimisation problems, and so on. If your problem
+has this property then AI might work for you.
 
 \section{Machine Learning}
 
 The first kind of AI both succeeded and failed. It succeeded in the sense that
 your satnav finds a shortest route out of a huge number of possibilities. But it
-failed because in many real-world problems the universe of possibilities cannot
-be precisely codified. These real-world problems include such things as image
-and speech recognition, `common sense reasoning,' and perception.
+failed because in many real-world problems we are unable precisley to codify the
+universe of possibilities. These real-world problems include such things as
+image and speech recognition, `common sense reasoning,' and perception. The
+problem seemed to be that GOFAI was too fragile when it came to the messiness of
+the real world: there were too many rules, too many exceptions to the rules, and
+too many exceptions to the exceptions.
 
-The problem seemed to be that GOFAI was too fragile when it came to the
-messiness of the real world: there were too many rules and too many exceptions
-to the rules. As an example, consider the problem of recongising a handwritten
-digit. It is hard to write down a set of precise rules to describe the shape of
-a `7,' and how it differs from a `1,' for example.
+As an example, consider the problem of recognising a handwritten digit. We can
+still partly answer two of the three questions above. An image can be
+represented as a (large) collection of numbers: namely, the darkness of each
+pixel in the image. However, not all collections of numbers correspond to
+pictures of digits; and it turned out to be very hard to write down a precise
+set of rules describing the shape of a `7,' and how it differs from a `1,'
+across all different kinds of handwriting. (The problem is even more actute in
+speech-to-text, or machine translation.) So we don't know how to recognise the
+answer, even if we did have time and resource.
 
-Machine learning gives up on trying to compute an answer from first principles. 
+In machine learning we give up on the plan of trying to compute an answer from
+`first principles.' Instead, we observe that sometimes it is possible to obtain
+many exemplar solutions to the very same problem. For example, we might ask a
+human to label images of handwritten digits with the digit itself in
+machine-readable form.\footnote{\url{http://yann.lecun.com/exdb/mnist/}} Now,
+given a new image, we can ask, to which of the exemplar images is it `closest'?
+Having found the `nearby' examples, we guess that the digit represented by the
+new image is the same as these. More generally, we have a set of `observations,'
+each of which is captured a set of numbers called \emph{features}.\footnote{A
+feature doesn't have to be a number but that generality is not important for
+this discussion.} We have a set of exemplar observations, known as the
+\emph{training data} and we'd like to predict some or all features of a new
+observations, possibly based on knowledge of some other features of that new
+observation. To do so, we find `similar' observations in the training data, and
+predict, for our new observation, the same as the features of those similar ones.
+
+Why is this hard? For one thing, we've acquired a new problem: what is meant by
+`close'? In the example of an image of a digit, we would want to say that images
+are `similar' if they differ by a small rotation, or a change of scale, or a
+line being thicker or moved slightly. It turns out that a certain kind of
+`neural network' is very good at compensating for just \emph{these} kinds of
+differences and that is why we now have very good image
+recognition.\footnote{It's important to recognise that image recognition is a
+prediction of a \emph{label} associated with an image: the system in no way
+understands the nature of the objects \emph{in} the image. There exist examples
+of images that are wildly misclassified (to a human) because the meaning of
+`close' imposed by the algorithm is merely about pixels; not about real things.}
+But for other problems, different notions of similarity will be appropriate.
+
+Still, one would have thought that, with enough data, we would not need to make
+so many assumptions. However, the amount of data that constitutes `enough,' in
+this sense, increases exponentially with the number of features\footnote{That
+is, adding a feature \emph{multiplies} the amount of data required by some
+amount.} so in practice one often does have enough data.
+
+Finally, one is often interested in predicting the result of making a change to
+the world, in some way; rather than simply predicting what would ordinarily
+happen. In this case, unless one has made that change for some observations in
+training data (for example, by running a controlled trial) then one will be
+attempting to predict what happens a long way from any observation in the
+training data.
+
+Thus it is typically necessary to make assumptions---all machine learning models
+make assumptions, either explicitly or implicitly. One way to make assumptions
+is by choosing a particular kind of algorithm, the details of which impose a
+certain way of looking at the world. Alternatively, one can pre-compute certain
+functions of the features and give those to the model those instead. This is
+known as `feature engineering;' the idea is to compute `useful' features, ones
+that capture something we know to be important about the world. A third way is
+to explicitly inlcude in the algorithm a `model of how the world works.'
 
 
 
@@ -115,8 +180,20 @@ Machine learning gives up on trying to compute an answer from first principles.
 
 
 
+
+
+
+
+
+
+
+
+
+\section{Inference}
 
 \section{Automation in general}
+
+\section{Summary}
 
 \section{The future}
 
