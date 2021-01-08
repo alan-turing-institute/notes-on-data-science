@@ -1,4 +1,4 @@
-\documentclass[10pt, a4paper, twocolumn]{article}
+\documentclass[10pt, a4, twocolumn]{article}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amssymb}
@@ -47,64 +47,68 @@ can't do. Usually these seem more prosaic: schedule a meeting at a time
 convenient for colleagues; organise my household finances; solve my customer
 service problem; diagnose most medical problems.
 
-What is the connection between the things computers can do and what is the
+What is the connection between the things computers can do? What is the
 difference with the things that they can't do? The traditional categories don't
-seem to be helpful here. I find it hard to tell, from knowing the distinction
-between `supervised' and `unsupervised' learning, that chess is possible and
-calendars aren't. Instead, I think it is more useful to focus on a simpler,
+seem to be helpful here. Just from knowing the distinction between `supervised
+learning' and `unsupervised learning,' I find it hard to tell that chess is
+possible and calendars aren't. Instead, I think it is more useful to focus on a
 slightly more abstract description of the \emph{kind} of problem being
 solved. In the rest of this note I will try to describe some of these kinds of
 problems. I will argue that the kinds of problems that are today amenable to AI
-are those which admit a simple and straightforward \emph{description}; in
-particular, those for which the question is clear, it's clear when you have an
-answer, and it's clear when the answer is right.
+are those which admit a simple and straightforward \emph{description}. In
+particular, it is necessary to have a clear question, a clear way of telling
+when you have an answer, and often a way to tell when the answer is right. 
 
-In some cases, indeed, we succeeded only by finding this description. Finding a
-represention of a real-world problem that is `understandable' by a computer
-seems to be a large part of the challenge of applying AI and perhaps this
-explains the phenomenon of the quote at the top: one makes progress in part by
-figuring out what the problem is; after that, the solution seems much less
-magical.
+Many problems are \emph{not} so easily describable. In some cases, indeed, we
+succeeded only by finding this description. Finding a represention of a
+real-world problem that is `understandable' by a computer seems to be a large
+part of the challenge of applying AI.\footnote{Perhaps this explains the
+phenomenon of the quote at the top: one makes progress in part by figuring out
+what the problem is; after that, the solution seems much less magical.}
 
 The field of AI is extremely broad. To some extent, it might best be thought of
 as a number of different, related fields. The discussion here will be
 opinionated and abridged. I will not be concerned with the specifics of
 particular algorithms, not with the niceties that distinguish one field from
-anohter. Comments and corrections on this draft are very weclome.
+another. Comments and corrections on this draft are very welcome.
 
+This note is still in draft form. 
 
 \section{What is a problem anyway?}
 
 Imagine a computer program which seaches through all the stars in our galaxy,
 looking for ones that are suitable to support life. You give a star to the
-computer and the computer tells you `yes' or `no.' Of course, you can't `give' a
-star to a computer; instead, you must provide the computer with a
+computer and the computer tells you `yes' or `no.' But of course, you can't
+`give' a star to a computer; instead, you must provide the computer with a
 `representation' of star. This representation might be a certain set of
-characteristics of the star. For example one might consider nine numbers
+characteristics of the star. For example one might consider the nine numbers
 describing the star's mass, brightness, colour, size, rotational speed, position
 on the main sequence, and three-dimensional position relative to the galactic
 centre. To the computer, a star just \emph{is} this set of nine numbers; and
 every possible star (to the computer) is completely described by some set of
-numbers.
+numbers. (But note that not every set of nine numbers describes a physically
+possible star.)
 
 A typical AI problem is similar to this example. In general, one has a way of
 representing each of a very large number of possibilities (of something). The
-goal is typically to find---or to say something about---certain, special,
+goal is usually to find---or to say something about---certain, special,
 possibilities. In the example, there are many sets of nine numbers, and the
 challenge is to identify particular sets that describe stars that might have a
 planet capable of sustaining life.
 
-Where problems differ is in what is known about the possibilities (more than how
-to represent them, which must always be known) and in the nature of the goal. I
-shall describe four variations: (1) In \emph{good old-fashioned AI problems} one
-knows everything: how to enumerate the possibilities and how to evalate a
-candidate answer. (2) In \emph{machine learning problems}, we are given a set of
-example answers and we have a view on what it means for two possibilities to be
-`similar;' we recognise an answer by its similarity to one or more of a set of
-known examples. (3) In \emph{inference problems}, we have a collection of
-theories of how the examples got here and we'd like to know which is more likely
-to be correct. (4) Finally, in \emph{simulation problems} we have a theory of
-how the world works and we want to `run the world forward.'
+Where problems differ is in what is known about the possibilities and in the
+nature of the goal.\footnote{It is always necessary to have a way to represent
+each possibility. Even that step can be hard to achieve.} I shall describe four
+variations: (1) In \emph{good old-fashioned AI problems} one knows everything:
+how to enumerate the possibilities and how to evalate a candidate answer. The
+problem is simply that there are too many possibilities to search them all. (2)
+In \emph{machine learning problems}, we are given a set of example answers out
+of all possibilities. We don't know how, theoretically, to recognise an answer
+so instead we spot answers by their `similarity' to one or more of the known
+examples. (3) In \emph{inference problems}, we have a collection of theories
+about how the world works and how observations are made and we'd like to know
+the most likely theory. (4) Finally, in \emph{simulation problems} we have a
+theory of how the world works and we want to `run the world forward.'
 
 \section{Four kinds of problem}
 
@@ -114,19 +118,21 @@ One of the first applications of AI was to games such as noughts-and-crosses
 (\emph{a.k.a.}, tic-tac-toe). In noughts-and-crosses, there is a universe of
 `possible games'---legal sequences of moves eventually leading to a position that
 is a win, a loss, or a draw. This universe is unambiguous: a few items of data
-suffice to describe a possible position. Furthermore, one could in principle
-mechanically enumerate \emph{all} the possibilities, if only one had time
-enough. Finally, it is easy to recognise when one has reached a winning position
+suffice to describe any possible position. Furthermore, one could in principle
+mechanically enumerate \emph{all} the possibilities, if only one had enough
+time. Finally, it is easy to recognise when one has reached a winning position
 because that is part of the rules (`three in a row'). Given knowledge of all
-possibly games from a given position, it is slightly harder, but not much
-harder, to recognise a winning move.
+possible games starting from a given position, it is slightly harder, but not
+much harder, to recognise a winning move from that position.
 
 Noughts-and-crosses is thus an example of a particularly straightforward class
-of problems. There is given a collection of `possible solutions,' each of which
-can be described completely and unambiguously; and all of which could in
-principle be mechanically enumerated. Among these possible solutions there is at
-least one `goal solution,' and we know how to recognise the goal should we be
-given it. The task is simply to find the goal solution.
+of problems.\footnote{It is the description of the problem that is
+straightforward, not the process for finding an answer in reasonable time!}
+There is given a collection of `possible solutions,' each of which can be
+described completely and unambiguously; and all of which could in principle be
+mechanically enumerated. Among these possible solutions there is at least one
+`goal solution,' and we know how to recognise the goal should we be given
+it. The task is simply to find the goal solution.
 
 There are variations on this kind of problem. One can codify mathematical logic
 in such a way as to allow mechanical enumeration of all possible logical
@@ -146,43 +152,38 @@ further replies; and so on. The resulting so-called `combinatorial explosion'
 soon exceeds the computational power of any computer (certainly for chess, if
 not for noughts-and-crosses).
 
-The kinds of problems that were explored in the first and second phases of AI
-were of this ilk. For many of these kinds of problems, we now have methods of
-finding solutions that are `good enough', even if not perfect. If your problem
-is one of these, then AI might work for you. On the other hand, if your central
-problem is like this then you likely know it and are already aware of the
-various approaches. In this case, it might be interesting to look at other
-problems you are facing and to ask whether it could be possible to cast them
-into this form: it might be that you have challenges that could not be solved
-ten years ago which now can, just because computers are faster. You will find
-that the hard part is converting a real-world problem to a mathematical one.
-
+The kinds of problems that were explored in the early years of AI were of this
+ilk. For many of these kinds of problems, we now have methods of finding
+solutions that are `good enough', even if not perfect. If your problem is one of
+these, then AI might work for you. On the other hand, if your central problem
+\emph{is} like this then you likely know it already and are already aware of the
+various approaches. 
 
 \subsection{Machine Learning Problems}
 
-The first kind of AI both succeeded and failed. It succeeded in the sense that
+Good old-fashioned AI both succeeded and failed. It succeeded in the sense that
 your satnav finds a shortest route out of a huge number of possibilities. But it
-failed because in many real-world problems we are unable precisley to codify the
-universe of possibilities. These real-world problems include such things as
-image and speech recognition, `common sense reasoning,' and perception. The
-problem seemed to be that GOFAI was too fragile when it came to the messiness of
-the real world: there were too many rules, too many exceptions to the rules, and
-too many exceptions to the exceptions.
+failed because in many real-world problems we are \emph{unable} precisely to
+codify the universe of possibilities. These real-world problems include such
+things as image and speech recognition, `common sense reasoning,' and
+perception. The problem seems to be that a simplistic approach to symbolic
+reasoning is `too fragile' when it comes to the messiness of the real world:
+there are too many rules, too many exceptions to the rules, and too many
+exceptions to the exceptions.
 
 As an example, consider the problem of recognising a handwritten digit from an
-image. We can still partly answer two of the three questions above. An image can
-be represented as a (large) collection of numbers: namely, the darkness of each
-pixel in the image. However, not all collections of numbers correspond to
-pictures of digits; and it turned out to be very hard to write down a precise
-set of rules describing the shape of a `7,' and how it differs from a `1,'
-across all different kinds of handwriting. (The problem is even more actute in
-speech-to-text, or machine translation.)
+image. An image can be represented as a (large) collection of numbers: namely,
+the darkness of each pixel in the image. However, not all collections of numbers
+correspond to pictures of digits. It turns out to be very hard to write down a
+precise set of rules describing the shape of a `7,' and how it differs from a
+`1,' across all different kinds of handwriting. (The problem is even more actute
+in speech-to-text, or machine translation.)
 
-What categorises these problems is the lack of answer to the third question: we
-don't know how to recognise a solution even if we had one. We don't have a
-mechnical way to tell a `7' from a `1'---that's the whole problem.
+What categorises these problems is that we don't know, theoretically, how to
+recognise a solution even if we have one. We don't have a mechnical way to tell
+a `7' from a `1'---that's the whole problem.
 
-In machine learning we ask a different question. We give up on the plan of
+So in machine learning we ask a different question. We give up on the plan of
 trying to compute an answer from `first principles.' Instead, we observe that
 sometimes it is possible to obtain many \emph{exemplar} answers to the very same
 problem. For example, we might ask a human to label images of handwritten digits
@@ -196,7 +197,7 @@ image represent?' to `to which example images is this one most similar?'
 More generally, we have a set of `observations,' each of which is completely
 described by a set of numbers called \emph{features}.\footnote{A feature doesn't
 have to be a number but that's not important for this discussion.}  We have a
-set of exemple observations, known as the \emph{training data} and we'd like to
+set of example observations, known as the \emph{training data} and we'd like to
 predict some or all features of a new observations, possibly based on knowledge
 of some other features of that new observation. To do so, we find `similar'
 observations in the training data, and predict, for our new observation, the
@@ -223,8 +224,8 @@ amount.} and so, in practice, there isn't enough.
 
 Moreover, one is often interested in predicting the result of making a
 \emph{change} to the world, rather than simply predicting what would happen
-under ordinary circumstances. Unless one has made that change in training data
-(for example, by running a controlled trial) then one will be attempting to
+under ordinary circumstances. Unless one has made that very change in training
+data (for example, by running a controlled trial) then one will be attempting to
 predict what happens a long way from any example.
 
 Thus it is typically necessary to make assumptions---all machine learning models
@@ -237,20 +238,11 @@ features, ones that capture something we know to be important about the world. A
 third way is to explicitly include in the algorithm a `model of how the world
 works.'}
 
-\subsubsection{State-of-the-art}
-
-Some advances in recent years have come from combining machine learning with
-traditional AI.\@ The rough idea is that, when searching for a particular
-possibility, we can use a machine learning model to suggest likely avenues of
-exploration. This is what AlphaGo does, for example: it uses a machine learning
-model, trained on lots of example games, to narrow down the search to
-potentially good moves.
-
 \subsection{Inference Problems}
 
 Machine learning models necessarily make assumptions, usually about what it
 means for observations to be `similar' to each other. But those assumptions tend
-to arise implicitly, from the structure of the model; it can be hard to see what
+to arise implicitly, from the structure of the model. It can be hard to see what
 is actually implied by a choice of one model over another.
 
 Sometimes, however, we actually do have a good idea of how the world works. That
@@ -295,31 +287,47 @@ for example.
 
 TBD. PPL? GOFAI+ML? 
 
+
+\subsubsection{State-of-the-art}
+
+Some advances in recent years have come from combining machine learning with
+traditional AI.\@ The rough idea is that, when searching for a particular
+possibility, we can use a machine learning model to suggest likely avenues of
+exploration. This is what AlphaGo does, for example: it uses a machine learning
+model, trained on lots of example games, to narrow down the search to
+potentially good moves.
+
+
 \section{Summary}
 
 This note describes four classes of problems that can be addressed by AI as it
-stands today. All problems require is to specify precisely a certain collection
-of configurations; they differ in what else is known.
+stands today. All problems require a precise representation of a certain
+collection of possibilities; they differ in what else is known. If your problem
+can be made to conform to these descriptions then AI may well be able to help.
 
-\begin{itemize}
-\item{GOFAI} All possible configurations can be enumerated mechanically. One or more
-  configurations consisute a solution state and this configuration is
-  straightforward to describe. We wish to find the solution state.
-\item{Machine Learning} There is a precise description of all configurations but not all of these
-  are possible or realistic. Although the possible configurations are not
-  straightforward to describe there are many examples of such possible
-  configurations. Given partial information about a particular configuration, We
-  wish to find examples that are similar to it in order to guess the remaining details.
-\item{Inference} There is a precise description of all configurations and a
-  theory describing what observations would be made under a particular possible
-  configuration. The theory is not completely known: there are parameters about
-  which we are uncertain, or perhaps competing theories with varying degrees of
-  plausibility. However, we have observational data from particular
-  configurations. We wish to recover as much information as possible about which
-  model of the world is most likely from observational data.
-\item{Simulation} We have a complete model of how the world changes in time and
-  information about how it is now. We wish to say what the world will look like later.
-\end{itemize}
+\begin{enumerate}
+\item \emph{GOFAI:} All possible possibilities can be enumerated
+  mechanically. One or more possibilities constitute a solution state and these
+  possibilities are straightforward to describe. We wish to find the solution
+  state(s).
+\item \emph{Machine Learning:} There is a precise description of all
+  possibilities but not all of these are realistic. Although the realistic
+  possibilities are not straightforward to describe there are many
+  examples. Given partial information about a particular possibility, we wish to
+  find examples that are similar to it in order to guess the remaining details.
+\item \emph{Inference:} There is a precise description of all possibilities and
+  a theory describing what observations would be made if a particular one
+  happened to be true. The theory is not completely known: there are parameters
+  about which we are uncertain, or perhaps competing theories with varying
+  degrees of plausibility. However, we have observational data. We wish to
+  recover as much information as possible about which model of the world is most
+  likely from this observational data.
+\item \emph{Simulation:} We have a complete model of how the world changes in
+  time and information about how it is now. We wish to say what the world will
+  look like later.
+\end{enumerate}
+
+What does this leave? TBD.
 
 \newpage
 \section{OLD}
