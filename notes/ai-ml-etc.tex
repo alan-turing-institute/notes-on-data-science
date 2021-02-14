@@ -27,7 +27,7 @@
 \begin{quote}
 ``Intelligence is whatever machines haven't done yet.'' ---Lawrence Tesler
 \end{quote}
-There is as yet no artifical system that posesses \emph{general}
+There is as yet no artificial system that posesses \emph{general}
 intelligence. However, there certainly exist many weak artificial intelligences:
 `weaker' in the sense of being specialised to particular kinds of problems. It
 is interesting to ask what characterises those problems that are amenable to
@@ -100,15 +100,15 @@ Where problems differ is in what is known about the possibilities and in the
 nature of the goal.\footnote{It is always necessary to have a way to represent
 each possibility. Even that step can be hard to achieve.} I shall describe four
 variations: (1) In \emph{good old-fashioned AI problems} one knows everything:
-how to enumerate the possibilities and how to evalate a candidate answer. The
+how to enumerate the possibilities and how to evaluate a candidate answer. The
 problem is simply that there are too many possibilities to search them all. (2)
-In \emph{machine learning problems}, we are given a set of example answers out
-of all possibilities. We don't know how, theoretically, to recognise an answer
-so instead we spot answers by their `similarity' to one or more of the known
-examples. (3) In \emph{inference problems}, we have a collection of theories
-about how the world works and how observations are made and we'd like to know
-the most likely theory. (4) Finally, in \emph{simulation problems} we have a
-theory of how the world works and we want to `run the world forward.'
+In \emph{machine learning problems}, we are given a set of \emph{example}
+answers. We don't know how, theoretically, to recognise an answer, so instead we
+spot answers by their `similarity' to one or more of the known examples. (3) In
+\emph{inference problems}, we have a collection of theories about how the world
+works and how observations are made and we'd like to know the most likely theory
+which explains the observations. (4) Finally, in \emph{simulation problems} we
+have a theory of how the world works and we want to `run the world forward.'
 
 \section{Four kinds of problem}
 
@@ -198,7 +198,7 @@ More generally, we have a set of `observations,' each of which is completely
 described by a set of numbers called \emph{features}.\footnote{A feature doesn't
 have to be a number but that's not important for this discussion.}  We have a
 set of example observations, known as the \emph{training data} and we'd like to
-predict some or all features of a new observations, possibly based on knowledge
+predict some or all features of a new observation, possibly based on knowledge
 of some other features of that new observation. To do so, we find `similar'
 observations in the training data, and predict, for our new observation, the
 same as the features of those similar ones.
@@ -258,8 +258,8 @@ view' with the new data coming in daily to provide updated estimates.
 
 This is the idea behind Bayesian inference: we have a view of how the world is
 but we are uncertain about parts of it. We make some observations. Based on
-those observations, we update our view of the world, become more certain about
-how it is.
+those observations, we update our view of the world and become more certain
+about how it is.
 
 What is nice about Bayesian inference is that it is principled: if we have a
 theory of the world we can adapt the approach to that theory. Furthermore, we
@@ -268,7 +268,7 @@ other hand, it can be computationally very expensive.)
 
 \subsection{Simulation Problems}
 
-Finally, simulation is well-known method for predicting the future. In problems
+Finally, simulation is a well-known method for making predictions. In problems
 of this nature, we have a complete theory of how the world evolves in time,
 along with knowledge of how the world is now, and we wish to `run the world
 forward,' starting from a particular configuration, to see what will happen.
@@ -288,7 +288,7 @@ for example.
 TBD. PPL? GOFAI+ML? 
 
 
-\subsubsection{State-of-the-art}
+\subsection{State-of-the-art}
 
 Some advances in recent years have come from combining machine learning with
 traditional AI.\@ The rough idea is that, when searching for a particular
@@ -335,24 +335,26 @@ What does this leave? TBD.
 \subsection{History}
 
 We seem to be in the middle of the third golden age of AI, at least as measured
-by research funding and public interest in `machine learning.'\footnote{The
-first age (roughly, `good old-fashioned AI') lasted from the 1950s until perhaps
-the Lighthill report of 1974. The second---continuing the themes of the first but
-having logical reasoning, among other things, as a domain of application---lasted
-from about 1980 until the end of the Alvey Programme, the end of the Fifth
-Generation Computing Project, and the collapse of the Lisp Machine market, all
-towards the end of that decade. See, for example,
+by research funding and public interest in `machine learning.'
+
+The first age (roughly, `good old-fashioned AI') lasted from the 1950s until
+perhaps the Lighthill report of 1974. The second---continuing the themes of the
+first but having logical reasoning, among other things, as a domain of
+application---lasted from about 1980 until the end of the Alvey Programme, the end
+of the Fifth Generation Computing Project, and the collapse of the Lisp Machine
+market, all towards the end of that decade. See, for example,
 \url{https://en.wikipedia.org/wiki/History_of_artificial_intelligence}. I am
 omitting a great deal of history. In particular, the ideas behind `deep
 learning' were formed in the early days of AI; and the ideas behind
 probabilistic inference arguably date back to the 18th century. I'm also
 ignoring, \emph{inter alia}, embodied cognition, various models of knowledge
-representation, and fuzzy logic.} In each of these ages---and also during the `AI
-winters' which separated them---there were genuine advances in AI: in planning and
-search, automated reasoning and theorem proving, expert systems, image and
-speech recognition, and others. Yet there were also many unrealistic
-expectations of the breadth of application of these breakthroughs. I think it is
-worth trying to understand what it is that made particular problems
-tractable.
+representation, and fuzzy logic.
+
+In each of these ages---and also during the `AI winters' which separated
+them---there were genuine advances in AI: in planning and search, automated
+reasoning and theorem proving, expert systems, image and speech recognition, and
+others. Yet there were also many unrealistic expectations of the breadth of
+application of these breakthroughs. I think it is worth trying to understand
+what it is that made particular problems tractable.
 
 \end{document}
