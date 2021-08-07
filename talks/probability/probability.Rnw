@@ -1,0 +1,161 @@
+\documentclass[12pt]{article}
+%\usepackage{graphicx}
+%\usepackage{amsmath}
+%\usepackage{textcomp}
+%\usepackage{amssymb}
+%\usepackage{fontspec}
+%\usepackage{minted}
+%\usepackage{booktabs}
+\usepackage[T1]{fontenc}
+\usepackage{concrete}
+\usepackage{euler}
+\usepackage[paperwidth=209.6mm, paperheight=157.2mm,
+  left=0.1875in, top=0.1875in, bottom=0.1875in, textwidth=100mm,
+  marginparwidth=85mm, marginparsep=10mm]{geometry}
+\usepackage{layout}
+\usepackage{parskip}
+%%
+\usepackage[style=authoryear]{biblatex}
+\addbibresource{probability.bib}
+%%
+\usepackage{amsmath}
+%%
+\author{James Geddes}
+\date{\today}
+\title{Probability I}
+\pagestyle{empty}
+%%
+\begin{document}
+\newgeometry{textwidth=200mm}
+\maketitle\thispagestyle{empty}
+\restoregeometry
+\newpage
+%%
+%% Setup
+%%
+<<options, include=FALSE>>=
+library(tidyverse)
+library(ggthemes)
+options(width = 46, digits = 3)
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE,
+                      dev='tikz', fig.width=3.5, fig.height=2.1,
+                      prompt=TRUE, comment='',
+                      tidy=TRUE, highlight=FALSE, tidy.opts=list(width.cutoff=I(46)))
+set.seed(20210807)
+@ 
+
+%%
+%% Discrete probability space
+%%
+<<<setup>>=
+jones1 <- read_tsv("Jones2004_Single.txt", quote = "") %>%
+  filter(str_detect(Char, "[:lower:]|[:space:]"))
+
+nyt <- jones1 %>% 
+  select(letter = Char, NYT) %>%
+  mutate(letter = factor(letter, levels = letters, ordered = TRUE), frequency = NYT/sum(NYT))
+@ 
+
+\begin{center}
+<<newyorktimes, cache=TRUE>>=
+ggplot(data = nyt) +
+    geom_col(aes(letter, frequency)) +
+    theme_tufte() + theme(axis.title = element_blank())
+@
+\end{center}
+
+Frequencies of individual lower-case letters in a sample of the New York
+Times. From \textcite{jones2004}. The sample space is $\mathcal{L} = \{\text{a},
+\text{b}, \dotsc, \text{z}\}$ and the probability mass function is $p(\text{a})
+= \Sexpr{nyt$frequency[nyt$letter == "a"]}$, etc. Here is a random letter:
+`\Sexpr{sample(nyt$letter, nyt$frequency, size = 1, replace = TRUE)}'.
+\begin{center}
+<<cumulative_nyt>>=
+nyt <- nyt %>% mutate(cumulative = cumsum(frequency))
+r <- runif(1)
+l <- with(nyt, 
+      if (r <= cumulative[1]) {
+        letter[1]
+      } else {
+        letter[-1][cumulative[-length(cumulative)] < r & r <= cumulative[-1]]
+      })
+ggplot(data = nyt) + 
+  geom_segment(aes(x = "a", y = r, xend = l, yend = r), colour = "grey", linetype = "dashed") +
+  geom_segment(aes(x = l, y = 0, xend = l, yend = r), colour = "grey", linetype = "dashed") +
+  geom_text(aes(x = "a", y = r, label = format(r, digits = 3)), hjust = "left", vjust = "bottom", nudge_y = 0.02) +
+  geom_step(aes(x = letter, y = cumulative, group = 1)) +
+  theme_tufte() + theme(axis.title = element_blank())
+@
+\end{center}
+\newpage
+<<cipher>>=
+cipher <- str_split_fixed("btjpxrmlxpcuvamlxicvjpibtwxvrcimlmtrpmtnmtnyvcjxcdxvmwmbtrjjpxamtngxrjbahuqctjpxqgmrjxvcijpxymggcijpxhbtwrqmgmaxmtnjpxhbtwrmyjpxqmvjcijpxpmtnjpmjyvcjxjpxtjpxhbtwracutjxtmtaxymrapmtwxnmtnpbrjpcuwpjrjvcufgxnpblrcjpmjjpxscbtjrcipbrgcbtryxvxgccrxnmtnpbrhtxxrrlcjxctxmwmbtrjmtcjpxvjpxhbtwavbxnmgcunjcfvbtwbtjpxmrjvcgcwxvrjpxapmgnxmtrmtnjpxrccjprmexvrmtnjpxhbtwrqmhxmtnrmbnjcjpxybrxlxtcifmfegctypcrcxdxvrpmggvxmnjpbryvbjbtwmtnrpcylxjpxbtjxvqvxjmjbctjpxvxcirpmggfxagcjpxnybjpram", "", Inf)[1,] %>%
+    factor(levels = letters, ordered = TRUE)
+cs <- sample(nyt$letter, nyt$frequency, size = 4, replace  = TRUE)
+@
+Here is a random sample from $\mathcal{L}\times\mathcal{L}\times\mathcal{L}\times\mathcal{L}$:
+\[
+(\Sexpr{cs[1]}, \Sexpr{cs[2]}, \Sexpr{cs[3]}, \Sexpr{cs[4]}).  
+\]
+The probability of getting this sequence was
+$p(\Sexpr{cs[1]})\times p(\Sexpr{cs[2]})\times p(\Sexpr{cs[3]})\times p(\Sexpr{cs[4]}) =
+\Sexpr{prod(nyt$frequency[match(cs, nyt$letter)])}$.
+
+Monalphabetic substitution cipher: To encipher a plaintext $l_1 l_2 l_3 \dotsm$ (where $l_i\in\mathcal{L}$):
+\begin{enumerate}
+\item Choose a permutation $\pi:\mathcal{L}\to\mathcal{L}$ (there are $\Sexpr{factorial(26)}$!);
+\item Emit the ciphertext $\pi(l_1) \pi(l_2) \pi(l_3) \dotsm$
+\end{enumerate} 
+The following ciphertext is the first of the `cipher challenges' accompanying
+\emph{The Code Book} \autocite{thecodebook}. 
+
+<<chiphertext, size="small">>=
+cat(as.character(cipher), fill = TRUE, sep = "")
+@
+
+What is $\pi$ and the plaintext?
+
+\newpage
+\printbibliography
+%\end{document}
+
+\newpage
+\section*{Notes}
+\subsection*{Discrete probability space}
+A \emph{discrete probability space} is
+\begin{enumerate}
+\item A set, $X$, called the \emph{sample space}; and
+\item A \emph{probability mass function}, $p:X\to[0,1]$, such that $\sum_{p \in X} p(x) = 1$.
+\end{enumerate}
+
+How do you sample from a discrete distribution? If you are lucky enough to have
+a source of samples from the uniform distribution on $[0, 1]$, use the inverse
+cumulative distribution.
+
+What if you only have a random stream of 1s and 0s? Well, a real number in
+$[0,1]$ is an infinite stream (eg, 0.10011010\ldots) but you only need a finite
+number to know which 'step' you will eventually end up in.
+
+\newpage
+\subsection*{Product space}
+
+Suppose $(X, p_X)$ and $(Y, p_Y$) are two independent discrete probability
+spaces. The chance of drawing $\alpha$ from $(X, p_X)$ and $\beta$ from $(Y, p_Y)$ is
+$p_X(\alpha) p_Y(\beta)$.
+
+The \emph{product space} of $X$ and $Y$ is the discrete probability space $(X\times
+Y, p_{X\times Y})$, where:
+\begin{enumerate}
+\item $X\times Y$ is the set $\{(x,y)\mid x\in X\;\text{and}\; y\in Y\}$;
+\item $p_{X\times Y}(x, y) = p_X(x)p_Y(y)$.
+\end{enumerate}
+
+Note that we're clearly identifying which probability mass function belongs to
+which probability space.
+
+Note also that $p(\alpha)$ means `the probability of drawing $\alpha$,' whereas $p(x)$
+means `the function which takes $x\in X$ to a number in $[0,1]$.' 
+
+
+\end{document}
+
