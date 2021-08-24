@@ -1,9 +1,13 @@
-all: probability.pdf
+all: probability-woven.pdf
 
-probability.pdf: probability.tex
-	latexmk -pdf probability.tex
+clean:
+	latexmk -C probability-woven.tex
+	rm probability-woven.tex
 
-probability.tex: probability.Rnw
-	Rscript -e "knitr::knit('probability.Rnw', output='probability.tex')"
+probability-woven.pdf: probability-woven.tex probability.bib
+	latexmk -pdf probability-woven.tex
+
+probability-woven.tex: probability.Rnw probability.bib
+	Rscript -e "knitr::knit('probability.Rnw', output = 'probability-woven.tex')"
 
 
