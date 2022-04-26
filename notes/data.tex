@@ -19,6 +19,9 @@
 \usepackage[style=authoryear]{biblatex}
 \addbibresource{data.bib}
 %%
+%% Table dum and Table dee (false and true)
+\newcommand{\dum}{\textbf{\textsf{f}}}
+\newcommand{\dee}{\textbf{\textsf{t}}}
 %%
 \author{James Geddes}
 \date{March 2022}
@@ -39,12 +42,12 @@
   5 & Adelie & Biscoe & 40.6 & 18.8 & 193 & 3800 & male & 2008 \\ 
   \bottomrule
 \end{tabular}
-\caption{Five rows sampled at random from the 344 rows of the `Palmer Penguins'
+\caption{Five rows sampled at random from the 344 rows of the ``Palmer Penguins''
   dataset (\cite{palmerpenguins}).\label{tbl:penguins}}
 \end{table*}
 
 Table~\ref{tbl:penguins} shows a few rows from a publicly-available dataset. It
-is presented as a table, perhaps the most common form of `structured' data. But
+is presented as a table, perhaps the most common form of ``structured'' data. But
 there is a great deal of information \emph{not} explicitly included in this
 table. For example:
 \begin{enumerate}
@@ -61,14 +64,14 @@ table. For example:
   with the dimensions of \emph{length} and the units of \emph{millimetres}.}
  \end{enumerate}
 These facts could not be deduced by mere inspection of the data in the
-table. The word `penguin' doesn't even appear! Although there are no duplicate
+table. The word ``penguin'' doesn't even appear! Although there are no duplicate
 rows in this particular dataset, that doesn't mean that the same penguin could
 not appear twice in any version. (The numbers in the far left column are likely
 just a way to order the rows rather than a way of individuating penguins.) The
-concepts of `species' and `sex' (fundamental characteristics of penguins) are
-different from the concept `island' (which would seem to be contingent) but
-these two things enter the table in the same way. Neither length nor mass is an
-integer, even though the values in the table are all integral.
+concepts of ``species'' and ``sex'' (fundamental characteristics of penguins)
+are different from the concept ``island'' (which would seem to be contingent)
+but these two things enter the table in the same way. Neither length nor mass is
+an integer, even though the values in the table are all integral.
 
 Some values in the full table are missing. Presumably a missing value indicates
 that the corresponding property was not measured or is otherwise unknown, not
@@ -80,33 +83,33 @@ tongue-in-cheek observation in the data science community that ``80\,\% of one's
 time is spent cleaning the data.'' Given that most of the information
 \emph{about} the data is not \emph{in} the data perhaps this observation is
 understandable. The point of this note is to try to understand what we can say
-about this `missing' information: the data that you need to be able to
+about this ``missing'' information: the data that you need to be able to
 understand the data. In other words, what \emph{is} data? In still other words,
 what is our \emph{theory} of data?
 
 Perhaps data are \emph{facts}. Then a theory of data would be available if we
 had a theory of facts. Well, I'm not sure what facts are. But one thing they
-might be is \emph{true} \emph{propositions}. And we do have a theory of
-propositions: namely, logic.\footnote{Actually---there are many logics, so perhaps
-there are multiple theories of data.}
+might be is \emph{true propositions}. And we do have a theory of propositions:
+namely, logic.\footnote{Actually---there are many logics, so perhaps there are
+multiple theories of data.}
 
 Two theories of data based on logic are widely used (though not, in my
 experience, well-understood by data scientists): the \emph{relational model} and
-\emph{ontologies} (specifically, those ontologies described by a `description
-logic'). The relational model provides the underpinnings of relational databases
-\parencite{codd1970relational} whereas ontologies provide the basis for the
-`semantic web' \parencite{DBLP:journals/corr/abs-1201-4089}. But there is
-clearly something unsatisfactory about having more than one theory of data!
+\emph{ontologies} (specifically, those ontologies described by a ``description
+logic''). The relational model provides the underpinnings of relational
+databases \parencite{codd1970relational} whereas ontologies provide the basis
+for the `semantic web' \parencite{DBLP:journals/corr/abs-1201-4089}. But there
+is clearly something unsatisfactory about having more than one theory of data!
 Presumably neither is sufficient because each is missing something.
 
 The literature on these two theories tends to focus on the computational
-complexity of reasoning about the data and not so much on what the data `mean.'
-Indeed, both theories are intentionally impoverished compared to (at least some
-varieties of) logic in order that they be \emph{decidable}; and ideally,
-decidable in something faster than exponential time. In this note, I propose to
-completely ignore questions of time and space complexity and mostly ignore
-questions of decidability.\footnote{Frankly, you'll be lucky if I worry about
-completeness.}
+complexity of reasoning about the data and not so much on what the data
+``mean.''  Indeed, both theories are intentionally impoverished compared to (at
+least some varieties of) logic in order that they be \emph{decidable}; and
+ideally, decidable in something faster than exponential time. In this note, I
+propose to completely ignore questions of time and space complexity and mostly
+ignore questions of decidability.\footnote{Frankly, you'll be lucky if I worry
+about completeness.}
 
 \section{Some terminology in set theory}
 
@@ -128,7 +131,8 @@ be:
 
 \emph{Example:} The relation $\leq$ is reflexive, antisymmetric, and transitive.
 
-\emph{Example:} A relation over the `unary product' $X$ is just a subset of $X$.
+\emph{Example:} A relation over the ``unary product'' $X$ is just a subset of
+$X$.
 
 \emph{Example:} A map, $f:X\to Y$ is a relation over $X\times Y$. Specifically, it is
 one such that for all $x\in X$ there is some $y\in Y$ for which $(x, y)\in f$.
@@ -137,7 +141,7 @@ one such that for all $x\in X$ there is some $y\in Y$ for which $(x, y)\in f$.
 sets. However, it is natural\footnote{At least, natural in the category
 \textbf{\textsf{Set}}.} to define it to be $\{\emptyset\}$, the set containing a single
 element (which we might as well take to be the empty set). Thus there are two
-`nullary' relations: one containing no elements; and one containing a single
+``nullary'' relations: one containing no elements; and one containing a single
 (empty) element.\footnote{\textcite{darwendate2006ttm} call these ``table dum''
 and ``table dee.'' I forget which is which.}
 
@@ -149,8 +153,7 @@ contrariwise, $(3, 2)\notin R_\leq$. When we interpret things this way, we often
 the proposition as, for example, $R_\leq(1, 2)$ (noting that this may be true or
 false).
 
-
-See \textcite{cameron1999sets} for more on set theory (from which some of the
+See \textcite{cameron1999sets} for more on set theory (from which much of the
 above is taken).
 
 
@@ -159,29 +162,40 @@ above is taken).
 Table~\ref{tbl:penguins} looks rather like the sort of thing one finds in a
 relational database so perhaps the relational model is the place to start.
 
-The main feature of tables like this is that they consist of a set of
-\emph{tuples} (or `rows'); and the values in corresponding positions in each
-tuple (that is, in the same column) have the same `type.' The set of tuples
-really is supposed to be a \emph{set}---no two rows can be identical. (In
-production systems this rule is often violated for efficiency reasons.)
+I find most treatements of the relational model to be \emph{extremely}
+confusing. They move from implementation-level details to very formal
+mathematics without clarifying why the one and not the other is necessary in the
+moment. They switch from using names for attributes to using position; and move
+between algebra and logic. Perhaps the issue is there is not a single
+model. This section is my attempt to describe some particular version of the
+theory.
 
-To try to capture the idea that `values in the same column have the same type,'
-let $\mathscr{D}_1, \mathscr{D}_2, \dots, \mathscr{D}_n$ be a finite collection
-of sets called \emph{domains}. The point of these domains is to be the
-`carriers' of the types of data; that is, each value in a table will be an
-element of one of the domains and all values in the same column will be
-elements of the same domain.
+The main feature of a table sch as table~\ref{tbl:penguins} is that it consists
+of a set of \emph{tuples} (or ``rows''); and the values in corresponding
+positions in each tuple (that is, in the same column) have the same ``type.''
+The set of tuples really is supposed to be a \emph{set}---no two rows can be
+identical. (In production systems this rule is often violated for efficiency
+reasons.)
+
+To try to capture the idea that ``values in the same column have the same
+type,'' let $\mathscr{D}_1, \mathscr{D}_2, \dots, \mathscr{D}_n$ be a finite
+collection of sets called \emph{domains}. The point of these domains is to be
+the ``carriers'' of the types of data; that is, each value in a table will be an
+element of one of the domains and all values in the same column will be elements
+of the same domain.\footnote{In Codd's version, and in SQL, a value may also be
+  the special value \texttt{NULL}. The addition of \texttt{NULL} significantly
+  complicates the relational theory.}
 
 Already there is trouble: The theory offers very little advice on how these
 domains are supposed to be chosen. In practice they are usually taken to be the
-`built-in' types of a database system: typically including such types as
-`integers between $-2^{31}$ and $2^{31}-1$,' `32-bit floating point numbers,'
-`strings of a certain maximum length,' `arbitrary-precision decimals,' and
-perhaps even `geospatial coordinates.' But there is a world of difference
-between `floating-point number' and `length in millimetres'. Anyway, presumably
-we don't really want to think about 32-bit integers (or whatever): we want to
-think about `real numbers' or `integers.' \textcite{abiteboul1995foundations}
-say (section 3.1):
+``built-in'' types of a database system: typically including such types as
+``integers between $-2^{31}$ and $2^{31}-1$,'' ``32-bit floating point
+numbers,'' ``strings of a certain maximum length,'' ``arbitrary-precision
+decimals,'' and perhaps even ``geospatial coordinates.'' But there is a world of
+difference between ``floating-point number'' and ``length in millimetres.''
+Anyway, presumably we don't really want to think about 32-bit integers (or
+whatever): we want to think about ``real numbers'' or ``integers.''
+\textcite{abiteboul1995foundations} say (section 3.1):
 \begin{quote}
   The entries of tuples are taken from sets of constants, called domains, that
   include, for example, the sets of integers, strings, and Boolean values.
@@ -197,35 +211,67 @@ uncountable) and we're not even going to worry about the existence of different
 types of value. (This is however consistent with the logical view, as we will
 see later.)
 
-For now, though, ignore all this and assume that we have some domains
-$\mathscr{D}_i$ without enquiring too much about how big they are. The
-definition of a \emph{table} then, is that it is a finite subset of
-$\mathscr{D}_i\times \mathscr{D}_j\times\dotsm\times\mathscr{D}_k$ for some $i, j, \dots, k$;
-that is, it is a relation.\footnote{Hence the name `relational model.'}
+For now, though, ignore all this and assume that we have a set of domains
+$\mathscr{D}_i$ (for $i=1,\dotsc, N_\mathscr{D}$) without enquiring too much
+about how big they are. The definition of a \emph{table}, then, is that it is a
+finite subset of $\mathscr{D}_{r_1}\times \mathscr{D}_{r_2}\times\dotsm\times\mathscr{D}_{r_n}$
+for some indices $0 < r_1, r_2, \dots, r_n \leq N_\mathscr{D}$; that is, it is a
+finite relation.\footnote{Hence the name ``relational model.''}
+
+The sequence of domains $(\mathscr{D}_{r_1}, \mathscr{D}_{r_2}, \dotsc,
+\mathscr{D}_{r_n})$ (or, equivalently, the sequence of indices $(r_1, r_2,
+\dotsc, r_n)$) is called the \emph{sort} of the relation. The length of this
+  sequence, $n$, is called the \emph{arity} of the relation. 
 
 The ensuing story raises at least four kinds of question. What is a table
 supposed to mean? What calculations can we effect on tables? What enquiries
 might we make of collections of tables? And what other information is supported
-by the relational model other than the brute existnce of tables? We start with
+by the relational model other than the brute existence of tables? We start with
 the second question.
 
 \subsection{The relational algebra}
 
-Table~\ref{tab:relational-algebra} summarises the operations on relations known
-as the `relational algebra.' Since relations are sets, there are set-theoretic
-operations (union, intersection, and set difference) as well as `relational'
-operations (selection, projection, and join).
+Table~\ref{tbl:relational-algebra} summarises the operations on relations, known
+collectively as the \emph{relational algebra.} These operations are of two broad
+kinds: set-theoretic operations (union, intersection, and set difference) and
+``relational'' operations (selection, projection, and join). There are also two
+constant relations and a way of getting a relation given a tuple.
 
 \begin{table}[ht]
-  \begin{tabular}{cl}
-    $A \cup B$ & $A$ and $B$ must be relations over the same domains \\
-    $A \cap B$ & $A$ and $B$ must be relations over the same domains \\
-    $A \backslash B$ & $A$ and $B$ must be relations over the same domains \\
-    
-
-  \end{tabular}
+  \begin{center}
+    \begin{tabular}{@{}cl@{}}
+      \toprule
+      \multicolumn{2}{@{}l}{\textbf{Set-theoretic operations}} \\
+      $R \cup S$ & Union  \\
+      $R \cap S$ & Intersection \\
+      $R \backslash S$ & Set difference \\
+      \midrule
+      \multicolumn{2}{@{}l}{\textbf{Relational operations}} \\
+      $\pi_{\kappa} R$ & Projection onto columns $\kappa$ \\
+      $\sigma_P R$ & Selection according to $P$ \\
+      $R \times S$ & Cartesian product (``outer join'') \\
+      $R \underset{\kappa}{\bowtie} S$ & Inner join on columns $\kappa$ \\
+      \midrule
+      \multicolumn{2}{@{}l}{\textbf{Constants and constructors}} \\
+      $\dee$ & The nullary relation of one tuple \\
+      $\dum$ & The empty nullary relation \\
+      $\tau(\langle v_1, \dotsc, v_n\rangle)$ & A relation of one tuple \\ 
+      \bottomrule
+    \end{tabular}\label{tbl:relational-algebra}
+    \caption{The relational algebra. Note that the set-theoretic operations
+      require the operands to be ``schema-compatible''.}
+  \end{center}
 \end{table}
 
+If $R$ is a relation over $\mathscr{D}_1, \dotsc, \mathscr{D}_n$, we write an
+element of $R$ as the tuple $\langle v_1, \dotsc, v_n \rangle$, where $v_i\in\mathscr{D}_i$. 
+
+
+
+
+\subsection{What's missing?}
+
+Group and aggregate. Adding a new column computed from other columns.
 
 
 \section{Sets and logic}
