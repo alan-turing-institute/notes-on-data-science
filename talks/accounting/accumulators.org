@@ -1,0 +1,29 @@
+
+Let P×P be the set of all pairs of positive numbers, (m, n). (Where m ≥ 0 and n
+≥ 0.) In the following construction, note that we avoid the use of negative
+numbers; indeed, we avoid subtraction anywhere the result could potentially be
+negative.
+
+We introduce a binary operation on P×P: For (a,b), (c,d) two elements of P×P,
+define (a,b) ⊕ (c,d) = (a+c, b+d). Note that this is a commutative, associative
+operation (by the properties of +) with identity element (0,0).
+
+For (a,b) and (c,d) two elements of P×P, we say that they are /equivalent/,
+written (a,b) ~ (c,d) if a+d = b+c. (This condition is equivalent to saying a-b
+= c-d, but we're avoiding subtraction.) Note that this is an equivalence
+relation.
+
+An /accumulator/ is an equivalence class of P×P under ~. Note that ⊕ is
+well-defined on equivalence classes, since if (a₁, b₁) ~ (a₂, b₂) and (c₁, d₁) ~
+(c₂, d₂) then necessarily (a₁, b₁) ⊕ (c₁, d₁) ~ (a₂, b₂) ⊕ (c₂, d₂).
+
+Claim: The set of accumulators, together with ⊕, is an abelian
+group. In this group, the inverse of the accumulator with representative (x, y)
+is the accumulator with representative (y, x). (For (x, y) ⊕ (y, x) = (x+y, x+y)
+~ (0, 0).)
+
+Indeed, the accumulators are isomorphic to the set of all numbers, positive and
+negative. 
+
+
+

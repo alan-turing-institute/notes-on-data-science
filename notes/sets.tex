@@ -102,9 +102,7 @@ thing. For two things $x$ and $y$, a pair is written $(x, y)$. We call $x$ the
 $(x,y)=(p,q)$ if and only if $x=p$ and $y=q$.
 
 One might wonder whether a pair is a new kind of thing. In fact, pairs can be
-defined in terms of sets. Here is one way to do so: Suppose we happen to have
-distinct things 1 and~2. Then we may define $(x, y) \equiv \{\{1, x\}, \{2,
-y\}\}$. (This construction is called a “tagged union.”)
+defined in terms of sets. Here is one way to do so: $(x, y)\equiv \{x, \{x,y\}\}$.
 
 A \defn{finite tuple} is an ordered list of things, possible repeated. One may
 define a 3-tuple, $(a, b, c)$ say, as a pair whose second element is a pair:

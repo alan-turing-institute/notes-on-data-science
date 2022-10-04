@@ -1,0 +1,573 @@
+\documentclass[10pt, a4paper, twocolumn]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{microtype}
+%%
+\usepackage[margin=0.5in, includefoot=true, columnsep=2em]{geometry}
+\usepackage[small]{titlesec}
+%\setlength{\parindent}{1em}
+%\setlength{\parskip}{\smallskipamount}
+%%
+\usepackage{hyperref}
+%\usepackage[citestyle=verbose-ibid]{biblatex}
+%\addbibresource{references.bib}
+%%
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\ie}{i.e.\relax}
+%%
+%% Artifical Intelligence, Machine Learning, and all that
+%% This note was written by James Geddes
+%%
+\title{The Problems of AI (DRAFT v0.2)}
+\author{James Geddes}
+\begin{document}\maketitle
+%\thispagestyle{empty}\pagestyle{empty}
+\begin{quote}
+``Intelligence is whatever machines haven't done yet.'' ---Lawrence Tesler
+\end{quote}
+There is as yet no artificial system that possesses \emph{general}
+intelligence. One should be very sceptical of claims that seem to imply the
+contrary.
+
+What we have, instead, are a number of `weak' or `narrow' kinds of AI:\@ methods
+that are well-suited to solving particular \emph{kinds} of problem. If you are
+interested in applying AI to a particular problem, or you are wondering what the
+next application of AI will be, it is important to understand what characterises
+those problems that can be solved by AI as it exists today. This is note is my
+attempt to structure the problems that can currently be addressed by AI, broadly
+construed, into a small number of categories.
+
+The traditional categories seem to me to be either too broad or too
+particular. `Supervised learning' for example, is an extremely broad term that
+seems to me to be more about the goal than it is about the approach. On the
+other hand, `random forests' is an approach that could be applied to many
+supervised learning problems. And none of the descriptive terms that are in
+common use seem to explain why chess is a solved problem and fully self-driving
+cars are not. 
+
+On the face of it, one could easily believe that there is a huge range of
+diverse and unrelated kinds of problem that are solved by AI.\@ Among other
+things, we have programs which recognise images or speech; translate from one
+language to another; learn to play chess, Go, or StarCraft; reason in formal
+logic; make certain kinds of medical diagnosis; recommend films; or plan a route
+of a thousand miles. More recently, finding the three-dimensional shape of a
+protein has been added to the list. My sense is that it is the apparent lack of
+connection between these examples which gives the impression that AI is more
+generally capable than it really is. In this note, I want to explicate the
+commonalities between the apparently broad range of applications as well as make
+clear the boundaries of those applications.
+
+The main argument here is that the kinds of problems we can solve are those for
+which we have found a simple and straightforward \emph{description}---and there
+only a handful of kinds of such description. I hope to make clear by examples
+what I mean by a description but, in general, it is necessary to have a clear
+question, a clear way of telling when you have an answer and, frequently, a way
+to tell when the answer is correct.
+
+Perhaps surprisingly, many problems are \emph{not} so easily
+describable. Recently there was a news article claiming that some organisations
+are `using AI to filter job applications.'\footnote{See for example \emph{The
+computers rejecting your job application},
+\url{https://www.bbc.co.uk/news/business-55932977}.} What can this mean? What
+question is being asked? A reasonable question might be `which candidate will
+produce the best outcome for the company if hired?', but the system cannot
+possibly know the answer to that question. What could `best outcome' mean? It
+seems unlikely that AI really is being used to select candidates in any
+meaningful sense.
+
+In some cases, indeed, we succeed only by finding this description. Finding a
+representation of a real-world problem that is `understandable' by a computer is
+a large part of solving the problem with AI.\@ Once we have found such a
+description the solution can seem much less magical.
+
+In the rest of this note, I outline four kinds of problem. I will try to say
+what the formulation of each problem looks like---that is, what representation is
+required---what a solution would be and why the solution might be hard. I'll also
+describe in very broad terms how we approach the problem with AI.\@ (I won't go
+into details of specific algorithms.) More recently, some challenges have been
+addressed using combinations of these methods and I will briefly talk about some
+of these.
+
+I also want to make the rather strong claim that \emph{all} the problems we
+currently know how to solve are of one of these four kinds and that, while the
+methods that have been developed to solve them are certainly very clever, and
+genuine advances have been made and continue to be made, it would be hard to
+describe them as `intelligent.'
+
+A brief disclaimer: The field of AI is extremely broad, I am not an expert in all
+of its sub-fields, and the discussion here will be opinionated and abridged. I
+will omit a great deal.\footnote{Including, \emph{inter alia}, embodied cognition, various
+models of knowledge representation, and fuzzy logic.} I will not be concerned
+with the specifics of particular algorithms, nor with the niceties that
+distinguish one field from another. And I will not discuss what is called
+`unsupervised learning.'
+
+Comments and corrections on this draft are very welcome. This note is still in
+draft form.
+
+
+\section{Four kinds of problem}
+
+\subsection{Simulation Problems}
+
+The rover \emph{Perseverance} just landed on Mars after a journey of seven
+months. In seven months, Mars travelled 440 million kilometres around the
+sun. How did we know where Mars was going to be seven months after launch?
+
+Of course, the laws of physics governing the motion of planets (and spacecraft)
+are well understood. Some questions, like this one, are easy enough that they
+can be answered by a simple calculation derived from the known laws. Other
+questions are more difficult but we can still find answer as long as we know the
+underlying laws. For example, we might wish to understand the temperatures and
+pressures in the engine of the rocket that launched \emph{Perseverance} into
+space. Here we often turn to \emph{simulation}. We construct, in the computer, a
+digital model of the world at one instant. Then we use the laws of physics to
+compute the state of the world at the next instant. By repeating this process we
+can run the model forward in time and so make predictions about what will
+happen. By starting the model from different `initial states' we can play out
+different scenarios, understand the consequences of different design decisions,
+and perhaps decide on a best one.
+
+Simulation is a well-known method for making predictions. It might seem a
+stretch to call it `AI'. Nonetheless, simulation has the flavour of other things
+that are called AI:\@ we are using a computer to make predictions about the
+world. `Agent-based models', for example, are sometimes classified as `AI' and
+these are simulations. Perhaps we baulk at calling it AI because was can see into
+the machine and it is obvious that what is going on is `merely mechanical'. To
+put it another way, the intelligence seems to be in the design of the
+calculation, not in the machine itself.
+
+What do we need to have, in order to be able to simulate? We need three things:
+A way of representing (in the computer) the state of the world at an instant of
+time; a theory of how this state changes from instant to instant; and a
+description of the initial state. Importantly, the representation must be
+complete and precise (it is usually a collection of numbers). In the case of
+Mars, for example, it turns out that what is required is the location, velocity,
+and masses of Mars and the sun. If we are not sure how to represent the state of
+the world, this method can't even get started.
+
+By the way, I hope it's clear that I am not dismissing the field of simulation
+as `not intelligent.' One the contrary, a great deal of intelligence is required
+to make simulations that provide useful information while running on real
+computers. And, after all, we landed a spacecraft on Mars!
+
+
+\subsection{`Symbolic AI' Problems}
+
+One of the first applications of what one might call `traditional' AI was to
+games such as noughts-and-crosses (\emph{a.k.a.}, tic-tac-toe) or chess. A
+computer that is able to beat a human opponent in these games really seems to be
+displaying intelligence, perhaps because one feels that it has `outwitted' its
+opponent---with better tactics or strategy---and this does seem to be one
+manifestation of intelligence.
+
+It's worth noticing what is \emph{not} difficult about these games. It is not
+difficult to know exactly what is happening: the game has `perfect information'
+(meaning that both sides know everything there is to know about the game at all
+times); it's not difficult to enumerate all possible legal moves from a given
+position; it's not difficult to tell when one side has won. It's reasonably
+straightforward to see how to represent precisely the position of the game in a
+computer.
+
+In fact, it's not even hard to see how to play these games mechanically, at
+least in principle. Here is the idea: Starting from the current position,
+enumerate all possible ways of playing out the rest of the game. That is,
+consider all legal moves, all legal replies to each move, and so on, all the way
+to a win for one player or a draw. Having done that, make a move from which your
+simulation shows you can always make a winning move in reply to your opponent.
+
+Of course, in practice it's not this easy at all. There are far too many
+possible possible games to simulate on a real computer in less than galactic
+time: enormously, vastly too many. So in practice we have designed methods that
+allow us to avoid having to simulate all the way. Here are two. First, find some
+way of assigning a score to a position---a number that quantifies how good this
+position is for you. Then, instead of simulating each game all the way to the
+end, play out a little way and chose the move that leads to the highest-scoring
+end position. The scoring method is sometimes called a \emph{heuristic}. A
+simple heuristic for chess is to sum up the values of each of your pieces and
+subtract the total value of all your opponent's pieces.\footnote{What value to
+assign to a piece is itself a heuristic but one that can be found in a book on
+chess.} The second method is to spot when there's no point simulating a
+particular line any further. For example if, after you make a particular move,
+your opponent has available a single move that wins the game for them, there is
+not point investigating that particular line further.
+
+These kinds of games are examples of a class of problems that are straightforward
+to describe. They are also straightforward to solve, in principle, although
+clever techniques are required to allow the solution method to finish in a
+useful time.
+
+Other problems can be cast into a form that is similar to playing games. For
+example, one can codify the principles of logic in such a way as to allow
+mechanical enumeration of all possible logical sentences. Given rules that
+govern the production of allowed sentences from given ones, we can cast the goal
+of finding mathematical proofs as a similar process of search.\footnote{Some
+variations on this theme deal with continuous quantities rather than discrete
+ones. The classical problem of `function maximisation' is like this: given a
+mathematical function of many arguments, find that particular choice of
+arguments which maximises the function. I'm going to wrap all these up in this
+section even though the techniques of each field are slightly different.}
+
+Modern databases take advantages of the techniques developed in this field. A
+contemporary database can search through billions of records looking for those
+which satisfy particular criteria in a matter of seconds. It's not intelligence,
+exactly, but it can seem magical at times.
+
+The kinds of problems that were explored in the early years of AI were of this
+ilk.\footnote{For this reason, symbolic AI is sometimes referred to as `Good
+old-fashioned AI.'} For many of these kinds of problems, we now have methods of
+finding solutions that are `good enough'. If your problem is one of these kinds,
+then AI might work for you. But notice what you need: you need to have a way of
+representing your problem as a `search' amongst precisely defined choices and
+there must be some way to reduce the number of viable choices at each
+point. Just because you can in principle deduce all true facts from a given
+collection of propositions doesn't mean you can find the fact you need.
+
+
+\subsection{Machine Learning Problems}
+
+Good old-fashioned AI both succeeded and failed. It succeeded in the sense that
+my satnav finds the shortest route to my destination from a huge number of
+possibilities in seconds. It's possible to describe precisely the problem my
+satnav solves: the satnav contains a database of all roads and the distances
+between their intersections and finds a contiguous sequence having shortest
+length. But good old-fashioned AI failed because in many real-world problems we
+are \emph{unable} precisely to codify either the universe of possibilities or
+the nature of a solution. Purely symbolic reasoning seems to be `too fragile'
+when it comes to the messiness of much of the real world: there are too many
+rules, too many exceptions to the rules, and too many exceptions to the
+exceptions. While computers now assist mathematicians in writing formal,
+mathematical proofs, the subject of `commonsense reasoning' seems beyond them.
+
+To take a classic example, consider the problem of identifying a handwritten
+digit in an image. It turns out to be very hard to write down a precise set of
+rules describing the shape of a `7,' and how it differs from a `1,' across all
+different kinds of handwriting. (The problem is even more acute in
+speech-to-text, or machine translation.) What categorises these problems is that
+we don't know, theoretically, how we would recognise a solution even if we had
+one. We don't have a mechanical way to tell a `7' from a `1'---that's the whole
+problem!
+
+So in the field of machine learning we ask a different question. We give up on
+the plan of trying to \emph{compute} an answer from first principles. Instead,
+we observe that sometimes it is possible to obtain many \emph{exemplar} answers
+to the very same problem and we try to answer a new question by reference to
+those examples.
+
+For example, we might ask a human to label images of handwritten digits by
+recording the specific digit in a machine-readable form.\footnote{Just such a
+collection of labelled examples can be found in the `MNIST database of
+handwritten digits,' available at \url{http://yann.lecun.com/exdb/mnist/}.} Now,
+given a new image, we can ask, to which of the exemplar images is it `closest'?
+Having found the nearby examples, we guess that the digit represented by the new
+image is the same as the ones that label the nearby images. Thus we have changed
+the question from `what digit does this image represent?' to `find example
+images that are similar to this one.' Although there are many ways to write a
+`7' there are lots of examples of handwritten `7's to refer to.
+
+Why is \emph{this} hard? For one thing, we've acquired a new problem: what
+exactly is meant by `close'? In the example of an image of a digit, we'd
+presumably like to say that images are `similar' if they differ by a small
+rotation, or a change of scale, or a line being thicker or moved slightly. It's
+not at all obvious how to explain all this to a computer, so in practice quite a
+bit of cleverness is required (by humans!) to solve a particular
+problem.\footnote{Neural networks, which currently do the best at this kind of
+task, don't work in quite the same way as I have described. Nevertheless, you
+can think of them as embodying some assumptions about which differences between
+images `matter' and which don't. The large advance in image recognition by deep
+learning has come about, in part, because we found those particular designs of
+neural networks which made the `right' kinds of assumptions: those which work
+for images.}
+
+Notice what is required to apply this kind of approach. First, you need some way
+to represent precisely each example of the problem. The MNIST database of
+digits, for example, represents each image as a $20\times 20$ grid of pixels, where
+each pixel is represented by a number indicating how dark it is. In other words,
+every image is exactly 400 numbers.
+
+Second, you need a large collection of solved examples of the very problem you
+are trying to solve: the MNIST database contains $60\,000$ images. It's important
+to recognise that image recognition is a prediction of a \emph{label} associated
+with an image: the system in no way understands the nature of the objects
+\emph{in} the image. There exist examples of images that are wildly
+misclassified (to a human) because the meaning of `close' imposed by the
+algorithm is merely about pixels; not about real things.
+
+One lesson I have learned is that it is easy to fool oneself into believing that
+one \emph{could} represent the world precisely, if only one took the trouble to
+do so. Consider the job-applicant--screening `AI' mentioned in the
+introduction. One should ask what, exactly, the `representation' of a candidate
+could be? Perhaps it is their CV and cover letter: but then how does one
+represent those documents in a consistent way?\footnote{One representation of
+documents that is sometimes used is `the collection of individual words in the
+document.' That's certainly a \emph{possible} representation but seems unlikely
+to produce useful information for accepting or rejecting a job candidate.} And
+perhaps more pointedly, where is the large collection of training
+examples?\footnote{If there is a training set, one might imagine that it was
+obtained by asking a human to score a large number of applications. But observe
+the system is now predicting something very different from the candidate's
+likely performance: it is predicting the score a human would give their
+application.}
+
+Finally, you also need some assumptions about what makes two examples
+similar.\footnote{For other methods, such as deep learning, the assumptions are
+coded in a different way but some assumptions are always required.} You might
+think that given enough examples the precise definition of close wouldn't matter
+but it turns out that, in many cases of interest, `enough' means `far more than
+you could hope to collect.'
+
+In some, important, applications one is interested in predicting the result of
+making a \emph{change} to the world, rather than simply predicting what would
+happen under ordinary circumstances. Unless one has made a similar change and
+collected the result in the training data (for example, by running a controlled
+trial) then one will be attempting to predict what happens a long way from any
+example. It is just in this situation that the assumptions that have gone into
+the modelling process will have a strong influence on the prediction and should
+be examined carefully.
+
+
+\subsection{Probabilistic Inference Problems}
+
+The assumptions made by machine learning models are often implicit: they arise
+from the structure of the model. It can be hard to see what is actually implied
+by a choice of one model over another.
+
+Sometimes, however, we actually \emph{do} have a good idea of how the world
+works. That is, we have a model of how the observed data arise based on some
+underlying theory, although we may not have full knowledge of parts of that
+theory. If we do have a theory, we would naturally want the assumptions made by
+our model to be consistent with that theory.
+
+For example, consider trying to track the infection rate of a new virus. There
+already exist models describing in principle how viruses spread within
+populations. If one has some idea of how many people were infected each week for
+the past few weeks, for example, one already has a good guess, from the model,
+as to what the infection rate will be this week. One can combine this `prior
+guess' with the new data coming in daily to provide updated estimates. This is
+the idea behind probabilistic, or \emph{Bayesian}, inference: we have a view of
+how the world is but we are uncertain about parts of it. We make some
+observations. Based on those observations, we update our view of the world and
+become more certain about how it is.
+
+What is nice about Bayesian inference is that it is principled. If we have a
+theory of the world we can adapt the approach to that theory. Furthermore, we
+get an estimate of the degree of certainty we have in any estimates. (On the
+other hand, it can be computationally very expensive.)
+
+Bayesian inference is in a sense a kind of machine learning. But I think it
+deserves its own section here because the way one approaches problems with a
+Bayesian mindset seems to me rather different from other approaches. In
+particular, one's assumption are perhaps more explicit. Furthermore, there have
+been computational breakthroughs in the last few decades that are different from
+those in, say, deep learning.
+
+\section{Some combinations of existing methods}  
+
+\subsection{Symbolic AI + Machine Learning}
+
+The symbolic AI approach to playing chess is to hunt through all possible ways
+to play out a game. In the end, however, any real computer will eventually run
+out of time and, at that point, it needs some way to decide if the furthest
+position explored is a good position or a bad one. Originally, this scoring
+algorithm was a heuristic, designed by asking expert chess players how they
+might produce a score. However, it's also possible to have a machine learning
+algorithm \emph{learn} how to score a position. This is the approach recently
+taken by the open source chess engine Stockfish and (I think) DeepMind's (now
+Google's) AlphaGo. The idea here is to let the machine play \emph{itself} many
+times, thereby creating the training data. One can generated enormous numbers of
+example games in this way and this approach has apparently produced marked
+improvements in the scoring heuristic.
+
+\subsection{Simulation + Bayesian methods}
+
+To run a simulation, one needs to know the initial state of the world and,
+often, the values of various parameters of the theory. It's common for these
+things not to be known with certainty. For example, in a model of the economy
+there may be numbers representing, say, the response of individuals or business
+to changes in inflation or lending rates, and these numbers will not be known
+exactly. Or, when considering the impact of some intervention five or 50 years
+from now, one is unlikely to know what the growth of the economy will be over
+this time.
+
+In such cases, one often turns to \emph{scenario analysis}. The modeller creates
+a small number of `scenarios,' particular choices of the unknown parameters and
+initial states. Then the simulation is run for each of these scenarios in order
+to understand both the range of possible outcomes and perhaps what findings are
+robust despite the uncertainty.
+
+Improvements in the design of these computations has meant that this idea can be
+extended in two ways. First, one can effectively run many simulations and so
+understand the likely \emph{distribution} of possible outcomes, given the
+distribution of possible parameter values. Second, one can take actual
+observations and run the model backwards to improve one's understanding of the
+unknown parameters.  
+
+\section{Conclusion: How to solve your problem with AI}
+
+The descriptions I have given of these four kinds of problem are spare to the
+point of caricature. Nevertheless, I think there are two clear lessons to be
+drawn. These lessons could help you apply AI to your particular problem. More
+immediately, they can be used to interrogate any proposed application of AI and
+will undoubtedly be revealing about what that application is actually doing.
+
+The most important lesson is that you will need to be precise about \emph{what}
+question you are asking. That means you will need a precise description of the
+inputs and outputs to the problem and either some way to tell whether the answer
+is correct or a collection of example solutions. 
+
+The second lesson is that AI can't get started without either a theory of the
+system you are studying or examples of previous solutions.
+
+Take, for example, the wish to `automate the screening of job applications.'
+That is a high level description of a goal but it is not sufficiently precise to
+understand whether or how AI might be used.
+
+The trick to being precise is to make sure there is no intelligence remaining in
+the description of the question. The first challenge is to say what is meant by
+a job application. Suppose it is a document: do only the words in the document
+matter, or should the layout count too? If only the words matter, does their
+order matter? That might sound outrageously simplistic but a common approach to
+document classification represents a document as no more than the count of the
+number of occurrences of each individual word in the document---this is called the
+`bag of words' model. The bag of words model has the benefit of being something
+that \emph{can} be captured exactly.
+
+There is no theory of job applications from which one could `calculate' a
+candidate's suitability. Thus, we are going to need a collection of example
+applications as well as some kind of measure of their success. One possible
+measure is the assessment---pass or fail---of each of a large collection of
+applications as made by a human.
+
+In the end, the question might be phrased as: given the count of occurrences of
+each word in a job application, predict the likelihood that a human would pass
+this application. That question is sufficiently clear that one could imagine
+applying machine learning. Of course, it is not the original question, and
+perhaps it is not the question we actually want to answer.
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
+
+%% Old material
+
+
+\newpage
+\section{OLD}
+
+
+
+This note describes four classes of problems that can be addressed by AI as it
+stands today. All problems require a precise representation of a certain
+collection of possibilities; they differ in what else is known. If your problem
+can be made to conform to these descriptions then AI may well be able to help.
+
+\begin{enumerate}
+\item \emph{GOFAI:} All possible possibilities can be enumerated
+  mechanically. One or more possibilities constitute a solution state and these
+  possibilities are straightforward to describe. We wish to find the solution
+  state(s).
+\item \emph{Machine Learning:} There is a precise description of all
+  possibilities but not all of these are realistic. Although the realistic
+  possibilities are not straightforward to describe there are many
+  examples. Given partial information about a particular possibility, we wish to
+  find examples that are similar to it in order to guess the remaining details.
+\item \emph{Inference:} There is a precise description of all possibilities and
+  a theory describing what observations would be made if a particular one
+  happened to be true. The theory is not completely known: there are parameters
+  about which we are uncertain, or perhaps competing theories with varying
+  degrees of plausibility. However, we have observational data. We wish to
+  recover as much information as possible about which model of the world is most
+  likely from this observational data.
+\item \emph{Simulation:} We have a complete model of how the world changes in
+  time and information about how it is now. We wish to say what the world will
+  look like later.
+\end{enumerate}
+
+What does this leave? TBD.
+
+Try to articulate your actual problem in a sufficiently precise way, aligned
+with one of the sections above.
+
+Just because your problem isn't of this form doesn't mean you shouldn't think
+about AI: it means you should think about how to cast your problem into this
+form.
+
+
+
+
+matt@standupmaths.com
+
+\section{What is a problem anyway?}
+
+Imagine a computer program which searches through all the stars in our galaxy,
+looking for ones that are suitable to support life. You give a star to the
+computer and the computer tells you `yes' or `no.' But of course, you can't
+`give' a star to a computer; instead, you must provide the computer with a
+`representation' of star. This representation might be a certain set of
+characteristics of the star. For example one might consider the nine numbers
+describing the star's mass, brightness, colour, size, rotational speed, position
+on the main sequence, and three-dimensional position relative to the galactic
+centre. To the computer, a star just \emph{is} this set of nine numbers; and
+every possible star (to the computer) is completely described by some set of
+numbers. (But note that not every set of nine numbers describes a physically
+possible star.)
+
+A typical AI problem is similar to this example. In general, one has a way of
+representing each of a very large number of possibilities (of something). The
+goal is usually to find---or to say something about---certain, special,
+possibilities. In the example, there are many sets of nine numbers, and the
+challenge is to identify particular sets that describe stars that might have a
+planet capable of sustaining life.
+
+Where problems differ is in what is known about the possibilities and in the
+nature of the goal.\footnote{It is always necessary to have a way to represent
+each possibility. Even that step can be hard to achieve.} I shall describe four
+variations: (1) In \emph{good old-fashioned AI problems} one knows everything:
+how to enumerate the possibilities and how to evaluate a candidate answer. The
+problem is simply that there are too many possibilities to search them all. (2)
+In \emph{machine learning problems}, we are given a set of \emph{example}
+answers. We don't know how, theoretically, to recognise an answer, so instead we
+spot answers by their `similarity' to one or more of the known examples. (3) In
+\emph{inference problems}, we have a collection of theories about how the world
+works and how observations are made and we'd like to know the most likely theory
+which explains the observations. (4) Finally, in \emph{simulation problems} we
+have a theory of how the world works and we want to `run the world forward.'
+
+
+\subsection{History}
+
+We seem to be in the middle of the third golden age of AI, at least as measured
+by research funding and public interest in `machine learning.'
+
+The first age (roughly, `good old-fashioned AI') lasted from the 1950s until
+perhaps the Lighthill report of 1974. The second---continuing the themes of the
+first but having logical reasoning, among other things, as a domain of
+application---lasted from about 1980 until the end of the Alvey Programme, the end
+of the Fifth Generation Computing Project, and the collapse of the Lisp Machine
+market, all towards the end of that decade. See, for example,
+\url{https://en.wikipedia.org/wiki/History_of_artificial_intelligence}. I am
+omitting a great deal of history. In particular, the ideas behind `deep
+learning' were formed in the early days of AI; and the ideas behind
+probabilistic inference arguably date back to the 18th century. I'm also
+ignoring, \emph{inter alia}, embodied cognition, various models of knowledge
+representation, and fuzzy logic.
+
+In each of these ages---and also during the `AI winters' which separated
+them---there were genuine advances in AI: in planning and search, automated
+reasoning and theorem proving, expert systems, image and speech recognition, and
+others. Yet there were also many unrealistic expectations of the breadth of
+application of these breakthroughs. I think it is worth trying to understand
+what it is that made particular problems tractable.
+

@@ -1,0 +1,510 @@
+\documentclass[10pt, a4paper, twocolumn]{article}
+%\usepackage{graphicx}
+%\usepackage{textcomp}
+%\usepackage{amssymb}
+%\usepackage{minted}
+\usepackage[T1]{fontenc}
+\usepackage{concrete}
+\usepackage{euler}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+%\usepackage{fontspec}
+\usepackage[margin=0.51in]{geometry}
+%\setlength{\parskip}{\smallskipamount}
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage[sf, bf, medium, compact]{titlesec}
+%%
+\usepackage[style=authoryear]{biblatex}
+\addbibresource{notes.bib}
+%%
+%% Table dum and Table dee (false and true)
+\newcommand{\dum}{\textbf{\textsf{f}}}
+\newcommand{\dee}{\textbf{\textsf{t}}}
+\DeclareMathOperator{\schema}{sch}
+\DeclareMathOperator{\extension}{ext}
+%%
+\author{James Geddes}
+\date{March 2022}
+\title{Data (INCOMPLETE)}
+\setcounter{tocdepth}{2}
+\begin{document}\maketitle
+\tableofcontents
+\section{Introduction}
+\begin{table*}[!ht]
+\centering\small
+\begin{tabular}{@{}rllrrrrlr@{}}
+  \toprule
+ & species & island & bill length & bill depth & flipper length & body mass & sex & year \\ 
+ & & & (mm) & (mm) & (mm) & (g) & &  \\ 
+  \midrule
+  1 & Gentoo & Biscoe & 46.2 & 14.5 & 209 & 4800 & female & 2007 \\ 
+  2 & Chinstrap & Dream & 50.9 & 19.1 & 196 & 3550 & male & 2008 \\ 
+  3 & Adelie & Dream & 44.1 & 19.7 & 196 & 4400 & male & 2007 \\ 
+  4 & Gentoo & Biscoe & 42.6 & 13.7 & 213 & 4950 & female & 2008 \\ 
+  5 & Adelie & Biscoe & 40.6 & 18.8 & 193 & 3800 & male & 2008 \\ 
+  \bottomrule
+\end{tabular}
+\caption{Five rows sampled at random from the 344 rows of the ``Palmer Penguins''
+  dataset (\cite{palmerpenguins}).\label{tbl:penguins}}
+\end{table*}
+
+Table~\ref{tbl:penguins} shows a few rows from a publicly-available dataset. It
+is presented as a table, perhaps the most common form of ``structured'' data. But
+there is a great deal of information \emph{not} explicitly included in this
+table. For example:
+\begin{enumerate}
+\item{There are, in the world, things called \emph{penguins}.}
+\item{The rows of this table describe the properties of an observational unit;
+  and that unit is a penguin.}
+\item{No individual penguin could occur more than once in any possible version
+  of this table.}
+\item{Penguins come in distinct \emph{species} and \emph{sexes}.}
+\item{\emph{Islands} are also a thing in the world.}
+\item{Each penguin stands in a certain spatial relation to one and only one
+  island.}
+\item{A \emph{flipper length} is a kind of \emph{physical quantity;} specifically, one
+  with the dimensions of \emph{length} and the units of \emph{millimetres}.}
+ \end{enumerate}
+These facts could not be deduced by mere inspection of the data in the
+table. The word ``penguin'' doesn't even appear in the table! The concepts of
+``species'' and ``sex'' (fundamental characteristics of penguins) are different
+from the concept ``island'' (which would seem to be contingent) but these two
+things enter the table in the same way. Neither length nor mass is an integer,
+even though the values in the table are all integral.Some values in the full
+table are missing. Presumably a missing value indicates that the corresponding
+property was not measured or is otherwise unknown, not that the property has no
+value.
+
+All of the above is information beyond that which is available from the table
+and yet it is required to actually make use of this table. There's a
+tongue-in-cheek observation in the data science community that ``80\,\% of one's
+time is spent cleaning the data.'' Given that most of the information
+\emph{about} the data is not \emph{in} the data perhaps this observation is
+understandable. The point of this note is to try to understand what we can say
+about this ``missing'' information: the data that you need to be able to
+understand the data. In other words, what \emph{is} data? In still other words,
+what is our \emph{theory} of data?
+
+Perhaps data are \emph{facts}. Then a theory of data would be available if we
+had a theory of facts. Well, I'm not sure what facts are. But one thing they
+might be is \emph{true propositions}. And we do have a theory of propositions:
+namely, logic.\footnote{Actually---there are many logics, so perhaps there are
+multiple theories of data.}
+
+Two theories of data based on logic are widely used (though not, in my
+experience, well-understood by data scientists): the \emph{relational model} and
+\emph{ontologies} (specifically, those ontologies described by a ``description
+logic''). The relational model provides the underpinnings of relational
+databases \parencite{codd1970relational} whereas ontologies provide the basis
+for the `semantic web' \parencite{DBLP:journals/corr/abs-1201-4089}. But there
+is clearly something unsatisfactory about having more than one theory of data.
+Presumably neither is sufficient because each is missing something.
+
+The literature on these two theories tends to focus on the computational
+complexity of reasoning about the data and not so much on what the data
+``mean.''  Indeed, both theories are intentionally impoverished compared to (at
+least some varieties of) logic in order that they be \emph{decidable}; and
+ideally, decidable in something faster than exponential time. In this note, I
+propose to completely ignore questions of time and space complexity and mostly
+ignore questions of decidability.\footnote{Frankly, you'll be lucky if I worry
+about completeness.}
+
+\section{What ought a theory of data cover?}
+
+This section is currently a collection of random thoughts. 
+
+\begin{enumerate}
+  \item There seems to be a distinction between ``brute'' facts---that is, rows in the
+table---and facts about which brute facts are possible. An example of the former
+is ``there existed, in 2007, a female Gentoo penguin on the island of Briscoe.''
+An example of the latter is, ``every penguin is either male or female.''
+
+In logic, brute facts are called ``ground.'' Is that the same distinction?
+
+In description logic, a distinction, possibly informal, is made between
+assertions in the ``A-box'' and terminological facts in the ``T-box''. Is that
+the same distinction?
+
+\item Given a table, one might ask about the status of possible rows that are,
+  however, not in the table. On one view, the ``closed-world'' assumption, any
+  row that is not in the table corresponds to a proposition that is false. On
+  another view, the ``open-world'' assumption, a row not in the table
+  corresponds to a proposition that is not known to be true or false.
+
+  Typically, the relational model takes the closed-world view (although
+  real-world databases are a lot less scrupulous about this) whereas ontological
+  models take the open-world view.
+
+\item There appear to be \emph{individuals}: for example, individual
+  penguins. And these individuals instantiate certain \emph{kinds}: for example,
+  the kind \emph{penguin}. Then again, penguins have certain properties: for
+  example, being of a particular species, such as Gentoo. Do properties
+  instantiate kinds? Is ``Gentoo'' an individual? What are our ontological
+  commitments here? On this topic, see, eg, \textcite{lowe2005four}.
+
+\end{enumerate}
+
+
+\section{Preliminaries}
+
+Let $X, Y, \dots, Z$ be sets. Then a \emph{relation} over $X, Y, \dots, Z$ is a
+subset of $X\times Y\times\dotsm\times Z$.
+
+\emph{Example:} The set $R_\leq \equiv \{(x, y)\in\mathbb{R}\times\mathbb{R} \mid x\leq y\}$ is a
+relation. (We could have called the set $\leq$ but writing $(1, 2)\in\leq$ is a bit odd.)
+
+A relation over $X\times X$ is called a \emph{binary relation}. Certain
+kinds of binary relation have special names. A binary relation $R$ is said to
+be:
+\begin{description}
+\item[Reflexive] if $(x, x)\in R$ for all $x\in X$;
+\item[Symmetric] if $(x, y)\in R$ implies $(y,x)\in R$;
+\item[Antisymmetric] if $(x, y)\in R$ and $(y, x)\in R$ imply $x = y$;
+\item[Transitive] if $(x, y) \in R$ and $(y, z) \in R$ imply $(x, z) \in R$.
+\end{description}
+
+\emph{Example:} The relation $\leq$ is reflexive, antisymmetric, and transitive.
+
+\emph{Example:} A relation over the ``unary product'' $X$ is just a subset of
+$X$.
+
+\emph{Example:} A map, $f:X\to Y$ is a relation over $X\times Y$. Specifically, it is
+one such that for all $x\in X$ there is some $y\in Y$ for which $(x, y)\in f$.
+
+\emph{Example:} We don't normally talk about the Cartesian product of \emph{no}
+sets. However, it is natural\footnote{At least, natural in the category
+\textbf{\textsf{Set}}.} to define it to be $\{\emptyset\}$, the set containing a single
+element (which we might as well take to be the empty set). Thus there are two
+``nullary'' relations: one containing no elements; and one containing a single
+(empty) element.\footnote{\textcite{darwendate2006ttm} call these ``table dum''
+and ``table dee.'' I forget which is which.}
+
+Why are we interested in relations? One good reason is that they can be
+interpreted as the extensions of \emph{propositions}: that is, of claims that
+could be true or false. For example, we might interpret $(x, y)\in R_\leq$ as the
+proposition ``$x$ is less than or equal to $y$.'' Thus, $(1, 2)\in R_\leq$ because
+the claim that $1\leq 2$ is true; contrariwise, $(3, 2)\notin R_\leq$. When we interpret
+things this way, we often write the proposition as, for example, $R_\leq(1, 2)$
+(noting that this may be true or false).
+
+See \textcite{cameron1999sets} for more on set theory (from which much of the
+above is taken).
+
+
+\section{The relational model}
+
+Table~\ref{tbl:penguins} looks rather like the sort of thing one finds in a
+relational database so perhaps the relational model is the place to start.
+
+I find most treatements of the relational model to be \emph{extremely}
+confusing. They move from implementation-level details to very formal
+mathematics without clarifying why the one and not the other is necessary in the
+moment. They switch from using names for attributes to using position; and move
+between algebra and logic. Perhaps the issue is there is not a single
+model. This section is my attempt to describe some particular version of the
+theory.
+
+The main feature of a table such as table~\ref{tbl:penguins} is that it consists
+of a set of \emph{tuples} (or rows); and the values in corresponding positions
+in each tuple (that is, in the same column) have the same ``type.''  The set of
+tuples really is supposed to be a \emph{set}---no two rows can be identical. (In
+production systems this rule is often violated for efficiency reasons.)
+
+To try to capture the idea that ``values in the same column have the same
+type,'' let $\mathscr{D}_1, \mathscr{D}_2, \dots, \mathscr{D}_n$ be a finite
+collection of sets called \emph{domains}. The point of these domains is to be
+the ``carriers'' of the types of data; that is, each value in a table will be an
+element of one of the domains and all values in the same column will be elements
+of the same domain.\footnote{In Codd's version, and in SQL, a value may also be
+  the special value \texttt{NULL}. The addition of \texttt{NULL} significantly
+  complicates the relational theory.}
+
+Already there is trouble: The theory offers very little advice on how these
+domains are supposed to be chosen. For example,
+\textcite{abiteboul1995foundations} say (in section 3.1):
+\begin{quote}
+  For most of the theoretical development, it suffices to use the same domain of
+  values for all of the attributes. Thus we now fix a countably infinite set
+  \textbf{dom} [...].
+\end{quote}
+These authors are happy to assume a single universe holding all possible values
+(so long as there are not more than countably many of them\footnote{Actually,
+Date believes that they should be finitely many.}).\footnote{Which at
+least seems consistent with first-order logic. There, if one wants to distinguish
+different kinds of individual, one does so with suitable predicates.} On the
+other hand, they also say, a few paragraphs earlier,
+\begin{quote}
+  The entries of tuples are taken from sets of constants, called domains, that
+  include, for example, the sets of integers, strings, and Boolean values.
+\end{quote}
+That sounds like there ought to be a more formal collection of domains, possibly
+various mathematical objects. In practice, in most production systems, the
+domains are usually taken to be the ``built-in types'' common to progamming
+languages: types such as ``integers between $-2^{31}$ and $2^{31}-1$,'' ``32-bit
+floating point numbers,'' ``strings of a certain maximum length,''
+``arbitrary-precision decimals,'' and perhaps even ``geospatial coordinates.''
+
+Does it matter? What about the column in table~\ref{tbl:penguins} labelled
+``species''? To say that the values in this column are members of the domain
+``strings'' seems like playing fast and loose with the world. A species is not a
+string! Surely we ought to be allowed a domain, ``species of penguin''? It is
+all very unclear.%
+\footnote{And surely (surely!) domains are also relations?}
+
+For now, though, ignore all this and assume that there is given, once and for
+all, a set, $\mathscr{D} = \{\mathscr{D}_1, \mathscr{D}_2, \dotsc,
+\mathscr{D}_N$, of domains $\mathscr{D}_i$.
+
+We are also going to need some way to refer to the individual elements of a
+tuple. Since an element of a mathematical relation is an ordered sequence, the
+natural way to identify an element would seem to be by position and, indeed,
+some treatments of the relational algebra do just this. However, for certain
+parts of the theory this approach becomes cumbersome and we use an alternative
+in which the elements are named.%
+\footnote{Indeed, the positional notation is \emph{so} awkward that I suspect
+that something deeper is going on with the named approach than merely notational
+convenience. For example, \textcite{brown2022tables} note that the notion of
+``pivoting'' a dataset requires ``first-class column names.'' In other words,
+the column names themselves are allowed to become values (and \textit{vice
+  versa}).}
+
+Fix, once and for all, a countable set, $\mathscr{N}$, of \emph{attribute
+names}, together with a map $D:\mathscr{N}\to\mathscr{D}$, which assigns, to each
+attribute name, $n\in\mathscr{N}$, a domain, $D(n)\in\mathscr{D}$.\footnote{The
+usual story doesn't bother to decompose the names by domain in this way, but
+then has to add other caveats in subsequent definitions. Date, however, says
+that (a) domains are types; and (b) a type is a \emph{named} set of values.} The
+map $D$ should assign countably many names to each domain (so that there
+``sufficiently many to work with.'')
+
+A \emph{relation schema} is a finite set of attribute names. For $\mathcal{S}$ a relation
+schema, a \emph{tuple over $\mathcal{S}$} is an assignment, to each attribute name $s\in\mathcal{S}$,
+of an element of the domain $D(s)$. The elements of the tuple, which are pairs
+of attribute name and value, are called \emph{attributes}. We write such an
+element as $\mathrm{n}\colon v$ where $\mathrm{n}$ is a name and $v$ is an
+element of the corresponding domain. We write a tuple using the notation
+$\langle\mathrm{n}_1\colon v_1, \dotsc, \mathrm{n}_n\colon v_n \rangle$. The value of $n$,
+the size of $\mathcal{S}$, is called the \emph{arity} of the relation.%
+\footnote{This notation is not standard but I haven't found a standard one. What
+\textcite{abiteboul1995foundations} do is to switch, \textit{ad libitum}, from
+the named approach to the ordered sequence approach, depending on which one
+provides a convenient notation at the time.}
+
+A \emph{relation instance} (or sometimes just \emph{relation}) is a relation
+schema, $\mathcal{S}$, together with a finite set of tuples over $\mathcal{S}$. The set of tuples is
+sometimes called the \emph{extension} of $R$. For $R$ a relation, we write the
+schema as $\schema(R)$ and the extension as $\extension(R)$.
+
+A relation instance in this sense is essentially a relation in the mathematical
+sense (except that a relation my have infinite extension but a relation instance
+is by definition finite). Fix some ordering of the relation schema, say $(s_1,
+s_2, \dotsc, s_n)$. Then each tuple is, by definition, an element of the
+Cartesian product $D(s_1)\times D(s_2) \times\dotsb \times D(s_n)$. 
+
+A database is composed of relation instances and it turns out we need names for
+these as well (in part because an instance is not individuated by its schema nad
+extension). Fix, once and for all, a set of \emph{relation names}. A
+\emph{database instance} is a finite set of named relation instances.
+
+In the ``RDBMS'' version of all this, a relation instance is called a
+\emph{table}, the schema (or something like it) is called the \emph{header} of
+the table, and a tuple is a \emph{row}.
+
+The ensuing story raises at least four questions. What is a table
+supposed to mean? What calculations can we effect on tables? What enquiries
+might we make of collections of tables? And what other information is supported
+by the relational model other than the brute existence of tables? We start with
+the second question.
+
+\subsection{The relational calculus}
+
+
+
+
+Naturally, there are two of these. Why is nothing straightforward in this
+subject? The two calculi are the \emph{tuple relational calculus} \parencite[][the
+  original one]{codd1972relational} and the \emph{domain relational calculus}
+\parencite{lacroix1977calculus}.%
+\footnote{The abstract begins, ``A view of the semantics of a relational
+database consists in considering that the database domains represent the sets of
+objects of the subject matter and that the relations represent various kinds of
+associations among these objects. This view is supported by query languages
+where each variable ranges on a domain of the relational data base and
+predicates correspond to the associations modeled by relations.''}
+
+The broad principles of both calculi are the same, however. In both, one
+specifies a relation by giving a logical expression, constructed using the usual
+logical connectives together with quantification. This expression is known as a
+``query.'' The extension of this query is the set of all tuples which make the
+logical expression true. An implementation of the calculus is supposed to return
+the extension as a relation instance. Although a general relation may have
+infinite extension, certain restrictions on the allowable queries guarantee
+finiteness.
+
+
+
+
+
+
+\subsection{The relational algebra}
+
+Table~\ref{tbl:relational-algebra} summarises the operations on relations known
+collectively as the \emph{relational algebra.} These operations are of two broad
+kinds: set-theoretic operations (union, intersection, and set difference) and
+``relational'' operations (selection, projection, and join). Both kinds consume
+and produce relations. There are also two constant relations and a way of
+getting a relation given a tuple.
+
+\begin{table}[ht]
+  \begin{center}
+    \begin{tabular}{@{}cl@{}}
+      \toprule
+      \multicolumn{2}{@{}l}{\textbf{Set-theoretic operations}} \\
+      $R \cup S$ & Union  \\
+      $R \cap S$ & Intersection \\
+      $R \backslash S$ & Set difference \\
+      \midrule
+      \multicolumn{2}{@{}l}{\textbf{Relational operations}} \\
+      $\pi_{\kappa} R$ & Projection onto schema $\kappa$ \\
+      $\sigma_P R$ & Selection according to proposition $P$ \\
+      $\rho_\pi R$ & Rename columns \\
+      $R \times S$ & Cartesian product \\
+      $R \bowtie S$ & Natural join \\
+      \midrule
+      \multicolumn{2}{@{}l}{\textbf{Constants and constructors}} \\
+      $\dee$ & The nullary relation of one tuple \\
+      $\dum$ & The empty nullary relation \\
+      $\tau(\langle v_1, \dotsc, v_n\rangle)$ & A relation of one tuple \\ 
+      \bottomrule
+    \end{tabular}\label{tbl:relational-algebra}
+    \caption{The relational algebra. $R$ and $S$ are arbitrary relations. Note
+      that the set-theoretic operations require the operands to have the same
+      schema. The above collection is redundant; a minimal set of operations
+      (excluding constants) is $\cup$, $\setminus$,
+      $\pi_\kappa$, $\sigma_P$, $\rho_\pi$, and $\bowtie$. $\dee$ and $\dum$ are not usually supported
+      by SQL-based systems.}
+  \end{center}
+\end{table}
+
+\subsubsection{Set-theoretic operations}
+
+The binary operations $\cup$, $\cap$, and $\setminus$ are just what you would expect, with the
+caveat that the two operands must have the same relation schema, which is also
+the schema of the result.%
+\footnote{When the definition of $\mathscr{N}$, the set of attribute names, is
+simply a set, without the map to domains, this condition is trickier to state,
+since one has to check equality of domains in addition to checking equality of
+names.}
+
+\subsubsection{Relational operations}
+
+Let $R$ be a relation and suppose $\kappa$ is a subset of $\schema(R)$. The
+\emph{projection}, $\pi_\kappa(R)$, is that relation, of schema $\kappa$, consisting of
+tuples formed by omitting, from tuples in $R$, attributes whose name is not in
+$\kappa$. Note that $\kappa$ may be empty and in that case $\pi_\kappa(R)$ is $\dum$ when $R$ is
+empty and $\dee$ otherwise.
+
+A \emph{propositional formula} over $\schema(R) = (n_1, \dotsc, n_n)$ is a
+truth-valued function on $R$ of a particular form, described shortly. Given a
+propositional formula, $P$, a \emph{selection}, $\sigma_P(R)$, is that relation
+consisting of all tuples $x\in R$ such that $P(x)$ is true.
+
+The particular forms that $P$ can take are those that are formed from
+\emph{propositional atoms} by the logical connectives $\wedge$, $\vee$, and $\neg$. What
+counts as a propositional atom seems to vary. At a minimum, they are expressions
+of the form $x_i = \mathrm{a}$ or $x_i = x_j$. Here, $x_i$ and $x_j$ are
+elements of a tuple in $R$ having the same domain, and `$\mathrm{a}$' is a
+constant from the same domain as $x_i$. These atoms allow one to ``filter on
+specific values of specific columns.''
+
+However, sometimes other atoms are allowed, for example, the expression $x_1 >
+0$, or $x_1 \leq x_2$. That is, a given system might allow relations other than
+equality. (Which anyway seems special.) Once one admits \emph{anything} more than
+equality, why not \emph{any} binary relation? Indeed, why not any relation? In
+which case, why are we expressing what is clearly a relational concept in this
+form?
+
+I think what's going on is that we're trying to keep everything finite. The
+domains are allowed to be (countably) infinite, so the extension of a general
+binary relation such as $<$ is also an infinite set; and for reasons of
+tractability we want to exclude infinite sets, or at least to confine the
+infinities to the domains. So some things get coded as ``intensional'' and some
+things---finite things---as ``extensional.''
+
+For $R$ and $S$ any two relations whose schemas have empty intersection, the
+\emph{Cartesian product} of $R$ and $S$ is the relation whose tuples are the
+concatenation of a tuple in $R$ with a tuple in $S$. The schema of $R\times S$ is
+$\schema(R)\cup\schema(S)$.
+
+Finally, let $R$ and $S$ be relations whose schemas may have common
+attributes. The \emph{natural join,} $R \bowtie S$, is the relation of schema
+$\schema(R) \cup \schema(S)$ consisting of all pairs of tuples from $R$ and $S$
+which agree on their common attributes.%
+\footnote{Sometimes one introducts a ``$\theta$-join'', equivalent to taking the
+Cartesian product and then selecting based on some propositional formula $\theta$. If
+all the atoms in $\theta$ are equalities, the result is called an ``equi-join.''}
+
+Note that if $\schema(R)\cap\schema(S)=\emptyset$ then the natural join is the Cartesian
+product; and if $\schema(R) = \schema(S)$ then the natural join is the
+intersection. Thus one can get away without $\times$ or $\cap$ as long as one is free to
+\emph{rename} attributes. Let $\pi:\schema(R)\to\mathscr{N}$ be an injective map
+preserving domains. (That is, for any attribute name $s\in\schema(R)$, the domain
+of $\pi(s)$ is the same as the domain of~$s$.) Then $\rho_\pi R$ is that relation,
+whose schema is the image of $\pi$, obtained by renaming the attributes in each
+tuple as indicated by~$\pi$.
+
+\subsubsection{Meaning}
+What does a tuple mean? On Codd's view, a tuple is a statement of a fact: that
+is, it is a proposition. Specifically, it is the proposition that some
+predicate, when applied to the values in the tuple, is true.\footnote{That's why
+the set of tuples is a set. Date reports Codd as saying, ``If something is true,
+saying it twice doesn’t make it any more true.''} What predicate does a relation
+express?
+
+Here things are murky again. A logical predicate is usually interpreted as
+saying that some relationship holds between individuals. For example, $1<2$
+means ``a relationship of `less than' holds between the individual 1 and the
+individual 2.'' But, on the face of it, table~\ref{tbl:penguins} doesn't seem to
+be of that form. Imagine projecting this relation onto the attributes
+``species'' and ``island''. One tuple in that resulting relation is $\langle
+\mathtt{Gentoo}, \mathtt{Biscoe} \rangle$. What relation holds between the species
+``Gentoo'' and the island ``Biscoe''? In this example, the relation must express
+something like ``\emph{there exists} a penguin, such that this penguin is a
+Gentoo and lives on Biscoe.'' That is, this relation asserts the existence of
+some individual (a penguin); moreoever---and this is definitely confusing---this
+individual is \emph{not} a value of one of the domains.
+
+\subsubsection{What's missing?}
+
+\begin{itemize}
+\item In the algebra described above, there is no ``grouping'' or aggregation.
+\item Pivot and unpivot
+\item Transitive closure
+\end{itemize}
+
+
+
+
+\section{Sets and logic}
+
+
+
+
+intension vs extension
+
+
+
+
+
+
+
+
+
+
+
+
+\printbibliography
+
+\end{document}

@@ -1,0 +1,109 @@
+%
+\documentclass[10pt, a4paper, twocolumn]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{microtype}
+\usepackage[margin=0.51in]{geometry}
+%%
+%\setlength{\parindent}{1em}
+\setlength{\parskip}{\smallskipamount}
+%%
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\eg}{\emph{Example:}\relax}
+\DeclareMathOperator{\dimension}{dim}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\image}{Im}
+\DeclareMathOperator{\kernel}{Ker}
+%%
+%% Multivariate Gaussians
+%% This note was written by James Geddes
+%%
+\title{The Multivariate Gaussian}
+\begin{document}\maketitle
+
+\section{Definition}
+
+The normal (or Gaussian) distribution is a family of probability distributions
+on $\R$, parameterised by $\mu\in\R$ (the “mean”) and $\sigma^2>0 \in\R$ (the “variance”),
+and defined by its probability density function,
+\begin{equation*}
+  \N(\mu, \sigma) \sim \frac{1}{\sigma\sqrt{2\pi}} e^{-(x-\mu)^2/2\sigma^2}.
+\end{equation*}
+
+Fix a finite-dimensional vector space,~$V$ and let $p$ be a probability
+distribution on~$V$. For any $w_a \in V^*$ define a probability distribution,
+$p_*$ on $\R$ in the folllowing way: it is that distribution for which the
+expectation of any function $f$ on $\R$ is
+\begin{equation*}
+\E_{p_*}(f) = \E_p\bigl(f(w_a x^a)\bigr). 
+\end{equation*}
+On the left is the expectation of $f$ with respect to $p_*$; on the right is the
+expectation with respect to $p$ of the function on $V$ given by $x^ a\mapsto f(w_a
+x^a)$. This $p_*$ is called the \emph{pushforward} of $p$ by the map~$w_a$.
+
+A \defn{multivariate Gaussian} is a probability distribution on $V$ whose
+pushfoward to $\R$ by any element of the dual is a Gaussian distribution.
+
+A multivariate Gaussian is uniquely determined by two parameters: a vector $m^a\in
+V$, called the mean, and a symmetric, positive-definite, two-index tensor,
+$\Sigma^{ab}\in V\otimes V$, called the \emph{covariance}. A two-index tensor $\Sigma^{ab}$ is
+\emph{symmetric} if $\Sigma^{ab}u_a w_b = \Sigma^{ba} u_a w_b$ for any $u_a, w_a \in V^*$ and
+\emph{positive definite} if $\Sigma^{ab}w_a w_b > 0$ for all $w_a\neq 0$.
+
+For $w_a$ any dual vector, the pushfoward to $\R$ of a multivariate Gaussian has
+mean $w_a m^a$ and variance $w_a w_b \Sigma^{ab}$.
+
+
+\section{Calculation of expectations}
+
+
+
+
+
+\section{Probability density function}
+
+FIXME: Need a volume form on $V$. 
+
+Given $m^a$ and $\Sigma^{ab}$ the probability density function of the multivariate
+Gaussian on a $k$-dimensional vector space is
+\begin{equation*}
+\N(m^a, \Sigma^{ab}) \sim \frac{1}{\Sigma (2\pi)^{k/2}} e^{(x^a-m^a)(x^b-m^b)(\Sigma^{-1})_{ab}/2}.
+\end{equation*}
+Here the inverse of the covariance, $(\Sigma^{-1})_{ab}$, is defined by:
+\begin{equation*}
+\Sigma^{ab} (\Sigma^{-1})_{bc} = \id^a{}_c,
+\end{equation*}
+where $\id^a{}_b$ is the identity map on~$V$.
+
+\section{Some identities}
+
+
+
+
+\section{Short, informal proofs}
+
+FIXME: Proof that multivariate Gaussians exist.
+
+Fix a multivariate Gaussian, $\mathcal{G}$, on $V$. For any dual vector $w\in V^*$
+we obtain a Gaussian distribution $\N_w$ on $\R$ (by definition). Denote the
+mean of this Gaussian by $m(w)$. Then $m(w) = \E_{\N_w}(x) = \E_\mathcal{G}(w_a
+v^a)$. But this expression is linear in $w_a$; hence $m(w)$ is an
+element of $(V^*)^*$, which is naturally isomorphic to is $V$ since $V$ is
+finite-dimensional. Thus, there is some $m^a\in V$ (also called the mean) such
+that the mean of the pushforward by $w_a$ is given by $w_a m^a$.
+
+
+
+
+
+
+
+
+
+
+\end{document}

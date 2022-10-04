@@ -1,0 +1,307 @@
+#+title: The representer theorem and kernels: Notes
+#+options: toc:nil
+
+* Introduction: Linear Regression
+
+In a regression problem there is given empirical data which we are to model. The
+data consist of pairs $(x_1, y_1)$, $(x_2, y_2)$, ..., $(x_n, y_n)$ and we want
+to find a function $\tilde{f}(x)$ that `approximates' this data in the sense
+that $\tilde{f}(x_i)$ are close to the $y_i$. The data themselves are supposed
+to come from some `true' function, possibly with a bit of randomness on top.
+
+A common way to define `close to' is by saying that $f$ approximates the data if
+the value of
+\begin{equation*} 
+E[f\mid x_i, y_i] = \sum_i \bigl(y_i - f(x_i)\bigr)^2
+\end{equation*} 
+is small. 
+
+We call $E$ the `error functional'. It's a `functional' because its argument is a
+function.[fn:1]
+
+Well, it's rather /too/ easy to find a function which /exactly/ matches the
+data: consider the function that is zero everywhere, except at the $x_i$ where it
+is equal to the $y_i$. The problem with this function is that it's very unlikely
+to give the right answer on new data. So what we really want is a function which
+`smoothly interpolates,' or `is useful for prediction'.
+
+Thus, in practice, we first pick a family of `reasonable' functions,
+$\mathcal{F}$, and we restrict ourselves to functions $f\in\mathcal{F}$ in that
+family.
+
+For example, in simple linear regression, the family $\mathcal{F}$ might be
+taken to be `all straight lines.' A function in this family is parameterised by
+two numbers, $\alpha_0$ and $\alpha_1$, and is of the form $f(x) = \alpha_0 +
+\alpha_1 x$.
+
+Often, however, the data clearly do not lie on a straight lines. In these cases,
+we might expand the family $\mathcal{F}$. For example, we might add quadratic
+terms and consider all functions of the form $f(x) = \alpha_0 + \alpha_1 x +
+\alpha_2 x^2$. Now we can fit slightly curvy data.
+
+Note that there is something special about this particular family; namely, that
+it has the structure of a vector space. For suppose $f$ and $g$ are of this
+form, so that $f(x) = \alpha_0 + \alpha_1 x + \alpha_2 x^2$ and $g(x) =
+\beta_0 + \beta_1 x + \beta_2 x^2$. Then the function $f(x) + c g(x)$, where $c$
+is a number, is also in the same family. In other words, linear combinations of
+functions in $\mathcal{F}$ are in $\mathcal{F}$. This is why it's called linear
+regression: not because it only contains linear functions but because the family
+itself is a `linear space.'
+
+In summary, in ordinary linear regression, we are trying to solve this
+/optimisation/ problem:
+\begin{equation}
+\tilde{f} = 
+\operatorname*{arg\,min}_{f\in\mathcal{F}} E[f\mid x_i, y_i] =
+\operatorname*{arg\,min}_{f\in\mathcal{F}} \sum_i \bigl(y_i - f(x_i)\bigr)^2.
+\end{equation}
+
+
+** Regularised regression
+
+There's a tension to this game. If $\mathcal{F}$ is `too small'---for example,
+if it consists of just the straight lines---then even the best-fitting member of
+this family, the one that minimises $E$, is unlikely to be a good fit. On the
+other hand, if $\mathcal{F}$ is `too large'---for example, if it is all
+functions---then many functions will match the data, and most of them are
+extremely unlikely to be close to the `true' function.
+
+A popular way to resolve this tension is to start with a capacious $\mathcal{F}$
+but to include a preference for some functions over others. For example, we
+might prefer less-wiggly functions over more-wiggly functions. Then the
+optimisation becomes a matter of balancing the goodness-of-fit (of the function
+to the data) with the degree to which we prefer a particular function.
+
+Conceptually, we imagine there is some other functional, $R[f]$, known as the
+`regulariser', which measures the extent to which we don't like $f$. Now we are
+looking to solve the problem of minimising the sum of the error functional and
+the regulariser, known as the `loss functional':
+\begin{equation}
+\tilde{f} = \operatorname*{arg\,min}_{f\in\mathcal{F}} L[f],
+\end{equation}
+where
+\begin{equation} 
+L[f] = E[f] + R[f].
+\end{equation}
+
+How might we choose $R$? In the case of linear regression---when $\mathcal{F}$ is
+a vector space---there are two common choices. Suppose that in some basis the
+components of a vector are $\alpha_i$ (just like in the examples above). One
+choice of regulariser is
+\begin{equation}
+R[f] = \lambda \sum_p \alpha_p^2.
+\end{equation}
+This is called /ridge regression/ (or sometimes `Tikhonov
+regularisation'). Another common choice is
+\begin{equation}
+R[f] = \lambda \sum_p \left|\alpha_p\right|,
+\end{equation}
+which is called /lasso regression/. In both cases the $\alpha_p$ are the
+parameters of the regression function and $\lambda$ is a term which controls the
+balance between goodness-of-fit and function preference.
+
+
+* A representer theorem
+
+The regression problem is therefore something about the `minimisation of a
+function on a vector space.' Here is a theorem about certain minimisation
+problems of this kind.
+
+Let $\mathcal{H}$ be a Hilbert space, with inner product $\langle -,-\rangle$
+and norm $\lVert v\rVert^2 = \langle v, v\rangle$. Let there be given vectors
+$w_1, w_2, \dotsc, w_n$ (known as `the data') and consider the following problem:
+\begin{equation}
+\operatorname*{arg\,min}_{\phi\in\mathcal{H}} \Bigl( 
+E(\langle\phi, w_1\rangle, \dotsc, \langle\phi, w_n\rangle) +
+\lambda \lVert \phi \rVert^2
+\Bigr). 
+\end{equation}
+Here $E:\mathbb{R}^n\to\mathbb{R}$ is a function whose dependence on $\phi$
+enters only though the inner products $\langle \phi, w_i\rangle$; and
+$\lambda>0$ is some positive number. /Theorem:/ Any solution of this
+minimisation problem is a linear combination of the $w_i$.
+
+The proof is surprisingly simple. The $w_i$ span a subspace
+$\mathcal{W}\subset\mathcal{H}$ so that the Hilbert space can be decomposed into
+the direct sum $\mathcal{H} = \mathcal{W} \oplus\mathcal{W}^\perp$. Thus, any
+vector $\phi$ can be written (uniquely!) as $\phi = w + z$ where $w\in
+\mathcal{W}$ and $\langle z, w_i\rangle = 0$.)
+
+Now consider the expression to be minimised. We have
+\begin{equation}
+\begin{aligned}
+E(\langle\phi, w_1\rangle, \dotsc, \langle\phi, w_n\rangle) +
+\lambda \lVert \phi \rVert^2 
+&= 
+E(\langle w, w_1\rangle, \dotsc, \langle w, w_n\rangle) +
+\lambda \lVert w + z \rVert^2 \\
+&\geq 
+E(\langle w, w_1\rangle, \dotsc, \langle w, w_n\rangle) +
+\lambda \lVert w \rVert^2.
+ \end{aligned}
+\end{equation}
+The first line follows since $\langle w + z, w_i\rangle = \langle w, w_i\rangle$,
+and the second line follows since $\lVert \phi \rVert^2 = \lVert w \rVert^2 +
+\lVert z \rVert^2$.
+
+Thus, if $\tilde{\phi} = \tilde{w} + \tilde{z}$ is a minimiser, then necessarily
+$\tilde{z}=0$.
+
+Incidentally, it's clear that one can replace the `regulariser' $\lambda\lVert
+v\rVert^2$ by $\Omega(\lVert v\rVert)$ as long as $\Omega$ is non-decreasing.
+
+The importance of this result is that one might be able to replace minimisation
+over very high-dimensional space (possibly infinite-dimensional) with a
+minimisation problem over a lower-dimensional space (namely $\mathcal{W}$).
+
+* Applying the representer theorem to regression 
+
+Suppose $\mathcal{F}$ is a Hilbert space with inner product $\langle -,-
+\rangle$, arising as a space of functions from some domain $\mathcal{X}$ to
+$\mathbb{R}$ with addition and scalar multiplication defined pointwise.
+
+Suppose we are given data $(x_i, y_i)$ and we wish to solve the regularised
+regression problem
+\begin{equation}
+\tilde{\phi} = 
+\operatorname*{arg\,min}_{\phi\in\mathcal{F}} \Bigl( E[\phi(x_i), y_i] + \lambda\lVert \phi\rVert^2 \Bigr).
+\end{equation}
+Here the error functional $E$ depends on $\phi$ only through its values at the
+data, $\phi(x_i)$.  
+
+On the face of it, this does not look like the form required for the representer
+theorem: the error functional depends on $\phi$ though evaluation at the $x_i$
+rather than by the inner product with some $w_i$. However, consider the
+`evaluation map,' $\Delta_x$, defined by:
+\begin{equation}
+\begin{aligned}
+\Delta_x : \mathcal{F} &\to \mathbb{R} \\
+           \phi        &\mapsto \phi(x).
+\end{aligned}
+\end{equation}
+
+By the definition of addition in $\mathcal{F}$, the map $\Delta_x$ is a linear
+map. Suppose it is also a \emph{continuous} linear map (equivalently, a bounded
+linear map[fn:3]). Then, by the Riesz representation theorem, there exists some
+vector $\delta_x \in\mathcal{F}$ such that
+\begin{equation}
+\Delta_{x} \phi = \langle \phi, \delta_{x}\rangle
+\end{equation}
+for all $\phi$.
+
+
+
+* The representer theorem for regression.
+
+Here is the big observation. In regularised linear regression, the loss
+functional usually depends on the function purely through the evaluation of the
+function at the data, $x_i$. If the vector space of functions under
+consideration is such that $\Delta_x$, the operation of `evaluation at $x$,' is
+a continuous linear map, then the premise of the representer theorem holds. In
+this case we can conclude that the minimising function is a linear combination
+of the $\delta_{x_i}$.
+
+Why is this helpful? It is helpful when the dimension of the vector space is
+much larger than the number of data points, which is likely since this is
+precisely when regularisation is useful. The dimension of the function space may
+even be infinite. Under these circumstances the minimisation problem may be made
+significantly more tractable.
+
+In order to make practical use of this observation, it is necessary to be able
+to find the vectors $\delta_{x_i}\in\mathcal{F}$. Since elements of
+$\mathcal{F}$ are functions, we need to fund the functions $\delta_{x_i}(x)$.
+
+Consider simple linear regression, where the space $\mathcal{F}$ consists of all
+functions of the form $f(x) = \alpha_0 + \alpha_1 x$. An obvious choice of
+inner product is
+\begin{equation*}
+\langle \alpha_0 + \alpha_1 x, \beta_0 + \beta_1 x\rangle =
+\alpha_0\beta_0 + \alpha_1\beta_1.
+\end{equation*} 
+Under this inner product, it's straightforward to see that
+\begin{equation*}
+\langle f(x), 1 + \tilde{x}x\rangle = \alpha_0 + \alpha_1 \tilde{x}, 
+\end{equation*}
+which is $f(\tilde{x})$, /i.e./, the evaluation of $f$ at $\tilde{x}$. Thus we have
+\begin{equation*}
+\delta_{\tilde{x}}(x) = 1 + \tilde{x}x.
+\end{equation*}
+(Here, the right hand side is a member of $\mathcal{F}$ in virtue of being a
+function of $x$.)
+
+A Hilbert space of functions in which $\Delta_x$ is a continuous linear map is
+called a /reproducing kernel Hilbert space/, abbreviated RKHS. The next section
+explains why.
+
+* Kernels
+
+Suppose $(\mathcal{F}, \langle, -, -\rangle)$ is an RKHS, whose underlying
+functions have domain $\mathcal{X}$ and range $\mathbb{R}$. By definition, for any $x,
+x'\in\mathcal{X}$ there are functions $\delta_{x}, \delta_{x'}\in\mathcal{F}$
+representing the action of evaluation. Since, say, $\delta_{x'}$ is a function,
+we might ask for its functional form; that is, for $\delta_{x'}(x)$. By
+definition,
+\begin{equation*}
+\delta_{x'}(x) = \langle \delta_{x'}, \delta_{x}\rangle.
+\end{equation*}
+The function on the right hand side, 
+\begin{equation*}
+\begin{aligned}
+K : \mathcal{X}\times\mathcal{X} & \to \mathbb{R} \\
+     (x, x')                     & \mapsto \langle \delta_x, \delta_{x'}\rangle. 
+\end{aligned}
+\end{equation*}
+is known as the /kernel/.[fn:2] It is symmetric (becuase the inner product is
+symmetric) and /positive definite/. Positive definite means that, for any
+numbers $c_1, \dotsc, c_n\in\mathbb{R}$, and elements $x_1, \dotsc, x_n\in
+\mathcal{X}$,
+\begin{equation*}
+\sum_i \sum_j c_i c_j K(x_i, x_j) \geq 0.
+\end{equation*}
+with the inequality being saturated if and only if all the $c_i$ are zero. The
+kernel is positive definite since
+\begin{equation*}
+\sum_i \sum_j c_i c_j K(x_i, x_j) = \langle v, v\rangle \geq 0,
+\end{equation*}
+where $v = \sum_i c_i\delta_{x_i}$ and the final inequality is a property of
+inner products.
+
+This $K(x, x')$ is sometimes called the /reproducing kernel/ (and gives its name
+to the space) because it `reproduces' itself, in the sense that
+\begin{equation*}
+K(x, x') = \langle K(x, \cdot), K(x', \cdot)\rangle .
+\end{equation*}
+
+So we can now answer the question raised by the representer theorem: The
+solution to the regularised linear regression problem is known to be a linear
+combination of $K(x_i, \cdot)$, the kernel evaluated at the data.
+
+What is perhaps more interesting, and a large part of the usefulness of kernel
+methods, is the following theorem:
+
+/Theorem (Moore--Aronszajn):/ Let $K:\mathcal{X}\times\mathcal{X}\to\mathbb{R}$
+be a symmetric, positive definite function. Then there exists a unique
+reproducing kernel Hilbert space of functions on $\mathcal{X}$ for which $K$ is
+the reproducing kernel.
+
+(Idea of proof: complete the span of $\{K(x, \cdot) \mid x\in\mathcal{X}\}$ in the
+inner product defined by the reproducing property.)
+
+The idea here is that one can get hold of lots of interesting RKHS's---and
+potentially solve lots of interesting regularised regression problems---by
+suitable choice of kernels. 
+
+
+
+
+* Footnotes
+
+[fn:1] Although of course functions whose domain is a space of function are
+still functions.
+
+[fn:2] The word `kernel' is severely overloaded in mathematics. A kernel is
+typically a symmetric function of two variables although, as here, the
+definition mostly seems to reflect how the function is used.
+
+[fn:3] Boundedness means that, for all $x$ there is some $M\geq 0$ such
+that $\lVert \Delta_x \phi\rVert \leq M \lVert \phi\rVert$ for all $\phi$. 
