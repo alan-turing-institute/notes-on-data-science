@@ -15,7 +15,7 @@
 %\usepackage{fancyhdr}
 %%
 \usepackage[style=authoryear]{biblatex}
-\addbibresource{probability.bib}
+\addbibresource{notes.bib}
 %%
 %%
 \author{James Geddes}
@@ -145,12 +145,12 @@ distribution, $p(x\mid y)$, is a distribution on $\mathcal{A}_X$, so we can comp
 its entropy---it is the \emph{conditional entropy} of $X$ given $y$ (note the
 capitalisation):
 \[
-H(X \mid y) = \sum_{x\in \mathcal{A}_X} p(x\mid y)\frac{1}{p(x\mid y)}.
+H(X \mid y) = \sum_{x\in \mathcal{A}_X} p(x\mid y)\log_2 \frac{1}{p(x\mid y)}.
 \]
 The average of this over $Y$ is the conditional entropy of $X$ given~$Y$:
 \[
 \begin{aligned}
-  H(X \mid Y) &= \sum_{y\in \mathcal{A}_y} p(y) \sum_{x\in \mathcal{A}_X} p(x\mid y)\frac{1}{p(x\mid
+  H(X \mid Y) &= \sum_{y\in \mathcal{A}_y} p(y) \sum_{x\in \mathcal{A}_X} p(x\mid y)\log_2 \frac{1}{p(x\mid
     y)} \\
   &= \sum_{(x,y)\in\mathcal{A}_X\times\mathcal{A}_Y} p(x, y) \log_2\frac{1}{p(x\mid y)}.
 \end{aligned}
