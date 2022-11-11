@@ -30,6 +30,7 @@
 \fancyfoot[L]{\scriptsize\thepage}
 %%
 \begin{document}
+%\SweaveOpts{concordance=TRUE}
 \setcounter{page}{0}
 \newgeometry{textwidth=200mm}
 \maketitle\thispagestyle{empty}
@@ -289,7 +290,7 @@ the bigram distribution.
   
   next_perm <- minimise_ll_step(perm, surprise)
   
-  while (next_perm) {
+  while (!isFALSE(next_perm)) {
       cat(paste0(step, " & ", perm_as_string(perm), " & ", format(round(surprise(perm)/length(ciphertext), 2), nsmall=2), "\\\\", collapse=""))
       perm <- next_perm
       step <- step + 1
