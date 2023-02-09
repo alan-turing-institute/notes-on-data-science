@@ -1,0 +1,9 @@
+#+title: Turing Machines and All That
+
+* Notes
+
+See: https://plato.stanford.edu/entries/church-turing/
+
+Example of an effective procedure: checking whether a statement in propositional
+logic is a tautology.
+
