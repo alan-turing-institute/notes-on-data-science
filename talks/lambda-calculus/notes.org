@@ -5,5 +5,5 @@
 See: https://plato.stanford.edu/entries/church-turing/
 
 Example of an effective procedure: checking whether a statement in propositional
-logic is a tautology.
+logic is a tautology through enumeration of the truth table.
 
