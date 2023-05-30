@@ -1,0 +1,8 @@
+Notes on a talk on functional programming
+
+What?
+Why?
+How?
+
+
+1. 
