@@ -1,8 +1,87 @@
-Notes on a talk on functional programming
+Notes for a talk on functional programming
 
 What?
 Why?
 How?
 
+- Lambda calculus
+- Church-Turing
+- OCaml? Haskell?
 
-1. 
+
+** Title: What is (functional) programming?
+
+What is programming? 
+
+What is coding?
+
+What is an algorithm?
+
+And if we can't say what an algorithm is, how can we say what
+programming is?
+
+The problem with all these descriptions is that they're rather
+informal. To understand programming in a deep sense, let's go back to
+the beginning.
+
+
+** The Entscheidungsproblem
+
+We can define mathematical objects. Is it possible to calculate all of
+the things we can define?
+
+For example, the "greatest common divisor" of two integers is the
+largest integer that divides both of the given integers. Is there an
+"effective procedure" which, given any two m and n, produces, in
+finite time, gcd(m, n)? Yes there is! It's called Euclid's
+algorithm. Euclid's algorithm is a sequence of arithmetic calculations
+that (a) is guaranteed to stop and (b) will give the correct answer.
+
+For example, π is a real number. Can we calculate π? Well, no, because
+its decimal expansion goes on forever. Okay, but consider the function
+P(n) which, given any number n, returns the nth digit of π. Can we
+calculate P(n) for any n? Yes! So there's some sense in which π is
+computable.
+
+Suppose F is a well-formed formula of first-order logic. Is there an
+algorithm which, given any such F, will tell you, in finite time,
+whether or not there is a proof of F?
+
+This is the problem that Hilbert and Ackermann posed in 1928. It is
+called the /Entscheidungsproblem/, or “decision problem”.
+
+Part of the challenge of this question is that to say whether there is
+an algorithm you have to say what an algorithm is. Informally, it's “a
+series of steps, where each step is so simple as to need no further
+explanation.” But what is it really?
+
+In 1936 Turing published a paper in which he both defined the term
+“algorithm” and answered the /Entscheidungsproblem/. 
+
+response was to
+say explicitly what counted as an algorithm by describing an imaginary
+but physical device -- a "computer". Whatever this thing can do is an
+algorithm; an algorithm is precisely what this thing does. What Turing
+intended to say was that whatever a *person* could do, could be done
+by this imaginary computer, but we needn't go there.
+
+** The Turing Machine
+
+What is a Turing Machine? In many ways it's a sort of idealised
+version of a modern, von Neuman architecture computer.
+
+First there is a memory. This memory is an infinite tape.
+
+
+** Summary
+
+To summarise, 
+
+
+** What would programming look like if we didn't have computers?
+
+
+
+
+
+** 
