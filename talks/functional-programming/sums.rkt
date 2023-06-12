@@ -7,3 +7,8 @@
          (sum (cdr xs)))))
 
 (sum '(1 3 2 8))
+
+(apply + '(1 3 2 8))
+
+(define (sum xs)
+  (apply + xs))
