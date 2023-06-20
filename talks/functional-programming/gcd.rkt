@@ -7,5 +7,5 @@
           (gcd (- a b) b)
           (gcd a (- b a)))))
 
-(gcd 32 24)
+(displayln (gcd 32 24))
 
