@@ -1,0 +1,124 @@
+\documentclass[10pt, a4paper, twocolumn]{article}
+%\usepackage{graphicx}
+%\usepackage{textcomp}
+%\usepackage{amssymb}
+%\usepackage{fontspec}
+%\usepackage{minted}
+\usepackage[T1]{fontenc}
+\usepackage{concrete}
+\usepackage{eulervm}
+\usepackage{amsmath}
+%\usepackage[amssymb,sansbold]{concmath}
+\usepackage[margin=0.51in]{geometry}
+%\setlength{\parskip}{\smallskipamount}
+\usepackage{parskip}
+\usepackage{booktabs}
+%\usepackage{fancyhdr}
+%%
+\usepackage[style=authoryear]{biblatex}
+\addbibresource{notes.bib}
+%%
+%%
+\newcommand{\N}{\mathbold{N}}
+\author{James Geddes}
+\date{\today}
+\title{The Integers}
+\begin{document}%\maketitle
+\section*{The Integers}
+
+I assume you are familiar with the \emph{natural numbers}: 0, 1, 2, 3,
+and so on.
+
+One of the challenges of life is managing ones flock of sheep. The
+natural numbers provides a way of marshalling and working with certain
+facts about flocks. For example, if one determines that on Tuesday one
+has, say, 143 sheep but, come Wednesday, there are 142, then one may
+infer that one sheep is missing. If, on the other hand, there are 144
+sheep on Wednesday, then perhaps one of Owain's has got through the
+hole in the fence again.
+
+The collection of these natural numbers is a set,
+$\N=\{0,1,2,\dotsc\}$, and they come equipped with a map,
+$+:\N\times\N\to\N$, known as \emph{addition}.\footnote{The notation
+``$\N\times\N$'' means the set consisting of all pairs of natural
+numbers. The notation ``$+:\N\times\N\to\N$'' means that $+$ is a rule
+which assigns, to every pair of natural numbers, a natural number.}
+Let us review some of the properties of the natural numbers.
+\begin{enumerate}
+\item There is a distinguished natural number, $0$, with the
+  property that for $n$ any natural number, $n+0=n$.
+\item For $l,m,n\in\N$ any three natural numbers, $(l+m)+n=l+(m+n)$. (We say
+  that addition is ``associative''.)
+\item For $m,n\in\N$ any two natural numbers, $m+n=n+m$. (We say that
+  addition is ``commutative''.)
+\end{enumerate}
+Other properties of the natural numbers (but not all!) follow from
+these three.\footnote{Mathematicians have a name for a structure
+satisfying these three conditions: A set with an associative,
+commutative, binary operation having an identity element is called an
+\emph{abelian monoid}. However, we will not use this terminology nor
+will we use any results about abelian monoids.} For example,
+it can be shown that the element $0$ mentioned in (1) is unique, in
+the sense that if any other element, say $0'$, has the same property,
+then $0'=0$. (Exercise: show this.)
+
+Here is an example of a real-world problem that can be solved with the
+use of the theory of natural numbers. Suppose I have five sheep. How
+many additional sheep must I acquire in order to have eight sheep? The
+question asks for a natural number, $n$, which makes the following
+equation true:
+\begin{equation*}
+5 + n = 8.
+\end{equation*}
+With some practice, one can obtain the answer for small numbers ``by
+inspection.'' In this case, it is $n=3$. For larger numbers,
+schoolchildren are taught a method of obtaining the result by an
+algorithm known as ``subtraction''. As a matter of notation, one
+writes $n = 8 - 5$, which just means that $n$ satisfies the formula
+above but shows when to apply the ``subtraction'' algorithm.
+
+Not all such problems have an answer. For example, the following
+problem does not have a solution:
+\begin{equation*}
+8 + n = 5. \quad\text{(No solution!)}
+\end{equation*}
+The answer would be written in the above notation as $5-8$ but
+children are taught the rubric that ``you can't subtract a larger
+number from a smaller one,'' which has the same content as the
+assertion that there is no natural number satisfying the above
+equation.
+
+Nonetheless, there are occasionally times when it would be convenient
+to pretend that we \emph{could} find a natural number $n$ having the
+property that $8+n=5$. Such a natural number isn't ``real,'' of
+course, but pretending it exists can allow us to describe and solve
+real problems in a way that is more notationally appealing than would
+otherwise be the case.
+
+Before describing an example of this kind of problem, let us try to
+say something about what this $n$ might ``look like.'' Note that
+adding any natural number to $8$ produces a natural number that is
+larger than $8$. We want the result to be a natural number, $5$, that
+is \emph{smaller} than $8$. But the smallest natural number we could
+add is $0$; so, in some sense, $n$ would have to be ``less than 0.''
+That is clearly a very strange number of sheep!
+
+The problem that will motivate our attempt to introduce ``numbers''
+that are ``less than zero'' may in fact be familiar to you: it is the
+problem of managing \emph{debt}. Suppose that my flock consists of
+eight sheep but three of them are \emph{owed} to you, perhaps through
+an imprudent bet. There is a sense in which I physically ``have''
+eight sheep \emph{and} I ``have'' a debt of three sheep, so I
+\emph{own} only five sheep. The debt of three sheep, when ``added'' to
+the eight sheep in my flock, seems to \emph{reduce} the number of
+sheep that count as my total wealth.
+
+
+
+
+
+
+
+
+
+\end{document}
