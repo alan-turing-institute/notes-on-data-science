@@ -43,7 +43,7 @@ sheep. What is more useful is that I am able to conclude that
 precisely three sheep are missing.
 
 The collection of these natural numbers is a set,
-$\N=\{0,1,2,\dotsc\}$, and they come equipped with a map,
+$\N=\{0,1,2,\dotsc\}$, which comes equipped with a map,
 $+:\N\times\N\to\N$, known as \emph{addition}.\footnote{The notation
 ``$\N\times\N$'' means the set consisting of all pairs of natural
 numbers. The notation ``$+:\N\times\N\to\N$'' means that $+$ is a rule
@@ -117,7 +117,7 @@ $n$ should be ``$3$ fewer than $0$.'' We will denote this strange
 object by $\minus{3}$. Don't be fooled! Right now, there is no meaning
 at all to $\minus{3}$: it's just a formal symbol. What we will do is
 give a \emph{meaning} to the symbol $\minus{3}$ so that the expression
-$140 - 143 = \minus{3}$ ``makes sense.''
+$143 + \minus{3} = 140$ ``makes sense.''
 
 Our strategy will be as follows: we ``enlarge'' the set $\N$, to
 include ``numbers less than zero, like $\minus{3}$ and $\minus{5}$;''
@@ -159,12 +159,11 @@ and $(143,3)$ are supposed to be ``the same number'' but they are
 \emph{not} the same element of $\pairs$.
 
 To fix this, we will say that $(m,n)$ and $(a,b)$ are
-\emph{equivalent} if $m + b = a + n$. We denote this equivalence by
-writing $(m,n) \sim (a,b)$. For example $(143,3)\sim(140,0)$ because
-$143+0=140+3$. An element of an equivalence class will be called a
-\emph{representative} of that equivalence class.\footnote{We'd like to
+\emph{equivalent} if $m + b = a + n$.\footnote{We'd like to
 write the condition for equivalence as $m-n=a-b$ but this expression
-might not make sense; for example, when $m<n$.}
+might not make sense; for example, when $m<n$.} We denote this equivalence by
+writing $(m,n) \sim (a,b)$. For example $(143,3)\sim(140,0)$ because
+$143+0=140+3$. 
 
 Equivalent elements of $\pairs$ will have the interpretation as being
 ``the same number.'' The crucial property of equivalence is that it
@@ -183,7 +182,9 @@ Let $\mathbold{n}$ be an element of $\pairs$. Consider the set of all
 elements of $\pairs$ that are equivalent to $\mathbold{n}$. We call
 this the \emph{equivalence class of $\mathbold{n}$} and denote it by
 $\tilde{\mathbold{n}}$. That is: $\tilde{\mathbold{n}} \equiv \{
-\mathbold{q}\in\pairs \mid \mathbold{q}\sim\mathbold{n}\}$.
+\mathbold{q}\in\pairs \mid \mathbold{q}\sim\mathbold{n}\}$. An element of an
+equivalence class will be called a \emph{representative} of that
+equivalence class.
 
 Every element of $\pairs$ lies in one and only one equivalence
 class. (To see this, note that if $\mathbold{n}\sim\mathbold{p}$ and
