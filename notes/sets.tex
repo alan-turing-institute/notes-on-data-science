@@ -1,7 +1,9 @@
 \documentclass[10pt, a4paper, twocolumn]{article}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{amssymb}
+\usepackage{concrete}
+\usepackage{eulervm}
+%\usepackage{lmodern}
+%\usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{microtype}
 \usepackage[margin=0.51in]{geometry}
@@ -9,13 +11,16 @@
 %\setlength{\parindent}{1em}
 \setlength{\parskip}{\smallskipamount}
 %%
-\newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\defn}[1]{\textbf{\textsf{#1}}}
 \newcommand{\eg}{\emph{Example:}\relax}
+\newcommand{\set}[1]{\mathbold{#1}}
 \DeclareMathOperator{\id}{id}
 %%
-%% Terminology from set theory
+\title{Terminology from set theory}
+\author{}\date{}
 %%
 \begin{document}
+\maketitle
 Set theory contains much of the vocabulary of mathematics. There is very little
 content but there are quite a few concepts and these concepts permeate the rest
 of the subject.
@@ -39,48 +44,57 @@ set as $\{2,0,1\}$.
 
 \eg\ $1\in\{0,1,2\}$.
 
-\eg\ $\{x \in \mathbb{N} \mid \text{$x$ is prime}\}$ is the set of
-primes.\footnote{There is a question of where “things” come from in the first place. Quite a lot of
-  mathematics can be constructed out of the empty set. For example, $\{\emptyset\}$ is a set containing one
-  element and $\{\emptyset, \{\emptyset\}\}$ is a set containing two elements. One might go so far as to \emph{define}
-  0 to be $\emptyset$, 1 to be $\{\emptyset\}$, and so on.}
+\eg\ $\{x \in \set{N} \mid \text{$x$ is prime}\}$ is the set of
+primes.\footnote{There is a question of where “things” come from in
+the first place. Quite a lot of mathematics can be constructed out of
+the empty set. For example, $\{\emptyset\}$ is a set containing one element
+and $\{\emptyset, \{\emptyset\}\}$ is a set containing two elements. One might go so
+far as to \emph{define} 0 to be $\emptyset$, 1 to be $\{\emptyset\}$, and so on.}
 
-If every element of $B$ is also an element of $A$, we write $B \subset A$ and say that
-$B$ is a \defn{subset} of~$A$. The set of all subsets of $B$ is called the
-\defn{power set} of $B$ and written $\mathcal{P}(B)$.
+If every element of $B$ is also an element of $A$, we write $B \subset A$
+and say that $B$ is a \defn{subset} of~$A$. The set whose elements are
+all subsets of $B$ is called the \defn{power set} of $B$ and written
+$\mathcal{P}(B)$.
 
 \eg\ $\emptyset \subset B$ for any $B$. $\emptyset \in \mathcal{P}(B)$ for any $B$.
 
-The \defn{union} of two sets, $X$ and $Y$, written $X \cup Y$, is the set of all
-elements in either $X$ or $Y$. The \defn{intersection} of two sets, written $X \cap
-Y$, is the set of all elements in both $X$ and $Y$. The \defn{difference} of two
-sets, written $Y \setminus X$ (or sometimes $Y-X$) is the set of all elements that are
-in $Y$ but not in $X$. Sometimes there is a set $U$ that is understood to be the
-“set of all things presently under consideration.” In that case, the
-\defn{complement} of $X$, written $X^c$ is the set of all things in $U$ but not
-in $X$; that is, $X^c \equiv U \setminus X$. There are many identities involving these
-operations that follow from the definitions.
+The \defn{union} of two sets, $X$ and $Y$, written $X \cup Y$, is the set
+whose elements are the elements of $X$ together with the elements of
+$Y$. (But each element only occurs once in $X \cup Y$.) The
+\defn{intersection} of two sets, written $X \cap Y$, is the set whose
+elements are elements of \emph{both} $X$ and $Y$. The
+\defn{difference} of two sets, written $Y \setminus X$ (or sometimes $Y-X$) is
+the set of all elements that are in $Y$ but not in $X$.
+
+Sometimes there is a set $\mathcal{U}$ (the ``universe'') that is understood to
+be the “set of all things presently under consideration.” In that
+case, the \defn{complement} of $X$, written $X^c$ is the set of all
+things in $\mathcal{U}$ but not in $X$; that is, $X^c \equiv \mathcal{U} \setminus X$. There are many
+identities involving these operations that follow from the
+definitions.
 
 \eg\ $X\cap(A\cup B) = (X\cap A)\cup (X\cap B)$.
 
-Given two sets, $X$ and $Y$, a \defn{map}, $f : X \to Y$, is a rule that assigns,
-to each element $x \in X$, an element $f(x) \in Y$.\footnote{The term “function” is
-  sometimes used to mean “map”; sometimes “function” means a map where the
-  codomain is a number; sometimes “map” means a certain kind of
-  structure-preserving map.} The set $X$ is called the \defn{domain} and the set
-$Y$ is called the \defn{codomain}. Maps are the principal way by which we
-compare sets and much of the subject of set theory is really the study of maps.
+Given two sets, $X$ and $Y$, a \defn{map}, $f : X \to Y$, is a rule that
+assigns, to each element $x \in X$, an element $f(x) \in Y$. The set $X$
+is called the \defn{domain} and the set $Y$ is called the
+\defn{codomain}. Maps are the principal way by which we compare sets
+and much of the subject of set theory is really the study of
+maps.\footnote{The term “function” is sometimes used to mean “map”;
+sometimes “function” means a map where the codomain is a number;
+sometimes “map” means a certain kind of structure-preserving map.}
 
 \eg\ For $X$ any set, there is a unique map $\emptyset \to X$.
 
-\eg\ For any set $X$, the
-identity map, $\id_X : X \to X$, is the map $f(x) = x$ for every
-$x\in X$. Where the set $X$ is implicitly known, we write simply “$\id$.” 
+\eg\ For any set $X$, the identity map, $\id_X : X \to X$, is the map
+$f(x) = x$ for every $x\in X$. Where the set $X$ is implicitly known, we
+write simply “$\id$.”
 
-A map is said to be \defn{one-to-one} (or \defn{injective}) if every point in
-the domain is mapped to a unique point in the codomain. The \defn{image} of $f$,
-written $f(X)$, is the set $f(X) = \{y \in Y \mid \text{$y = f(x)$ for some
-  $x$}\}$. If the image of $f$ is the codomain, the map is said to be \defn{onto} (or \defn{surjective}). 
+A map is said to be \defn{one-to-one} (or \defn{injective}) if every
+point in the domain is mapped to a unique point in the codomain. The
+\defn{image} of $f$, written $f(X)$, is the set $f(X) = \{y \in Y \mid
+\text{$y = f(x)$ for some $x$}\}$. If the image of $f$ is the
+codomain, the map is said to be \defn{onto} (or \defn{surjective}).
 
 For two maps $f:B \to C$ and $g:A \to B$, their \defn{composition}, $f\circ g: A \to C$
 (read “$f$ after $g$”) is the map defined by $(f\circ g)(x) = f(g(x))$.
@@ -95,14 +109,16 @@ isomorphic. We often write $g = f^{-1}$.
 
 \eg\ (\defn{Cantor's theorem}) There is no isomorphism between $A$ and $\mathcal{P}(A)$. 
 
-We sometimes do want to talk about collections of things where the order
-matters. A \defn{pair} (sometimes “ordered pair”) is a collection of two things
-where the order of the things matters and the two things might be the same
-thing. For two things $x$ and $y$, a pair is written $(x, y)$. We call $x$ the
-“first element” and $y$ the “second element”. The main property of pairs is that
-$(x,y)=(p,q)$ if and only if $x=p$ and $y=q$.
+We sometimes do want to talk about collections of things in which the
+order matters. A \defn{pair} (sometimes “ordered pair”) is a
+collection of two things where the order of the things matters and the
+two things might be the same thing. For two things $x$ and $y$, a pair
+is written $(x, y)$. We call $x$ the “first element” and $y$ the
+“second element.” The main property of pairs is that $(x,y)=(p,q)$ if
+and only if $x=p$ and $y=q$.
 
-One might wonder whether a pair is a new kind of thing. In fact, pairs can be
+One might wonder
+whether a pair is a new kind of thing. In fact, pairs can be
 defined in terms of sets. Here is one way to do so: $(x, y)\equiv \{x, \{x,y\}\}$.
 
 A \defn{finite tuple} is an ordered list of things, possible repeated. One may
@@ -120,5 +136,16 @@ The Cartesian product is associative, in the sense that there is a
 ``natural'' isomporphism between $X \times (Y \times Z)$ and $(X
 \times Y) \times Z$. Because of this, we normally write simply $X
 \times Y \times Z$.
+
+Suppose $X$ and $Y$ are sets. Their \defn{disjoint union} (sometimes
+“coproduct”), $X \sqcup Y$ is the set $\{(0, x) \mid x \in X\} \cup \{(1, y) \mid y \in Y\}$ of
+\emph{labelled pairs}. The disjoint union is “like the union of $X$
+and $Y$, only we remember which set an element originally came from
+and the same element in $X$ and $Y$ will occur twice in the result.”
+The disjoint union comes with two natural \defn{injection} maps;
+namely, $i_X : X \to X \sqcup Y$ and $i_Y : Y \to X \sqcup Y$.
+
+\eg\ $i_X p = (0, p)$ for any $p \in X$.
+
 
 \end{document}
