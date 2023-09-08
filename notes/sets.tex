@@ -28,10 +28,11 @@ of the subject.
 A \defn{set} is a “collection of things.” The term “collection” is not
 defined. The things are called the \defn{elements} of the set. There are two
 important facts about sets: within a set, the elements are unique; and there is
-no order to the elements. To show that an element, $x$, is a member of some set,
-$A$, write “$x \in A$”.
+no order to the elements. To say that an element, $x$, is a member of some set,
+$A$, write “$x \in A$”. Two sets are equal if and only if every element
+of one is an element of the other and \emph{vice versa}. 
 
-To describe a concrete set, with given elements, surround the elements with
+To describe a concrete set with given elements, surround the elements with
 braces. To describe a set containing those elements of another set, $X$, which
 satisfy some predicate $P(x)$, write $\{x \in X \mid P(x)\}$. The set with no
 elements is called the \defn{empty set} and written as $\emptyset$. There is only one
@@ -90,6 +91,9 @@ sometimes “map” means a certain kind of structure-preserving map.}
 $f(x) = x$ for every $x\in X$. Where the set $X$ is implicitly known, we
 write simply “$\id$.”
 
+\eg\ Fix sets $X$ and $Y$. The collection of all maps from $X$ to $Y$
+is a set. This set is often written $Y^X$. 
+
 A map is said to be \defn{one-to-one} (or \defn{injective}) if every
 point in the domain is mapped to a unique point in the codomain. The
 \defn{image} of $f$, written $f(X)$, is the set $f(X) = \{y \in Y \mid
@@ -101,13 +105,17 @@ For two maps $f:B \to C$ and $g:A \to B$, their \defn{composition}, $f\circ g: A
 
 \eg\ $f\circ\id = \id\circ f = f$ for any map $f$. 
 
-If, given $f:X \to Y$, there exists a $g:Y \to X$ such that $f\circ g = \id_Y$ and $g\circ f
-= \id_X$, then we say that $f$ is an \defn{isomorphism} and that $X$ and $Y$ are
-isomorphic. We often write $g = f^{-1}$.
+If, given $f:X \to Y$, there exists a $g:Y \to X$ such that $f\circ g = \id_Y$
+and $g\circ f = \id_X$, then we say that $f$ is a \defn{bijection} (or an
+\emph{isomorphism}) and that $X$ and $Y$ are
+\defn{isomorphic}. Isomorphic sets are essentially the ``same''
+set. We often write $g = f^{-1}$.
 
-\eg\ A map $f$ is an isomorphism if and only if it is both one-to-one and onto. 
+\eg\ A map $f$ is an bijection if and only if it is both one-to-one
+and onto.
 
-\eg\ (\defn{Cantor's theorem}) There is no isomorphism between $A$ and $\mathcal{P}(A)$. 
+\eg\ (\defn{Cantor's theorem}) There is no bijection between $A$ and
+$\mathcal{P}(A)$.
 
 We sometimes do want to talk about collections of things in which the
 order matters. A \defn{pair} (sometimes “ordered pair”) is a
