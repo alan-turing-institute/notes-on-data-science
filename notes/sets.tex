@@ -28,12 +28,12 @@
 \newcommand{\id}{\text{id}}
 %\DeclareMathOperator{\id}{id}
 %%
-%% Terminology from set theory
 %%
 \title{\vspace{-6ex}Sets}
 \author{James Geddes}
 \begin{document}
-\maketitle Set theory contains much of the vocabulary of
+\maketitle
+Set theory contains much of the vocabulary of
 mathematics. There is not much content to the subject but there are
 quite a few concepts and these concepts permeate the rest of
 mathematics.
@@ -47,7 +47,7 @@ elements: two sets are equal if and only if they have the same elements.
 There are two important facts about sets: within a set, the elements
 are unique; and there is no order to the elements.
 
-To describe a concrete set, with given elements, surround the elements with
+To describe a concrete set with given elements, surround the elements with
 braces. To describe a set containing those elements of another set, $X$, which
 satisfy some predicate $P(x)$, write $\{x \in X \mid P(x)\}$. The set with no
 elements is called the \defn{empty set} and written as $\emptyset$. There is only one
@@ -84,10 +84,10 @@ $Y$. The \defn{set difference} of two sets, written $Y \setminus X$ (or
 sometimes $Y-X$) is the set of all elements that are in $Y$ but not in
 $X$.
 
-Sometimes there is a set $U$ that is understood to be the “set of all
+Sometimes there is a set $\mathcal{U}$ that is understood to be the “set of all
 things presently under consideration.” In that case, the
 \defn{complement} of $X$, written $X^c$, is the set of all things in
-$U$ but not in $X$; that is, $X^c \equiv U \setminus X$.
+$\mathcal{U}$ but not in $X$; that is, $X^c \equiv \mathcal{U} \setminus X$.
 
 There are many identities involving these operations that follow from
 the definitions.
@@ -208,5 +208,7 @@ as ``the plane.''
 The Cartesian product is associative, in the sense that there is a
 ``natural'' isomorphism of sets between $X \times (Y \times Z)$ and $(X \times Y) \times
 Z$. Because of this, we normally write simply $X \times Y \times Z$.
+
+
 
 \end{document}
