@@ -1,30 +1,51 @@
-\documentclass[10pt, a4paper, twocolumn]{article}
+\documentclass[12pt, a4paper]{article}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{amssymb}
+\usepackage{beton}
+\usepackage{eulervm}
+\DeclareFontSeriesDefault[rm]{bf}{sbc}
+\usepackage[font=footnotesize]{caption}
+\usepackage{ragged2e}
+\usepackage{snotez}
+\setsidenotes{
+  text-format+=\RaggedRight}
 \usepackage{amsmath}
 \usepackage{microtype}
-\usepackage[margin=0.51in]{geometry}
+\usepackage[a4paper]{geometry}
+\geometry{left=15mm,
+  textwidth=0.6\paperwidth, % 126mm for A4
+  textheight=0.6\paperheight}
+%\usepackage{calc}
+\geometry{marginparsep=5mm, marginparwidth=49mm}
+\geometry{footskip=2in}
 %%
-%\setlength{\parindent}{1em}
+\usepackage{tikz-cd}
+%%
 \setlength{\parskip}{\smallskipamount}
 %%
 \newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\set}[1]{\mathbold{#1}}
 \newcommand{\eg}{\emph{Example:}\relax}
-\DeclareMathOperator{\id}{id}
+\newcommand{\id}{\text{id}}
+%\DeclareMathOperator{\id}{id}
 %%
 %% Terminology from set theory
 %%
+\title{\vspace{-6ex}Sets}
+\author{James Geddes}
 \begin{document}
-Set theory contains much of the vocabulary of mathematics. There is very little
-content but there are quite a few concepts and these concepts permeate the rest
-of the subject.
+\maketitle Set theory contains much of the vocabulary of
+mathematics. There is not much content to the subject but there are
+quite a few concepts and these concepts permeate the rest of
+mathematics.
 
 A \defn{set} is a “collection of things.” The term “collection” is not
-defined. The things are called the \defn{elements} of the set. There are two
-important facts about sets: within a set, the elements are unique; and there is
-no order to the elements. To show that an element, $x$, is a member of some set,
-$A$, write “$x \in A$”.
+defined. The things are called the \defn{elements} (or \defn{members})
+of the set. To show that an element, $x$, is a member of some set,
+$A$, write $x \in A$. A set is nothing more than the collection of its
+elements: two sets are equal if and only if they have the same elements.
+
+There are two important facts about sets: within a set, the elements
+are unique; and there is no order to the elements.
 
 To describe a concrete set, with given elements, surround the elements with
 braces. To describe a set containing those elements of another set, $X$, which
@@ -32,93 +53,160 @@ satisfy some predicate $P(x)$, write $\{x \in X \mid P(x)\}$. The set with no
 elements is called the \defn{empty set} and written as $\emptyset$. There is only one
 empty set.
 
-\eg\ $\{0, 1, 2\}$ is the set containing the numbers 0, 1, and~2. It is the same
+\eg\ $\{0, 1, 2\}$ is the set containing 0, 1, and~2. It is the same
 set as $\{2,0,1\}$.
 
 \eg\ The expression $\{1, 1\}$ does not describe a set.
 
-\eg\ $1\in\{0,1,2\}$.
+\eg\ $1\in\{0,1,2\}$. $3\notin\{0,1,2\}$.
 
-\eg\ $\{x \in \mathbb{N} \mid \text{$x$ is prime}\}$ is the set of
-primes.\footnote{There is a question of where “things” come from in the first place. Quite a lot of
-  mathematics can be constructed out of the empty set. For example, $\{\emptyset\}$ is a set containing one
-  element and $\{\emptyset, \{\emptyset\}\}$ is a set containing two elements. One might go so far as to \emph{define}
-  0 to be $\emptyset$, 1 to be $\{\emptyset\}$, and so on.}
+\eg\ The set $\set{N}$ denotes the set of natural numbers,
+$\{0,1,2,\dotsc\}$. The set $\{n \in \set{N} \mid \text{$n$ is prime}\}$ is
+the set of primes.
 
-If every element of $B$ is also an element of $A$, we write $B \subset A$ and say that
-$B$ is a \defn{subset} of~$A$. The set of all subsets of $B$ is called the
-\defn{power set} of $B$ and written $\mathcal{P}(B)$.
+\eg\ The set $\{\emptyset\}$ has one element (the empty set). The set $\{\emptyset,
+\{\emptyset\}\}$ has two elements (the empty set, and the set containing the
+empty set).
 
-\eg\ $\emptyset \subset B$ for any $B$. $\emptyset \in \mathcal{P}(B)$ for any $B$.
+If every element of $B$ is also an element of $A$, we write $B \subset A$
+and say that $B$ is a \defn{subset} of~$A$. The set of all subsets of
+$A$ is called the \defn{power set} of $A$ and written $\mathcal{P}(A)$.
 
-The \defn{union} of two sets, $X$ and $Y$, written $X \cup Y$, is the set of all
-elements in either $X$ or $Y$. The \defn{intersection} of two sets, written $X \cap
-Y$, is the set of all elements in both $X$ and $Y$. The \defn{difference} of two
-sets, written $Y \setminus X$ (or sometimes $Y-X$) is the set of all elements that are
-in $Y$ but not in $X$. Sometimes there is a set $U$ that is understood to be the
-“set of all things presently under consideration.” In that case, the
-\defn{complement} of $X$, written $X^c$ is the set of all things in $U$ but not
-in $X$; that is, $X^c \equiv U \setminus X$. There are many identities involving these
-operations that follow from the definitions.
+\eg\ The power set of $\{0,1,2\}$ has, as elements, $\emptyset$, $\{0\}$,
+$\{1\}$, $\{2\}$, $\{0,1\}$, $\{0,2\}$, $\{1,2\}$, and $\{0,1,2\}\}$.
 
-\eg\ $X\cap(A\cup B) = (X\cap A)\cup (X\cap B)$.
+\eg\ $\emptyset \subset A$ for any $A$. Therefore, $\emptyset \in \mathcal{P}(A)$ for any $A$. 
 
-Given two sets, $X$ and $Y$, a \defn{map}, $f : X \to Y$, is a rule that assigns,
-to each element $x \in X$, an element $f(x) \in Y$.\footnote{The term “function” is
-  sometimes used to mean “map”; sometimes “function” means a map where the
-  codomain is a number; sometimes “map” means a certain kind of
-  structure-preserving map.} The set $X$ is called the \defn{domain} and the set
-$Y$ is called the \defn{codomain}. Maps are the principal way by which we
-compare sets and much of the subject of set theory is really the study of maps.
+The \defn{union} of two sets, $X$ and $Y$, written $X \cup Y$, is the set
+of all elements of either $X$ or $Y$. The \defn{intersection} of two
+sets, written $X \cap Y$, is the set of all elements in both $X$ and
+$Y$. The \defn{set difference} of two sets, written $Y \setminus X$ (or
+sometimes $Y-X$) is the set of all elements that are in $Y$ but not in
+$X$.
 
-\eg\ For $X$ any set, there is a unique map $\emptyset \to X$.
+Sometimes there is a set $U$ that is understood to be the “set of all
+things presently under consideration.” In that case, the
+\defn{complement} of $X$, written $X^c$, is the set of all things in
+$U$ but not in $X$; that is, $X^c \equiv U \setminus X$.
 
-\eg\ For any set $X$, the
-identity map, $\id_X : X \to X$, is the map $f(x) = x$ for every
-$x\in X$. Where the set $X$ is implicitly known, we write simply “$\id$.” 
+There are many identities involving these operations that follow from
+the definitions.
+\eg\ $X\cap(A\cup B) = (X\cap A) \cup (X\cap B)$.
 
-A map is said to be \defn{one-to-one} (or \defn{injective}) if every point in
-the domain is mapped to a unique point in the codomain. The \defn{image} of $f$,
-written $f(X)$, is the set $f(X) = \{y \in Y \mid \text{$y = f(x)$ for some
-  $x$}\}$. If the image of $f$ is the codomain, the map is said to be \defn{onto} (or \defn{surjective}). 
+\begin{sidefigure}
+  \[\begin{tikzcd}
+    X \arrow[r, "f"] & Y
+  \end{tikzcd}\]
+  \caption{One way to draw a map, $f\colon X\to Y$.}
+\end{sidefigure}
+Given two sets, $X$ and $Y$, a \defn{map}, $f\colon X \to Y$, is a rule
+that assigns, to each element $x \in X$, an element $f(x) \in Y$. The set
+$X$ is called the \defn{domain} of $f$ and the set $Y$ is called the
+\defn{codomain} of~$f$. Maps are the principal means by which we compare
+sets and much of the subject of set theory is really the study of
+maps.\sidenote{The term “function” is sometimes used instead of “map;”
+  sometimes “function” means a map where the codomain is a number;
+  sometimes “map” means a certain kind of structure-preserving map.}
 
-For two maps $f:B \to C$ and $g:A \to B$, their \defn{composition}, $f\circ g: A \to C$
-(read “$f$ after $g$”) is the map defined by $(f\circ g)(x) = f(g(x))$.
+Sometimes we describe a map using the notation $f\colon x\mapsto f(x)$. (The
+symbol $\mapsto$ is read as ``maps to.'')
+
+\eg\ For $X$ any set, there is a unique map $\emptyset \to X$. (It may surprise
+you that there is such a map at all. After all, there are no elements
+in $\emptyset$ to be mapped to something in $X$. However, a map just has to
+say what to do with each element of its domain and, since this domain
+is empty, the “empty set of rules” is a perfectly fine map.)
+
+\eg\ For any set $X$, the \emph{identity map}, $\id_X\colon X \to X$, is
+the map given by $\id_X\colon x \mapsto x$ for every $x\in X$. Where the set
+$X$ is implicitly known, we write simply “$\id$.”
+
+A map is said to be \defn{one-to-one} (or \defn{injective}) if every
+point in the domain is mapped to a \emph{unique} point in the
+codomain.
+
+The \defn{image} of $f$, written $f(X)$, is the set of all elements of
+the codomain mapped to from \emph{some} element of the domain: $f(X) =
+\{y \in Y \mid \text{$y = f(x)$ for some $x$}\}$. If the image of $f$ is
+the entire codomain, the map is said to be \defn{onto} (or
+\defn{surjective}).
+
+\eg\ The identity map is both one-to-one and onto.
+
+\eg\ The map $\set{R}\to\set{R}$ defined by $x\mapsto x^2$ is neither
+one-to-one nor onto. It is not one-to-one because, for example, both
+$2$ and $-2$ are mapped to $4$. It is not onto because the range is
+only the non-negative reals.  
+
+For two maps $f\colon B \to C$ and $g\colon A \to B$, their
+\defn{composition}, $f\circ g\colon A \to C$ (read “$f$ after $g$”) is the
+map defined by $(f\circ g)(x) = f(g(x))$.
+
+\begin{sidefigure}
+  \[
+  \begin{tikzcd}
+    A \arrow [rr, bend right, "f \circ g"' ] \arrow[r, "g"] & B \arrow[r, "f"] & C 
+  \end{tikzcd}
+  \]
+  \caption{One way to visualise $f \circ g$. Notice that $f$ is applied
+    after $g$.}
+\end{sidefigure}
 
 \eg\ $f\circ\id = \id\circ f = f$ for any map $f$. 
 
-If, given $f:X \to Y$, there exists a $g:Y \to X$ such that $f\circ g = \id_Y$ and $g\circ f
-= \id_X$, then we say that $f$ is an \defn{isomorphism} and that $X$ and $Y$ are
-isomorphic. We often write $g = f^{-1}$.
+If, given $f\colon X \to Y$, there exists a $g\colon Y \to X$ such that
+$f\circ g = \id_Y$ and $g\circ f = \id_X$, then we say that $f$ is an
+\defn{isomorphism of sets} and that $X$ and $Y$ are isomorphic. The
+map $g$ is called the \defn{inverse} of $f$ and written $g =
+f^{-1}$. Isomorphic sets are “identical in every way that matters to
+set theory.”
 
-\eg\ A map $f$ is an isomorphism if and only if it is both one-to-one and onto. 
+\eg\ A map $f$ is an isomorphism of sets if and only if it is both
+one-to-one and onto. (If it is one-to-one, then we can “go backwards”
+from any element in the range; if it is onto, then every element of
+the codomain is in the range.)
 
-\eg\ (\defn{Cantor's theorem}) There is no isomorphism between $A$ and $\mathcal{P}(A)$. 
+\eg\ Two finite sets (sets with finitely many members) are isomorphic
+if and only if the two sets have the same number of elements.
 
-We sometimes do want to talk about collections of things where the order
-matters. A \defn{pair} (sometimes “ordered pair”) is a collection of two things
-where the order of the things matters and the two things might be the same
-thing. For two things $x$ and $y$, a pair is written $(x, y)$. We call $x$ the
-“first element” and $y$ the “second element”. The main property of pairs is that
-$(x,y)=(p,q)$ if and only if $x=p$ and $y=q$.
+\eg\ (\defn{Cantor's theorem}) There is no isomorphism between $A$ and
+$\mathcal{P}(A)$ for any set~$A$.
 
-One might wonder whether a pair is a new kind of thing. In fact, pairs can be
-defined in terms of sets. Here is one way to do so: $(x, y)\equiv \{x, \{x,y\}\}$.
+\eg\ (Georg Cantor) There is no isomorphism between the natural
+numbers and the real numbers. In this, well-defined, sense, there are
+``more'' real numbers than there are natural numbers: the real numbers
+are ``uncountable.''
 
-A \defn{finite tuple} is an ordered list of things, possible repeated. One may
-define a 3-tuple, $(a, b, c)$ say, as a pair whose second element is a pair:
-$(a, (b, c))$. 
+We sometimes do want to talk about collections of things where the
+order matters. A \defn{pair} (sometimes “ordered pair”) is a
+collection of two things where the order of the things matters and the
+two things might be the same thing. For two things $x$ and $y$, a pair
+is written $(x, y)$. We call $x$ the “first element” and $y$ the
+“second element.” The main property of pairs is that $(x,y)=(p,q)$ if
+and only if $x=p$ and $y=q$.
 
-Suppose $X$ and $Y$ are sets. Their \defn{Cartesian product}, $X \times Y$, is the
-set of all pairs $(x, y)$ where $x \in X$ and $y \in Y$. The Cartesian product comes
-with two natural \defn{projection} maps; namely, $\pi_X : X \times Y \to X$ and $\pi_Y : X
-\times Y \to Y$.
+One might wonder whether a pair is a new kind of thing. In fact, pairs
+can be defined in terms of sets. Here is one way to do so: $(x, y)\equiv
+\{x, \{x,y\}\}$. (Though it's surprisingly subtle to say why this works.)
+
+A \defn{finite tuple} is an ordered list of things, possibly
+repeated. One may define a 3-tuple, $(a, b, c)$ say, as a pair whose
+second element is a pair: $(a, (b, c))$.
+  
+Suppose $X$ and $Y$ are sets. Their \defn{Cartesian product}, $X \times Y$,
+is the set of all pairs $(x, y)$ where $x \in X$ and $y \in Y$. The
+Cartesian product comes with two natural \defn{projection maps} onto
+its ``factors;'' namely, $\pi_X\colon X \times Y \to X$ given by $\pi_X\colon
+(x,y)\mapsto x$ and and $\pi_Y\colon X \times Y \to Y$ given by $\pi_Y\colon (x,y)\mapsto y$.
+
+\eg\ $\set{R}^2$ is the set of all pairs of real numbers. If you think
+of $\set{R}$ as ``the real line,'' then you can think of $\set{R}^2$
+as ``the plane.''
 
 \eg\ $(\pi_X p, \pi_Y p) = p$ for any $p \in X \times Y$.
 
 The Cartesian product is associative, in the sense that there is a
-``natural'' isomporphism between $X \times (Y \times Z)$ and $(X
-\times Y) \times Z$. Because of this, we normally write simply $X
-\times Y \times Z$.
+``natural'' isomorphism of sets between $X \times (Y \times Z)$ and $(X \times Y) \times
+Z$. Because of this, we normally write simply $X \times Y \times Z$.
 
 \end{document}
