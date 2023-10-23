@@ -82,7 +82,7 @@ $\{1\}$, $\{2\}$, $\{0,1\}$, $\{0,2\}$, $\{1,2\}$, and $\{0,1,2\}$.
 
 \eg\ $\emptyset \subset A$ for any $A$. Therefore, $\emptyset \in \mathcal{P}(A)$ for any $A$. 
 
-The \defn{union} of two sets, $X$ and $Y$, written $X \cup Y$, is the set
+The \defn{union} of two sets $X$ and $Y$, written $X \cup Y$, is the set
 of all elements of either $X$ or $Y$. The \defn{intersection} of two
 sets, written $X \cap Y$, is the set of all elements in both $X$ and
 $Y$. The \defn{set difference} of two sets, written $Y \setminus X$ (or
@@ -116,7 +116,7 @@ $(a, b, c)$, is as a pair whose second element is a pair: $(a, (b,
 c))$.
   
 Tuples provide one way of constructing a new set out of two given
-sets. Suppose $X$ and $Y$ are sets. Their \defn{Cartesian product} (or
+sets. Let $X$ and $Y$ be sets. Their \defn{Cartesian product} (or
 simply \defn{product}), $X \times Y$, is the set of all pairs $(x, y)$
 where $x \in X$ and $y \in Y$. That is,
 \begin{equation*}
@@ -182,7 +182,7 @@ $X$ is implicitly known, we write simply “$\id$.”
 \[\begin{tikzcd}
     X \arrow[loop right, out=45, in=-45, distance=3em, "\id"]
   \end{tikzcd}\]
-  \caption{The identity map $\id_X\colon X\to X$.}
+  \caption{The identity map $\id\colon X\to X$.}
 \end{sidefigure}
 
 The main operation on maps is that of composition. Suppose there are
@@ -204,9 +204,12 @@ $f(x)\in B$, then use $g$ to obtain an element $g(f(x))\in C$. That is,
 for two maps $f\colon A \to B$ and $g\colon B \to C$, their
 \defn{composition}, $g\circ f\colon A \to C$, is the map defined by $(g\circ
 f)(x) = g(f(x))$. Notice that $g\circ f$ means “apply $g$ \emph{after}
-applying $f$,” and we normally read $g\circ f$ as “$g$ after $f$.”
-
-\eg\ For any map $f\colon A\to B$, $f\circ\id_A = \id_B\circ f = f$.
+applying $f$,” and we normally read $g\circ f$ as “$g$ after
+$f$.”\sidenote{I picked up this way of reading $g\circ f$ from Bartosz
+  Milewski's lectures on category theory; I don't know whether it is
+  more widespread.}
+  
+\eg\ For any map $f\colon A\to B$, we have $f\circ\id_A = \id_B\circ f = f$.
 
 \eg\ For any three compatible maps, $h\circ (g\circ f) = (h\circ g)\circ f$.
 
@@ -225,13 +228,14 @@ codomain.
 Injective maps have the following property. Suppose $i\colon A\to B$ is
 an injective map. For any set $X$ and maps $f\colon X\to A$ and $g\colon
 X\to A$, if $i\circ f = i\circ g$ then $f = g$. (To see this, note that if $f$
-and $g$ differed on any $x\in X$, then $i$ would have to take $f(x)$ and
-$g(x)$ to different points in $B$, otherwise it would not be
-injective, and so the compositions could not be equal.) That is,
-injective maps are “maps that can be cancelled out on the left.”
+and $g$ were different maps, they would differ on some $x \in X$; then
+$i$ would take $f(x)$ and $g(x)$ to different points in $B$, otherwise
+it would not be injective, and so the compositions could not be equal
+either.) That is, injective maps are “maps that can be cancelled out
+on the left.”
 
-The \defn{image} of $f$, written $f(X)$, is the set of all elements of
-the codomain mapped to from \emph{some} element of the domain: $f(X) =
+The \defn{image} of $f$, written $f[X]$, is the set of all elements of
+the codomain mapped to from \emph{some} element of the domain: $[X] =
 \{f(x) \in Y \mid x\in X\}$. If the image of $f$ is the entire codomain, the
 map is said to be \defn{surjective} (or \defn{onto}).
 
@@ -246,8 +250,7 @@ surjective then, for any set $X$ and maps $f\colon B\to X$ and $g\colon
 B\to X$, if $f\circ s = g\circ s$ then $f = g$. (To see this, note that if $f$
 and $g$ differed on any $b\in B$, then, since there is some $a\in A$ with
 $b = s(a)$, the compositions would differ on this $a$.) That is,
-injective maps are “maps that can be cancelled out on the right.”
-
+surjective maps are “maps that can be cancelled out on the right.”
 
 \eg\ The identity map is both injective and surjective.
 
@@ -256,15 +259,15 @@ injective nor surjective. It is not injective because, for example,
 both $2$ and $-2$ are mapped to $4$. It is not surjective because the
 codomain is only the non-negative reals.
 
-There is a convenient, graphical way to give the conditions for being
-injective and surjective, shown in figures~\ref{fig:injection}
+There is a convenient, graphical, way to give the conditions for being
+injective and surjective, illustrated in figures~\ref{fig:injection}
 and~\ref{fig:surjection}. Consider each diagram as a directed graph,
 with the sets forming the vertices and the maps forming the
-edges. There are certain sets for which multiple paths exist between
-the two. In figure~\ref{fig:injection}, for example, one path from $X$
-to $B$ is “first $f$ then $i$” and another path is “first $g$ then
-$i$.” The premise in the definition of injective is precisely that “it
-doesn't matter which path you take.”
+edges. There are certain pairs of sets for which multiple paths exist
+between the two. For example, in figure~\ref{fig:injection} one path
+from $X$ to $B$ is “first $f$ then $i$” and another path is “first $g$
+then $i$.” The premise in the definition of injective is precisely
+that “it doesn't matter which path you take.”
 
 We say that a diagram \defn{commutes} if every composition of maps
 resulting in the same domain and codomain gives rise to the same map.
