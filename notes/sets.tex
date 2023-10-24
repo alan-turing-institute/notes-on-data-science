@@ -34,11 +34,13 @@
 \begin{document}
 \maketitle
 
-Set theory contains much of the vocabulary of mathematics. There is
-not much content to the subject but there are quite a few concepts and
-these concepts permeate the rest of mathematics. Most mathematical
-objects you will meet will be “sets, with some additional structure,”
-and in many cases the additional structures are themselves sets.
+Set theory contains much of the vocabulary of mathematics. This note
+is a short summary of the parts of set theory that you are likely to
+meet when studying other topics. There is not much here beyond some
+concepts and examples but these concpets permeate the rest of
+mathematics: most mathematical objects you will meet will be “sets,
+with some additional structure,” and in many cases the additional
+structures are themselves sets.
 
 A \defn{set} is a “collection of things.” The term “collection” is not
 defined. The things are called the \defn{elements} (or \defn{members})
@@ -62,7 +64,7 @@ set as $\{2,0,1\}$.
 
 \eg\ $1\in\{0,1,2\}$. $3\notin\{0,1,2\}$.
 
-\eg\ The set $\set{N}$ denotes the set of natural numbers,
+\eg\ The symbol $\set{N}$ denotes the set of natural numbers,
 $\{0,1,2,\dotsc\}$. The set $\{n \in \set{N} \mid \text{$n$ is prime}\}$ is
 the set of primes.
 
@@ -106,8 +108,8 @@ is written $(x, y)$. We call $x$ the “first element” and $y$ the
 “second element.” The defining property of pairs is that $(x,y)=(p,q)$
 if and only if $x=p$ and $y=q$. One might wonder whether a pair is a
 new kind of thing. In fact, pairs can be defined in terms of
-sets. Here is one way to do so: $(x, y)\equiv \{x, \{x,y\}\}$. (Though it's
-surprisingly subtle to say why this works.)
+sets. Here is one way to do so: $(x, y)\equiv \{\{x\}, \{x,y\}\}$. (Though
+it's surprisingly subtle to say why this works.)
 
 An \defn{$n$-tuple} (or just \defn{tuple}) is an ordered list of $n$
 things. A 3-tuple, say, is written $(x, y, z)$. (Note that any of $x$,
@@ -143,11 +145,11 @@ together with all the elements of $Y$ “tagged” with $1$. If some
 element $\text{a}\in X$ is also an element of $Y$, it will “appear twice” in the
 coproduct, once as $(0,\text{a})$ and once as $(1,\text{a})$. 
 
-The above is largely all there is to the subject of sets as
-sets. There are a few definitions and some results which follow more
-or less immediately from the definitions. The richness of the subject
-of set theory arises from the relationships between sets, captured by
-the notion of a map.
+The above is largely all that we shall say about the subject of sets
+as sets. There are a few definitions and some results which follow
+more or less immediately from the definitions. The richness of the
+subject of set theory arises from the relationships between sets,
+perhaps the most important of which is the notion of a map.
 
 \begin{sidefigure}
   \[\begin{tikzcd}
@@ -161,12 +163,12 @@ $X$ is called the \defn{domain} of $f$ and the set $Y$ is called the
 \defn{codomain} of~$f$. The rule must cover \emph{every} element of
 the domain. Much of the subject of set theory is really the study of
 maps and, indeed, much of any topic in mathematics is the study of the
-maps relevant to that topic.\sidenote{The term “function” is sometimes
+maps relevant to that topic.\footnote{The term “function” is sometimes
   used instead of “map;” sometimes “function” means a map where the
   codomain is a number; sometimes “map” means a certain kind of
   structure-preserving map.}
 
-Sometimes we describe a map using the notation $f\colon x\mapsto f(x)$. (The
+A map may be described using the notation $f\colon x\mapsto f(x)$. (The
 symbol $\mapsto$ is read as ``maps to.'')
 
 \eg\ For $X$ any set, there is a unique map $\emptyset \to X$. (It may surprise
@@ -205,7 +207,7 @@ for two maps $f\colon A \to B$ and $g\colon B \to C$, their
 \defn{composition}, $g\circ f\colon A \to C$, is the map defined by $(g\circ
 f)(x) = g(f(x))$. Notice that $g\circ f$ means “apply $g$ \emph{after}
 applying $f$,” and we normally read $g\circ f$ as “$g$ after
-$f$.”\sidenote{I picked up this way of reading $g\circ f$ from Bartosz
+$f$.”\footnote{I picked up this way of reading $g\circ f$ from Bartosz
   Milewski's lectures on category theory; I don't know whether it is
   more widespread.}
   
@@ -235,7 +237,7 @@ either.) That is, injective maps are “maps that can be cancelled out
 on the left.”
 
 The \defn{image} of $f$, written $f[X]$, is the set of all elements of
-the codomain mapped to from \emph{some} element of the domain: $[X] =
+the codomain mapped to from \emph{some} element of the domain: $f[X] =
 \{f(x) \in Y \mid x\in X\}$. If the image of $f$ is the entire codomain, the
 map is said to be \defn{surjective} (or \defn{onto}).
 
@@ -294,7 +296,7 @@ A map may not have an inverse; in fact, an
 inverse of $f$ exists if and only if $f$ is both injective and
 surjective (that is, it is “one-to-one and onto”). A map with an
 inverse is called an \defn{bijection} (or an \defn{isomorphism of
-  sets}).\sidenote{There seem to be two names for everything:
+  sets}).\footnote{There seem to be two names for everything:
   “injective” and “one-to-one;” “surjective” and “onto;” “one-to-one
   correspondence” (which we haven't used) and “bijection.” The terms
   “one-to-one” (and perhaps “onto”) seem to be the oldest. It was
@@ -315,6 +317,43 @@ between it and the natural numbers. The integers and the rationals are
 both countable. If a set is not countable, it is said to be
 \emph{uncountable}. The real numbers are uncountable. In this sense,
 there are ``more'' real numbers than there are natural numbers.
+
+The notion of countability gives rise to “counting arguments.” Here is
+an example. A real number $r$ between 0 and 1 is said to be
+\emph{computable} if there exists a computer program which, for any
+natural number $n$, will output the $n$th digit of $r$ in finite
+time. \emph{Claim:} Almost every number is not
+computable. \emph{Proof:} There are uncountably many reals between 0
+and~1 but there are only countably many programs. Hence most reals are
+not computable. (There are only countably many progams because a
+program is a finite list of instructions and there are only finitely
+many possible instructions: it turns out that the set of all finite
+lists of elements from a finite set is countable.)
+
+In the introduction, we said that most mathematical objects were sets
+and it turns out that this is true of maps. One way of thinking about
+maps is as a kind of relationship between two sets. A map, $f:X\to Y$,
+pairs each element, $x$, of its domain with an element $f(x)$ of its
+codomain. In other words, a map can be represented by a set of pairs,
+$\{(x,f(x)) \in X\times Y\mid x\in X\}$. In short, it is a subset of $X\times Y$. Not
+every subset of $X\times Y$ is a map: to be a map, every element of $X$
+must be the first element of some pair in the set. The subset of $X\times
+Y$ generated by a map is sometimes called its \emph{graph}.
+
+This way of thinking is described as the “extensive” view: on this
+view, a map, $f$, is simply the collection of pairs $(x, f(x))$,
+without regard to what it “means.” The extensive view contrasts with
+our earlier, “intensive,” view, on which a map is a rule. I don't
+fully understand this distinction so I won't say more about it
+here.\footnote{My sense is that the intensive view was the early view
+of functions; then, with the rise of formal set theory, mathematicians
+moved to the extensive view. On the other hand, category theory
+focuses on maps as the primary object.}
+
+
+
+
+
 
 \end{document}
 
