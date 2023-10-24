@@ -35,9 +35,9 @@
 \maketitle
 
 Set theory contains much of the vocabulary of mathematics. This note
-is a short summary of the parts of set theory that you are likely to
-meet when studying other topics. There is not much here beyond some
-concepts and examples but these concpets permeate the rest of
+is a short summary of those parts of set theory which you are likely
+to meet when studying other topics. There is not much here beyond some
+concepts and examples but these concepts permeate the rest of
 mathematics: most mathematical objects you will meet will be “sets,
 with some additional structure,” and in many cases the additional
 structures are themselves sets.
@@ -147,9 +147,9 @@ coproduct, once as $(0,\text{a})$ and once as $(1,\text{a})$.
 
 The above is largely all that we shall say about the subject of sets
 as sets. There are a few definitions and some results which follow
-more or less immediately from the definitions. The richness of the
-subject of set theory arises from the relationships between sets,
-perhaps the most important of which is the notion of a map.
+more or less immediately from the definitions. A richer view is
+provided by the relationships between sets, perhaps the most important
+of which is the notion of a map.
 
 \begin{sidefigure}
   \[\begin{tikzcd}
@@ -158,15 +158,14 @@ perhaps the most important of which is the notion of a map.
   \caption{A map, $f\colon X\to Y$, with domain $X$ and codomain $Y$.}
 \end{sidefigure}
 Given two sets, $X$ and $Y$, a \defn{map}, $f\colon X \to Y$, is a rule
-that assigns, to each element $x \in X$, an element $f(x) \in Y$. The set
-$X$ is called the \defn{domain} of $f$ and the set $Y$ is called the
-\defn{codomain} of~$f$. The rule must cover \emph{every} element of
-the domain. Much of the subject of set theory is really the study of
-maps and, indeed, much of any topic in mathematics is the study of the
-maps relevant to that topic.\footnote{The term “function” is sometimes
-  used instead of “map;” sometimes “function” means a map where the
-  codomain is a number; sometimes “map” means a certain kind of
-  structure-preserving map.}
+that assigns, to each element $x \in X$, an element $f(x) \in
+Y$.\footnote{The term “function” is sometimes used instead of “map;”
+sometimes “function” means a map where the codomain is a number;
+sometimes “map” means a certain kind of structure-preserving map.} The
+set $X$ is called the \defn{domain} of $f$ and the set $Y$ is called
+the \defn{codomain} of~$f$. The rule must cover \emph{every} element
+of the domain. Much of any given topic in mathematics is the study of
+the maps relevant to that topic.
 
 A map may be described using the notation $f\colon x\mapsto f(x)$. (The
 symbol $\mapsto$ is read as ``maps to.'')
@@ -208,18 +207,20 @@ for two maps $f\colon A \to B$ and $g\colon B \to C$, their
 f)(x) = g(f(x))$. Notice that $g\circ f$ means “apply $g$ \emph{after}
 applying $f$,” and we normally read $g\circ f$ as “$g$ after
 $f$.”\footnote{I picked up this way of reading $g\circ f$ from Bartosz
-  Milewski's lectures on category theory; I don't know whether it is
-  more widespread.}
+  Milewski's lectures on category theory. It helps me to remember
+  which way round the maps are!}
   
 \eg\ For any map $f\colon A\to B$, we have $f\circ\id_A = \id_B\circ f = f$.
 
-\eg\ For any three compatible maps, $h\circ (g\circ f) = (h\circ g)\circ f$.
+\eg\ Composition of maps is associative: for any three compatible
+maps, $h\circ (g\circ f) = (h\circ g)\circ f$.
 
 There are a few special kinds of maps. 
-
+ 
 A map is said to be \defn{injective} (or \defn{one-to-one}) if every
 element of the domain is mapped to a \emph{unique} element in the
-codomain.
+codomain. Injective maps “keep distinct elements of the domain
+distinct.”
 
 \begin{sidefigure}
 \[\begin{tikzcd}
@@ -239,7 +240,8 @@ on the left.”
 The \defn{image} of $f$, written $f[X]$, is the set of all elements of
 the codomain mapped to from \emph{some} element of the domain: $f[X] =
 \{f(x) \in Y \mid x\in X\}$. If the image of $f$ is the entire codomain, the
-map is said to be \defn{surjective} (or \defn{onto}).
+map is said to be \defn{surjective} (or \defn{onto}). Surjective maps
+“don't miss out parts of the codomain.”
 
 \begin{sidefigure}
 \[\begin{tikzcd}
@@ -265,18 +267,22 @@ There is a convenient, graphical, way to give the conditions for being
 injective and surjective, illustrated in figures~\ref{fig:injection}
 and~\ref{fig:surjection}. Consider each diagram as a directed graph,
 with the sets forming the vertices and the maps forming the
-edges. There are certain pairs of sets for which multiple paths exist
-between the two. For example, in figure~\ref{fig:injection} one path
-from $X$ to $B$ is “first $f$ then $i$” and another path is “first $g$
-then $i$.” The premise in the definition of injective is precisely
-that “it doesn't matter which path you take.”
+edges. There may be certain pairs of sets for which multiple paths
+exist between the two. For example, in figure~\ref{fig:injection} one
+path from $X$ to $B$ is “first $f$ then $i$” and another path is
+“first $g$ then $i$.” The premise in the definition of injective is
+precisely that “it doesn't matter which path you take.”
 
 We say that a diagram \defn{commutes} if every composition of maps
 resulting in the same domain and codomain gives rise to the same map.
 
-\eg\ An alternative definition of injective is: A map $i\colon A\to B$
-is \emph{injective} if it is such that, whenever the diagram of
-figure~\ref{fig:injection} commutes then $f=g$.
+\eg\ A map $i\colon A\to B$ is injective if and only if it is such that,
+whenever the diagram of figure~\ref{fig:injection} commutes, then
+$f=g$.
+
+\eg\ A map $s\colon A\to B$ is surjective if and only if it is such that,
+whenever the diagram of figure~\ref{fig:surjection} commutes, then
+$f=g$.
 
 The \defn{inverse} of a map $f\colon A\to B$ is a map $g\colon B\to A$
 such that $g\circ f = \id_A$ and $f\circ g = \id_B$ (see
@@ -292,18 +298,22 @@ sometimes written as $f^{-1}$.
   \caption{An inverse of a map $f$ is a map $g$ which makes this
     diagram commute.\label{fig:inverse}}
 \end{sidefigure}
-A map may not have an inverse; in fact, an
-inverse of $f$ exists if and only if $f$ is both injective and
-surjective (that is, it is “one-to-one and onto”). A map with an
-inverse is called an \defn{bijection} (or an \defn{isomorphism of
+A map may not have an inverse; in fact, an inverse of $f$ exists if
+and only if $f$ is both injective and surjective. Consider trying to
+find the inverse $f^{-1}(y)$ of some element $y\in B$. Because $f$ is
+surjective, we know there is \emph{some} $x\in A$ such that $f(x) = y$;
+and because it is injective, we know that this $x$ is unique. That
+defines the inverse on each element of~$B$. A map with an inverse is
+called an \defn{bijection} (or an \defn{isomorphism of
   sets}).\footnote{There seem to be two names for everything:
-  “injective” and “one-to-one;” “surjective” and “onto;” “one-to-one
-  correspondence” (which we haven't used) and “bijection.” The terms
-  “one-to-one” (and perhaps “onto”) seem to be the oldest. It was
-  Bourbaki (a French mathematics collective!) who introduced
-  “injection,” “surjection,” and “bijection,” perhaps because they
-  wanted to make clear that the domain and codomain of a map are an
-  integral part of its specification.}
+“injective” and “one-to-one;” “surjective” and “onto;” “one-to-one
+correspondence” (which we haven't used) and “bijection.”  The terms
+“one-to-one” (and perhaps “onto”) seem to be the oldest. It was
+Bourbaki (a French mathematics collective!) who introduced
+“injection,” “surjection,” and “bijection,” perhaps because they
+wanted to make clear that the domain and codomain of a map are an
+integral part of its specification.} To denote the existence a
+bijection between sets $A$ and $B$ we write $A\cong B$. 
 
 \eg\ A bijection exists between two finite sets (sets with finitely
 many members) if and only if the two sets have the same number of
@@ -319,39 +329,74 @@ both countable. If a set is not countable, it is said to be
 there are ``more'' real numbers than there are natural numbers.
 
 The notion of countability gives rise to “counting arguments.” Here is
-an example. A real number $r$ between 0 and 1 is said to be
+an example. A real number $r$, between 0 and 1, is said to be
 \emph{computable} if there exists a computer program which, for any
-natural number $n$, will output the $n$th digit of $r$ in finite
-time. \emph{Claim:} Almost every number is not
+natural number $n$, will output in finite time the $n$th digit in the
+decimal expansion of~$r$. \emph{Claim:} Almost every number is not
 computable. \emph{Proof:} There are uncountably many reals between 0
 and~1 but there are only countably many programs. Hence most reals are
-not computable. (There are only countably many progams because a
+not computable. (There are only countably many programs because a
 program is a finite list of instructions and there are only finitely
 many possible instructions: it turns out that the set of all finite
 lists of elements from a finite set is countable.)
 
-In the introduction, we said that most mathematical objects were sets
-and it turns out that this is true of maps. One way of thinking about
-maps is as a kind of relationship between two sets. A map, $f:X\to Y$,
-pairs each element, $x$, of its domain with an element $f(x)$ of its
-codomain. In other words, a map can be represented by a set of pairs,
-$\{(x,f(x)) \in X\times Y\mid x\in X\}$. In short, it is a subset of $X\times Y$. Not
-every subset of $X\times Y$ is a map: to be a map, every element of $X$
-must be the first element of some pair in the set. The subset of $X\times
-Y$ generated by a map is sometimes called its \emph{graph}.
+In the introduction, we said that most mathematical objects are sets
+and it turns out that this is true of maps. A map, $f:X\times Y$, is a kind
+of relationship between two sets: it pairs each element, $x$, of its
+domain with an element, $f(x)$, of its codomain. In other words, a map
+can be represented by the set of pairs $\{(x,f(x)) \mid x\in X\}$. In
+short, a map is a subset of $X\times Y$. Not every subset of $X\times Y$
+represents a map: to represent a map, there must be one and only one
+pair $(x,y)$ in the subset for every element $x\in X$. The subset of $X\times
+Y$ generated by a map is sometimes called its
+\emph{graph}.\footnote{This way of thinking is described as the
+“extensional” view: on this view, the map simply \emph{is} the set
+that comprises its graph, without regard to what it “means.” The
+extensional view contrasts with our earlier, “intensional,” view, on
+which a map is a rule. I don't fully understand this distinction so I
+won't say more about it here.}
 
-This way of thinking is described as the “extensive” view: on this
-view, a map, $f$, is simply the collection of pairs $(x, f(x))$,
-without regard to what it “means.” The extensive view contrasts with
-our earlier, “intensive,” view, on which a map is a rule. I don't
-fully understand this distinction so I won't say more about it
-here.\footnote{My sense is that the intensive view was the early view
-of functions; then, with the rise of formal set theory, mathematicians
-moved to the extensive view. On the other hand, category theory
-focuses on maps as the primary object.}
+Finally, suppose $A$ and $B$ are sets, and consider the collection of
+\emph{all} maps $A\to B$ (see figure~\ref{fig:homset}).
+\begin{sidefigure}
+  \[\begin{tikzcd}
+  A
+  \arrow[r, out=-60, in=-120, "f_1"]
+  \arrow[r, out=10, in=170, "f_2"]
+  \arrow[r, out=70, in=110, "f_3"] & B 
+  \end{tikzcd}\]
+  \caption{A selection of maps from $A$ to $B$.\label{fig:homset}}
+\end{sidefigure}
+This collection is itself a set, written as~$B^A$. It is sometimes
+called the \emph{hom-set} (a term from category theory). The notation
+is suggestive of exponentiation as the following examples illustrate.
 
+\eg\ Denote by $\set{2}$ the set of two elements:
+$\set{2}\equiv\{0,1\}$.\footnote{We say \emph{the} set because we will not
+care what those elements are, just that there are two of them. If you
+don't like using numbers (because where do they come from?) you can
+use the set $\{\emptyset, \{\emptyset\}\}$.} Then, for $X$ any set, $X^\set{2}$ is the
+set of all maps from $\set{2}$ to $X$. A map from $\set{2}$ to $X$ is
+a rule that assigns an element of $X$ to each of the two elements
+of~$X$; that is, it is a pair of elements of~$X$: in other words,
+it is an element of $X\times X$. Likewise, every element of $X\times X$ is a
+pair of elements of $X$ and thus gives rise to a map $\set{2}\to
+X$. Thus, there exists a bijection, $X^\set{2} \cong X\times X$.
 
+\eg\ $\set{2}^X \cong \mathcal{P}(X)$. 
 
+As a final example, note that a map always has a single domain;
+it “takes a single argument.” What if we want a map which “takes two
+arguments” (a common feature of functions in a computer program)? One
+way to do this is to package up the two arguments as a pair. For
+example, a map $f:A\times B\to C$ can be thought of as a map which “takes an
+$A$ and a $B$ and returns a~$C$.”
+
+\eg\ $C^{A\times B} \cong (C^B)^A.$ That is, “a map from pairs of $A$ and $B$ to
+$C$ is the same as a map which takes an $A$, and returns a map from
+$B$ to $C$.” In computer science, passing from the left hand side to
+the right hand side of this bijection is called “currying,” after
+Haskell Curry.
 
 
 
