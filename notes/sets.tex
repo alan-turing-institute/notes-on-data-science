@@ -94,7 +94,8 @@ $X$.
 Sometimes there is a set $\mathcal{U}$ that is understood to be the “set of all
 things presently under consideration.” In that case, the
 \defn{complement} of $X$, written $X^c$, is the set of all things in
-$\mathcal{U}$ but not in $X$; that is, $X^c \equiv \mathcal{U} \setminus X$.
+$\mathcal{U}$ but not in $X$; that is, $X^c \equiv \mathcal{U} \setminus X$. (The notation “$\equiv$” is
+used here to mean “equal to, by definition.”)
 
 There are many identities involving these operations that follow from
 the definitions.
@@ -217,44 +218,18 @@ maps, $h\circ (g\circ f) = (h\circ g)\circ f$.
 
 There are a few special kinds of maps. 
  
+Let $f:A\to B$ be a map. For any $x\in A$, the \defn{image} of $x$ is the
+element $f(x)\in B$.
+
 A map is said to be \defn{injective} (or \defn{one-to-one}) if every
-element of the domain is mapped to a \emph{unique} element in the
-codomain. Injective maps “keep distinct elements of the domain
-distinct.”
+element of the codomain is the image of at most one element from the
+domain. Injective maps “keep distinct elements of the domain
+distinct.” Note that some elements of the codomain may not be the
+image of any element of the domain.
 
-\begin{sidefigure}
-\[\begin{tikzcd}
-  X \arrow[r, bend left, "f"] \arrow [r, bend right, "g"] & A \arrow[r, "i"] & B
-\end{tikzcd}\]
-  \caption{An injective map, $i$.\label{fig:injection}}
-\end{sidefigure}
-Injective maps have the following property. Suppose $i\colon A\to B$ is
-an injective map. For any set $X$ and maps $f\colon X\to A$ and $g\colon
-X\to A$, if $i\circ f = i\circ g$ then $f = g$. (To see this, note that if $f$
-and $g$ were different maps, they would differ on some $x \in X$; then
-$i$ would take $f(x)$ and $g(x)$ to different points in $B$, otherwise
-it would not be injective, and so the compositions could not be equal
-either.) That is, injective maps are “maps that can be cancelled out
-on the left.”
-
-The \defn{image} of $f$, written $f[X]$, is the set of all elements of
-the codomain mapped to from \emph{some} element of the domain: $f[X] =
-\{f(x) \in Y \mid x\in X\}$. If the image of $f$ is the entire codomain, the
-map is said to be \defn{surjective} (or \defn{onto}). Surjective maps
-“don't miss out parts of the codomain.”
-
-\begin{sidefigure}
-\[\begin{tikzcd}
-  A \arrow[r, "s"] & B \arrow[r, bend left, "f"] \arrow [r, bend right, "g"] & X 
-\end{tikzcd}\]
-  \caption{A surjective map, $s$.\label{fig:surjection}}
-\end{sidefigure}
-Surjective maps have the following property. If $s\colon A\to B$ is
-surjective then, for any set $X$ and maps $f\colon B\to X$ and $g\colon
-B\to X$, if $f\circ s = g\circ s$ then $f = g$. (To see this, note that if $f$
-and $g$ differed on any $b\in B$, then, since there is some $a\in A$ with
-$b = s(a)$, the compositions would differ on this $a$.) That is,
-surjective maps are “maps that can be cancelled out on the right.”
+A map is said to be \defn{surjective} (or \defn{onto}) if every
+element of the domain is the image of at least one element of the
+domain. Surjective maps “don't miss out parts of the codomain.”
 
 \eg\ The identity map is both injective and surjective.
 
@@ -263,15 +238,45 @@ injective nor surjective. It is not injective because, for example,
 both $2$ and $-2$ are mapped to $4$. It is not surjective because the
 codomain is only the non-negative reals.
 
-There is a convenient, graphical, way to give the conditions for being
-injective and surjective, illustrated in figures~\ref{fig:injection}
-and~\ref{fig:surjection}. Consider each diagram as a directed graph,
-with the sets forming the vertices and the maps forming the
-edges. There may be certain pairs of sets for which multiple paths
-exist between the two. For example, in figure~\ref{fig:injection} one
-path from $X$ to $B$ is “first $f$ then $i$” and another path is
-“first $g$ then $i$.” The premise in the definition of injective is
-precisely that “it doesn't matter which path you take.”
+\begin{sidefigure}
+\[\begin{tikzcd}
+  X \arrow[r, bend left, "f"] \arrow [r, bend right, "g"] & A \arrow[r, "i"] & B
+\end{tikzcd}\]
+  \caption{An injective map, $i$.\label{fig:injection}}
+\end{sidefigure}
+\eg\ Let $i\colon A\to B$ be a map (see
+figure~\ref{fig:injection}). That $i$ is injective is equivalent to
+the following property: For any set $X$ and maps $f\colon X\to A$ and
+$g\colon X\to A$, if $i\circ f = i\circ g$ then $f = g$.\footnote{To see that
+this follows from the property of being injective, note that if $f$
+and $g$ were different maps, there would have to be some some $x \in X$
+with $f(x)\neq f(y)$; then $i$ would take $f(x)$ and $g(x)$ to different
+points in $B$ (otherwise it would not be injective) and so the
+compositions could not be equal either.} That is, injective maps are
+“maps that can be cancelled out on the left.”
+
+\eg\ Let $s\colon A\to B$ be a map (see
+figure~\ref{fig:surjection}).
+\begin{sidefigure}
+\[\begin{tikzcd}
+  A \arrow[r, "s"] & B \arrow[r, bend left, "f"] \arrow [r, bend right, "g"] & X 
+\end{tikzcd}\]
+  \caption{A surjective map, $s$.\label{fig:surjection}}
+\end{sidefigure}
+That $s$ is surjective is equivalent to
+the following property: For any set $X$ and maps $f\colon B\to X$ and
+$g\colon B\to X$, if $f\circ s = g\circ s$ then $f = g$. That is, surjective
+maps are “maps that can be cancelled out on the right.”
+
+There is a convenient, graphical, way to give the in the previous two
+examples. Consider each diagram of figure~\ref{fig:injection}
+and~\ref{fig:surjection} as directed graphs, with the sets forming
+the vertices and the maps forming the edges. There may be certain
+pairs of sets for which multiple paths exist between the two. For
+example, in figure~\ref{fig:injection} one path from $X$ to $B$ is
+“first $f$ then $i$” and another path is “first $g$ then $i$.”  The
+premise in the definition of injective is precisely that “it doesn't
+matter which path you take.”
 
 We say that a diagram \defn{commutes} if every composition of maps
 resulting in the same domain and codomain gives rise to the same map.
@@ -298,22 +303,23 @@ sometimes written as $f^{-1}$.
   \caption{An inverse of a map $f$ is a map $g$ which makes this
     diagram commute.\label{fig:inverse}}
 \end{sidefigure}
-A map may not have an inverse; in fact, an inverse of $f$ exists if
-and only if $f$ is both injective and surjective. Consider trying to
-find the inverse $f^{-1}(y)$ of some element $y\in B$. Because $f$ is
-surjective, we know there is \emph{some} $x\in A$ such that $f(x) = y$;
-and because it is injective, we know that this $x$ is unique. That
-defines the inverse on each element of~$B$. A map with an inverse is
-called an \defn{bijection} (or an \defn{isomorphism of
-  sets}).\footnote{There seem to be two names for everything:
-“injective” and “one-to-one;” “surjective” and “onto;” “one-to-one
-correspondence” (which we haven't used) and “bijection.”  The terms
-“one-to-one” (and perhaps “onto”) seem to be the oldest. It was
-Bourbaki (a French mathematics collective!) who introduced
-“injection,” “surjection,” and “bijection,” perhaps because they
-wanted to make clear that the domain and codomain of a map are an
+A map may not have an inverse. In fact, an inverse of $f$ exists if
+and only if $f$ is both injective and surjective: that is, if every
+element of the codomain is the image of one and only one element of
+the domain. Consider trying to find the inverse $f^{-1}(y)$ of some
+element $y\in B$. Because $f$ is surjective, we know there is
+\emph{some} $x\in A$ such that $f(x) = y$; and because it is injective,
+we know that this $x$ is unique. That defines the inverse on each
+element of~$B$. A map with an inverse is called an \defn{bijection}
+(or an \defn{isomorphism of sets}).\footnote{There seem to be two
+names for everything: “injective” and “one-to-one;” “surjective” and
+“onto;” “one-to-one correspondence” (which we haven't used) and
+“bijection.”  The terms “one-to-one” (and perhaps “onto”) seem to be
+the oldest. It was Bourbaki (a French mathematics collective!) who
+introduced “injection,” “surjection,” and “bijection,” perhaps because
+they wanted to make clear that the domain and codomain of a map are an
 integral part of its specification.} To denote the existence a
-bijection between sets $A$ and $B$ we write $A\cong B$. 
+bijection between sets $A$ and $B$ we write $A\cong B$.
 
 \eg\ A bijection exists between two finite sets (sets with finitely
 many members) if and only if the two sets have the same number of
