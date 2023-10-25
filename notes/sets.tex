@@ -1,122 +1,425 @@
-\documentclass[10pt, a4paper, twocolumn]{article}
+\documentclass[12pt, a4paper]{article}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{amssymb}
+\usepackage{beton}
+\usepackage{eulervm}
+\DeclareFontSeriesDefault[rm]{bf}{sbc}
+\usepackage[font=footnotesize]{caption}
+\usepackage{ragged2e}
+\usepackage{snotez}
+\setsidenotes{
+  text-format+=\RaggedRight}
 \usepackage{amsmath}
 \usepackage{microtype}
-\usepackage[margin=0.51in]{geometry}
+\usepackage[a4paper]{geometry}
+\geometry{left=15mm,
+  textwidth=0.6\paperwidth, % 126mm for A4
+  textheight=0.6\paperheight}
+%\usepackage{calc}
+\geometry{marginparsep=5mm, marginparwidth=49mm}
+\geometry{footskip=2in}
 %%
-%\setlength{\parindent}{1em}
+\usepackage{tikz-cd}
+%%
 \setlength{\parskip}{\smallskipamount}
 %%
 \newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\isdef}{\stackrel{\text{\tiny def}}{=}}
+\newcommand{\set}[1]{\mathbold{#1}}
 \newcommand{\eg}{\emph{Example:}\relax}
-\DeclareMathOperator{\id}{id}
+\newcommand{\id}{\text{id}}
+%\DeclareMathOperator{\id}{id}
 %%
-%% Terminology from set theory
 %%
+\title{\vspace{-6ex}Sets}
+\author{James Geddes}
 \begin{document}
-Set theory contains much of the vocabulary of mathematics. There is very little
-content but there are quite a few concepts and these concepts permeate the rest
-of the subject.
+\maketitle
+
+Set theory contains much of the vocabulary of mathematics. This note
+is a short summary of those parts of set theory which you are likely
+to meet when studying other topics. There is not much here beyond some
+concepts and examples but these concepts permeate the rest of
+mathematics: most mathematical objects you will meet will be “sets,
+with some additional structure,” and in many cases the additional
+structures are themselves sets.
 
 A \defn{set} is a “collection of things.” The term “collection” is not
-defined. The things are called the \defn{elements} of the set. There are two
-important facts about sets: within a set, the elements are unique; and there is
-no order to the elements. To show that an element, $x$, is a member of some set,
-$A$, write “$x \in A$”.
+defined. The things are called the \defn{elements} (or \defn{members})
+of the set. To show that a thing, $x$, is a member of some set,
+$A$, write $x \in A$. A set is nothing more than the collection of its
+elements: two sets are equal if and only if they have the same elements.
 
-To describe a concrete set, with given elements, surround the elements with
-braces. To describe a set containing those elements of another set, $X$, which
-satisfy some predicate $P(x)$, write $\{x \in X \mid P(x)\}$. The set with no
-elements is called the \defn{empty set} and written as $\emptyset$. There is only one
-empty set.
+There are two important facts about sets: within a set, the elements
+are unique; and there is no order to the elements.
 
-\eg\ $\{0, 1, 2\}$ is the set containing the numbers 0, 1, and~2. It is the same
+To describe a concrete set with given elements, surround the elements
+with braces. To describe a set containing those elements of another
+set, $X$, which satisfy some predicate $P(x)$, write $\{x \in X \mid
+P(x)\}$. The set with no elements is called the \defn{empty set} and
+written as $\emptyset$. There is only one empty set.
+
+\eg\ $\{0, 1, 2\}$ is the set containing 0, 1, and~2. It is the same
 set as $\{2,0,1\}$.
 
 \eg\ The expression $\{1, 1\}$ does not describe a set.
 
-\eg\ $1\in\{0,1,2\}$.
+\eg\ $1\in\{0,1,2\}$. $3\notin\{0,1,2\}$.
 
-\eg\ $\{x \in \mathbb{N} \mid \text{$x$ is prime}\}$ is the set of
-primes.\footnote{There is a question of where “things” come from in the first place. Quite a lot of
-  mathematics can be constructed out of the empty set. For example, $\{\emptyset\}$ is a set containing one
-  element and $\{\emptyset, \{\emptyset\}\}$ is a set containing two elements. One might go so far as to \emph{define}
-  0 to be $\emptyset$, 1 to be $\{\emptyset\}$, and so on.}
+\eg\ The symbol $\set{N}$ denotes the set of natural numbers,
+$\{0,1,2,\dotsc\}$. The set $\{n \in \set{N} \mid \text{$n$ is prime}\}$ is
+the set of primes.
 
-If every element of $B$ is also an element of $A$, we write $B \subset A$ and say that
-$B$ is a \defn{subset} of~$A$. The set of all subsets of $B$ is called the
-\defn{power set} of $B$ and written $\mathcal{P}(B)$.
+\eg\ The set $\{\emptyset\}$ has one element (the empty set). The set $\{\emptyset,
+\{\emptyset\}\}$ has two elements (the empty set, and the set containing the
+empty set).
 
-\eg\ $\emptyset \subset B$ for any $B$. $\emptyset \in \mathcal{P}(B)$ for any $B$.
+If every element of $B$ is also an element of $A$, we write $B \subset A$
+and say that $B$ is a \defn{subset} of~$A$. The set of all subsets of
+$A$ is called the \defn{power set} of $A$ and written $\mathcal{P}(A)$.
 
-The \defn{union} of two sets, $X$ and $Y$, written $X \cup Y$, is the set of all
-elements in either $X$ or $Y$. The \defn{intersection} of two sets, written $X \cap
-Y$, is the set of all elements in both $X$ and $Y$. The \defn{difference} of two
-sets, written $Y \setminus X$ (or sometimes $Y-X$) is the set of all elements that are
-in $Y$ but not in $X$. Sometimes there is a set $U$ that is understood to be the
-“set of all things presently under consideration.” In that case, the
-\defn{complement} of $X$, written $X^c$ is the set of all things in $U$ but not
-in $X$; that is, $X^c \equiv U \setminus X$. There are many identities involving these
-operations that follow from the definitions.
+\eg\ The set of all even natural numbers is a subset of the set of all
+natural numbers: $\{2n \mid n \in \set{N}\} \subset \set{N}$.
 
-\eg\ $X\cap(A\cup B) = (X\cap A)\cup (X\cap B)$.
+\eg\ The power set of $\{0,1,2\}$ has, as elements, $\emptyset$, $\{0\}$,
+$\{1\}$, $\{2\}$, $\{0,1\}$, $\{0,2\}$, $\{1,2\}$, and $\{0,1,2\}$.
 
-Given two sets, $X$ and $Y$, a \defn{map}, $f : X \to Y$, is a rule that assigns,
-to each element $x \in X$, an element $f(x) \in Y$.\footnote{The term “function” is
-  sometimes used to mean “map”; sometimes “function” means a map where the
-  codomain is a number; sometimes “map” means a certain kind of
-  structure-preserving map.} The set $X$ is called the \defn{domain} and the set
-$Y$ is called the \defn{codomain}. Maps are the principal way by which we
-compare sets and much of the subject of set theory is really the study of maps.
+\eg\ $\emptyset \subset A$ for any $A$. Therefore, $\emptyset \in \mathcal{P}(A)$ for any $A$. 
 
-\eg\ For $X$ any set, there is a unique map $\emptyset \to X$.
-\eg\ For any set $X$, the
-identity map, $\id_X : X \to X$, is the map $f(x) = x$ for every
-$x\in X$. Where the set $X$ is implicitly known, we write simply “$\id$.” 
+The \defn{union} of two sets $X$ and $Y$, written $X \cup Y$, is the set
+of all elements of either $X$ or $Y$. The \defn{intersection} of two
+sets, written $X \cap Y$, is the set of all elements in both $X$ and
+$Y$. The \defn{set difference} of two sets, written $Y \setminus X$ (or
+sometimes $Y-X$) is the set of all elements that are in $Y$ but not in
+$X$.
 
-A map is said to be \defn{one-to-one} (or \defn{injective}) if every point in
-the domain is mapped to a unique point in the codomain. The \defn{image} of $f$,
-written $f(X)$, is the set $f(X) = \{y \in Y \mid \text{$y = f(x)$ for some
-  $x$}\}$. If the image of $f$ is the codomain, the map is said to be \defn{onto} (or \defn{surjective}). 
+Sometimes there is a set $\mathcal{U}$ that is understood to be the “set of all
+things presently under consideration.” In that case, the
+\defn{complement} of $X$, written $X^c$, is the set of all things in
+$\mathcal{U}$ but not in $X$; that is, $X^c = \mathcal{U} \setminus X$. 
 
-For two maps $f:B \to C$ and $g:A \to B$, their \defn{composition}, $f\circ g: A \to C$
-(read “$f$ after $g$”) is the map defined by $(f\circ g)(x) = f(g(x))$.
+There are many identities involving these operations that follow from
+the definitions.
+\eg\ $X\cap(A\cup B) = (X\cap A) \cup (X\cap B)$.
 
-\eg\ $f\circ\id = \id\circ f = f$ for any map $f$. 
+We sometimes do want to talk about collections of things where the
+order matters. A \defn{pair} (sometimes “ordered pair”) is a
+collection of two things where the order of the things matters and the
+two things might be the same thing. For two things $x$ and $y$, a pair
+is written $(x, y)$. We call $x$ the “first element” and $y$ the
+“second element.” The defining property of pairs is that $(x,y)=(p,q)$
+if and only if $x=p$ and $y=q$. One might wonder whether a pair is a
+new kind of thing. In fact, pairs can be defined in terms of
+sets. Here is one way to do so: $(x, y) \isdef \{\{x\},
+\{x,y\}\}$. (Though it's surprisingly subtle to say why this works.)
 
-If, given $f:X \to Y$, there exists a $g:Y \to X$ such that $f\circ g = \id_Y$ and $g\circ f
-= \id_X$, then we say that $f$ is an \defn{isomorphism} and that $X$ and $Y$ are
-isomorphic. We often write $g = f^{-1}$.
+An \defn{$n$-tuple} (or just \defn{tuple}) is an ordered list of $n$
+things. A 3-tuple, say, is written $(x, y, z)$. (Note that any of $x$,
+$y$, and $z$ might be the same thing.) One way of defining a 3-tuple,
+$(a, b, c)$, is as a pair whose second element is a pair: $(a, (b,
+c))$.
+  
+Tuples provide one way of constructing a new set out of two given
+sets. Let $X$ and $Y$ be sets. Their \defn{Cartesian product} (or
+simply \defn{product}), $X \times Y$, is the set of all pairs $(x, y)$
+where $x \in X$ and $y \in Y$. That is,
+\begin{equation*}
+X\times Y = \{(x, y) \mid x\in X\;\text{and}\; y\in Y\}.
+\end{equation*}
 
-\eg\ A map $f$ is an isomorphism if and only if it is both one-to-one and onto. 
+\eg\ $\set{R}^2$ is the set of all pairs of real numbers. If you think
+of $\set{R}$ as ``the real line,'' then you can think of $\set{R}^2$
+as ``the plane.''
 
-\eg\ (\defn{Cantor's theorem}) There is no isomorphism between $A$ and $\mathcal{P}(A)$. 
+\eg\ $\{0,1\}\times\{a, b\} = \{(0,a), (0,b), (1,a), (1,b)\}$. 
 
-We sometimes do want to talk about collections of things where the order
-matters. A \defn{pair} (sometimes “ordered pair”) is a collection of two things
-where the order of the things matters and the two things might be the same
-thing. For two things $x$ and $y$, a pair is written $(x, y)$. We call $x$ the
-“first element” and $y$ the “second element”. The main property of pairs is that
-$(x,y)=(p,q)$ if and only if $x=p$ and $y=q$.
+The product of two sets is “all combinations of elements, one from
+each set.” There is a related construction which provides “all the
+elements of one set, together with the elements of another set, where,
+unlike the set union, we keep track of which set the elements came
+from.” Let $X$ and $Y$ be sets. Their \defn{coproduct} (or sometimes,
+\defn{disjoint union}), $X \sqcup Y$, is the set
+\begin{equation*}
+  X \sqcup Y = \{(0,x) \mid x\in X\} \cup \{(1, y)\mid y\in Y\}.
+\end{equation*}
+The coproduct contains all the elements of $X$ “tagged” with $0$,
+together with all the elements of $Y$ “tagged” with $1$. If some
+element $\text{a}\in X$ is also an element of $Y$, it will “appear twice” in the
+coproduct, once as $(0,\text{a})$ and once as $(1,\text{a})$. 
 
-One might wonder whether a pair is a new kind of thing. In fact, pairs can be
-defined in terms of sets. Here is one way to do so: $(x, y)\equiv \{x, \{x,y\}\}$.
+The above is largely all that we shall say about the subject of sets
+as sets. There are a few definitions and some results which follow
+more or less immediately from the definitions. A richer view is
+provided by the relationships between sets, perhaps the most important
+of which is the notion of a map.
 
-A \defn{finite tuple} is an ordered list of things, possible repeated. One may
-define a 3-tuple, $(a, b, c)$ say, as a pair whose second element is a pair:
-$(a, (b, c))$. 
+\begin{sidefigure}
+  \[\begin{tikzcd}
+    X \arrow[r, "f"] & Y
+  \end{tikzcd}\]
+  \caption{A map, $f\colon X\to Y$, with domain $X$ and codomain $Y$.}
+\end{sidefigure}
+Given two sets, $X$ and $Y$, a \defn{map}, $f\colon X \to Y$, is a rule
+that assigns, to each element $x \in X$, an element $f(x) \in
+Y$.\footnote{The term “function” is sometimes used instead of “map;”
+sometimes “function” means a map where the codomain is a number;
+sometimes “map” means a certain kind of structure-preserving map.} The
+set $X$ is called the \defn{domain} of $f$ and the set $Y$ is called
+the \defn{codomain} of~$f$. The rule must cover \emph{every} element
+of the domain. Much of any given topic in mathematics is the study of
+the maps relevant to that topic.
 
-Suppose $X$ and $Y$ are sets. Their \defn{Cartesian product}, $X \times Y$, is the
-set of all pairs $(x, y)$ where $x \in X$ and $y \in Y$. The Cartesian product comes
-with two natural \defn{projection} maps; namely, $\pi_X : X \times Y \to X$ and $\pi_Y : X
-\times Y \to Y$.
+A map may be described using the notation $f\colon x\mapsto f(x)$. (The
+symbol $\mapsto$ is read as ``maps to.'')
+
+\eg\ For $X$ any set, there is a unique map $\emptyset \to X$. (It may surprise
+you that there is such a map at all. After all, there are no elements
+in $\emptyset$ to be mapped to something in $X$. However, a map just has to
+say what to do with each element of its domain and, since this domain
+is empty, the “empty set of rules” is a perfectly fine map.)
+
+\eg\ For any set $X$, the \emph{identity map}, $\id_X\colon X \to X$, is
+the map given by $\id_X\colon x \mapsto x$ for every $x\in X$. Where the set
+$X$ is implicitly known, we write simply “$\id$.”
+\begin{sidefigure}
+\[\begin{tikzcd}
+    X \arrow[loop right, out=45, in=-45, distance=3em, "\id"]
+  \end{tikzcd}\]
+  \caption{The identity map $\id\colon X\to X$.}
+\end{sidefigure}
+
+The main operation on maps is that of composition. Suppose there are
+two maps, $f\colon A\to B$ and $g\colon B\to C$, as shown in
+figure~\ref{fig:comp}. These two maps are \emph{compatible} in the
+sense that the codomain of $f$ is the domain of~$g$.
+\begin{sidefigure}
+  \[
+  \begin{tikzcd}
+    A \arrow [rr, bend right, "g \circ f"' ] \arrow[r, "f"] & B \arrow[r, "g"] & C 
+  \end{tikzcd}
+  \]
+  \caption{Composition of maps, $g \circ f$. Notice that $g$ is applied
+    after $f$.\label{fig:comp}}
+\end{sidefigure}
+For compatible maps, one may construct a map $A\to C$ by the following
+rule: start with an element $x\in A$, then use $f$ to obtain an element
+$f(x)\in B$, then use $g$ to obtain an element $g(f(x))\in C$. That is,
+for two maps $f\colon A \to B$ and $g\colon B \to C$, their
+\defn{composition}, $g\circ f\colon A \to C$, is the map defined by $(g\circ
+f)(x) = g(f(x))$. Notice that $g\circ f$ means “apply $g$ \emph{after}
+applying $f$,” and we normally read $g\circ f$ as “$g$ after
+$f$.”\footnote{I picked up this way of reading $g\circ f$ from Bartosz
+  Milewski's lectures on category theory. It helps me to remember
+  which way round the maps are!}
+  
+\eg\ For any map $f\colon A\to B$, we have $f\circ\id_A = \id_B\circ f = f$.
+
+\eg\ Composition of maps is associative: for any three compatible
+maps, $h\circ (g\circ f) = (h\circ g)\circ f$.
+
+There are a few special kinds of maps. 
+ 
+Let $f:A\to B$ be a map. For any $x\in A$, the \defn{image} of $x$ is the
+element $f(x)\in B$.
+
+A map is said to be \defn{injective} (or \defn{one-to-one}) if every
+element of the codomain is the image of at most one element from the
+domain. Injective maps “keep distinct elements of the domain
+distinct.” Note that some elements of the codomain may not be the
+image of any element of the domain.
+
+A map is said to be \defn{surjective} (or \defn{onto}) if every
+element of the domain is the image of at least one element of the
+domain. Surjective maps “don't miss out parts of the codomain.”
+
+\eg\ The identity map is both injective and surjective.
+
+\eg\ The map $\set{R}\to\set{R}$ defined by $x\mapsto x^2$ is neither
+injective nor surjective. It is not injective because, for example,
+both $2$ and $-2$ are mapped to $4$. It is not surjective because the
+codomain is only the non-negative reals.
+
+\begin{sidefigure}
+\[\begin{tikzcd}
+  X \arrow[r, bend left, "f"] \arrow [r, bend right, "g"] & A \arrow[r, "i"] & B
+\end{tikzcd}\]
+  \caption{An injective map, $i$.\label{fig:injection}}
+\end{sidefigure}
+\eg\ Let $i\colon A\to B$ be a map (see
+figure~\ref{fig:injection}). That $i$ is injective is equivalent to
+the following property: For any set $X$ and maps $f\colon X\to A$ and
+$g\colon X\to A$, if $i\circ f = i\circ g$ then $f = g$.\footnote{To see that
+this follows from the property of being injective, note that if $f$
+and $g$ were different maps, there would have to be some some $x \in X$
+with $f(x)\neq f(y)$; then $i$ would take $f(x)$ and $g(x)$ to different
+points in $B$ (otherwise it would not be injective) and so the
+compositions could not be equal either.} That is, injective maps are
+“maps that can be cancelled out on the left.”
+
+\eg\ Let $s\colon A\to B$ be a map (see
+figure~\ref{fig:surjection}).
+\begin{sidefigure}
+\[\begin{tikzcd}
+  A \arrow[r, "s"] & B \arrow[r, bend left, "f"] \arrow [r, bend right, "g"] & X 
+\end{tikzcd}\]
+  \caption{A surjective map, $s$.\label{fig:surjection}}
+\end{sidefigure}
+That $s$ is surjective is equivalent to
+the following property: For any set $X$ and maps $f\colon B\to X$ and
+$g\colon B\to X$, if $f\circ s = g\circ s$ then $f = g$. That is, surjective
+maps are “maps that can be cancelled out on the right.”
+
+There is a convenient, graphical, way to give the content of the
+previous two examples. Consider each diagram in
+figures~\ref{fig:injection} and~\ref{fig:surjection} as directed
+graphs, with the sets forming the vertices and the maps forming the
+edges. There may be certain pairs of sets for which multiple paths
+exist from one set to the other. For example, in
+figure~\ref{fig:injection} one path from $X$ to $B$ is “first $f$ then
+$i$” and another path is “first $g$ then $i$.” However, for some
+graphs, “it doesn't matter which path you take,” in the sense that the
+composition of maps is the same.
+
+We say that a diagram \defn{commutes} if every composition of maps
+resulting in the same domain and codomain gives rise to the same map.
+
+\eg\ A map $i\colon A\to B$ is injective if and only if it is such that,
+whenever the diagram of figure~\ref{fig:injection} commutes, then
+$f=g$.
+
+\eg\ A map $s\colon A\to B$ is surjective if and only if it is such that,
+whenever the diagram of figure~\ref{fig:surjection} commutes, then
+$f=g$.
+
+The \defn{inverse} of a map $f\colon A\to B$ is a map $g\colon B\to A$
+such that $g\circ f = \id_A$ and $f\circ g = \id_B$ (see
+figure~\ref{fig:inverse}). The inverse of $f$, if it exists, is
+sometimes written as $f^{-1}$.
+\begin{sidefigure}
+  \[\begin{tikzcd}
+  A \arrow[loop left, out=225, in=135, distance=3em, "\id"] \arrow[r, bend
+      left, "f"] &
+    B \arrow[l, bend left, "g"] \arrow[loop right, out=45, in=-45,
+      distance=3em, "\id"]
+  \end{tikzcd}\]
+  \caption{An inverse of a map $f$ is a map $g$ which makes this
+    diagram commute.\label{fig:inverse}}
+\end{sidefigure}
+A map may not have an inverse. In fact, an inverse of $f$ exists if
+and only if $f$ is both injective and surjective: that is, if every
+element of the codomain is the image of one and only one element of
+the domain. Consider trying to find the inverse $f^{-1}(y)$ of some
+element $y\in B$. Because $f$ is surjective, we know there is
+\emph{some} $x\in A$ such that $f(x) = y$; and because it is injective,
+we know that this $x$ is unique. That defines the inverse on each
+element of~$B$. A map with an inverse is called an \defn{bijection}
+(or an \defn{isomorphism of sets}).\footnote{There seem to be two
+names for everything: “injective” and “one-to-one;” “surjective” and
+“onto;” “one-to-one correspondence” (which we haven't used) and
+“bijection.”  The terms “one-to-one” (and perhaps “onto”) seem to be
+the oldest. It was Bourbaki (a French mathematics collective!) who
+introduced “injection,” “surjection,” and “bijection,” perhaps because
+they wanted to make clear that the domain and codomain of a map are an
+integral part of its specification.} To denote the existence a
+bijection between sets $A$ and $B$ we write $A\cong B$.
+
+\eg\ A bijection exists between two finite sets (sets with finitely
+many members) if and only if the two sets have the same number of
+elements.
+
+\eg\ (\defn{Cantor's theorem}) There is no bijection between $A$ and
+$\mathcal{P}(A)$ for any set~$A$.
+
+\eg\ A set is called \emph{countable} if there exists a bijection
+between it and the natural numbers. The integers and the rationals are
+both countable. If a set is not countable, it is said to be
+\emph{uncountable}. The real numbers are uncountable. In this sense,
+there are ``more'' real numbers than there are natural numbers.
+
+The notion of countability gives rise to “counting arguments.” Here is
+an example. A real number $r$, between 0 and 1, is said to be
+\emph{computable} if there exists a computer program which, for any
+natural number $n$, will output in finite time the $n$th digit in the
+decimal expansion of~$r$. \emph{Claim:} Almost every number is not
+computable. \emph{Proof:} There are uncountably many reals between 0
+and~1 but there are only countably many programs. Hence most reals are
+not computable. (There are only countably many programs because a
+program is a finite list of instructions and there are only finitely
+many possible instructions: it turns out that the set of all finite
+lists of elements from a finite set is countable.)
+
+In the introduction, we said that most mathematical objects are sets
+and it turns out that this is true of maps. A map, $f:X\times Y$, is a kind
+of relationship between two sets: it pairs each element, $x$, of its
+domain with an element, $f(x)$, of its codomain. In other words, a map
+can be represented by the set of pairs $\{(x,f(x)) \mid x\in X\}$. In
+short, a map is a subset of $X\times Y$. Not every subset of $X\times Y$
+represents a map: to represent a map, there must be one and only one
+pair $(x,y)$ in the subset for every element $x\in X$. The subset of $X\times
+Y$ generated by a map is sometimes called its
+\emph{graph}.\footnote{This way of thinking is described as the
+“extensional” view: on this view, the map simply \emph{is} the set
+that comprises its graph, without regard to what it “means.” The
+extensional view contrasts with our earlier, “intensional,” view, on
+which a map is a rule. I don't fully understand this distinction so I
+won't say more about it here.}
+
+Finally, suppose $A$ and $B$ are sets, and consider the collection of
+\emph{all} maps $A\to B$ (see figure~\ref{fig:homset}).
+\begin{sidefigure}
+  \[\begin{tikzcd}
+  A
+  \arrow[r, out=-60, in=-120, "f_1"]
+  \arrow[r, out=10, in=170, "f_2"]
+  \arrow[r, out=70, in=110, "f_3"] & B 
+  \end{tikzcd}\]
+  \caption{A selection of maps from $A$ to $B$.\label{fig:homset}}
+\end{sidefigure}
+This collection is itself a set, written as~$B^A$. It is sometimes
+called the \emph{hom-set} (a term from category theory). The notation
+is suggestive of exponentiation as the following examples illustrate.
+
+\eg\ Denote by $\set{2}$ the set of two elements:
+$\set{2} = \{0,1\}$.\footnote{We say \emph{the} set because we will not
+care what those elements are, just that there are two of them. If you
+don't like using numbers (because where do they come from?) you can
+use the set $\{\emptyset, \{\emptyset\}\}$.} Then, for $X$ any set, $X^\set{2}$ is the
+set of all maps from $\set{2}$ to $X$. A map from $\set{2}$ to $X$ is
+a rule that assigns an element of $X$ to each of the two elements
+of~$X$; that is, it is a pair of elements of~$X$: in other words,
+it is an element of $X\times X$. Likewise, every element of $X\times X$ is a
+pair of elements of $X$ and thus gives rise to a map $\set{2}\to
+X$. Thus, there exists a bijection, $X^\set{2} \cong X\times X$.
+
+\eg\ $\set{2}^X \cong \mathcal{P}(X)$. 
+
+As a final example, note that a map always has a single domain;
+it “takes a single argument.” What if we want a map which “takes two
+arguments” (a common feature of functions in a computer program)? One
+way to do this is to package up the two arguments as a pair. For
+example, a map $f:A\times B\to C$ can be thought of as a map which “takes an
+$A$ and a $B$ and returns a~$C$.”
+
+\eg\ $C^{A\times B} \cong (C^B)^A.$ That is, “a map from pairs of $A$ and $B$ to
+$C$ is the same as a map which takes an $A$, and returns a map from
+$B$ to $C$.” In computer science, passing from the left hand side to
+the right hand side of this bijection is called “currying,” after
+Haskell Curry.
+
+
+
+\end{document}
+
+
+The Cartesian product comes with two natural \defn{projection maps}
+onto its ``factors;'' namely, $\pi_X\colon X \times Y \to X$ given by
+$\pi_X\colon (x,y)\mapsto x$ and and $\pi_Y\colon X \times Y \to Y$ given by $\pi_Y\colon
+(x,y)\mapsto y$.
+
 
 \eg\ $(\pi_X p, \pi_Y p) = p$ for any $p \in X \times Y$.
 
-The Cartesian product is associative, in the sense that there is a natural
-isomporphism between $X \times (Y \times Z)$ and $(X \times Y) \times Z$. Because of this, we
-normally write simply $X \times Y \times Z$.
+The Cartesian product is associative, in the sense that there is a
+``natural'' isomorphism of sets between $X \times (Y \times Z)$ and $(X \times Y) \times
+Z$. Because of this, we normally write simply $X \times Y \times Z$.
 
-\end{document}
+

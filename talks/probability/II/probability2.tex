@@ -1,0 +1,560 @@
+\documentclass[11pt]{article}
+%\usepackage{graphicx}
+%\usepackage{textcomp}
+%\usepackage{amssymb}
+%\usepackage{fontspec}
+%\usepackage{minted}
+\usepackage[T1]{fontenc}
+\usepackage{concrete}
+\usepackage{euler}
+%%
+%% Set up page layout for presentation with Remarkable
+%% Typeset material in a narrow column on the rhs, leaving
+%% a broad space for writing. Landscape.
+\usepackage[paperwidth=209.6mm, paperheight=157.2mm,
+  right=0.1875in, top=0.1875in, bottom=0.1875in, footskip=0.164in, textwidth=85mm,
+  marginparwidth=40mm, marginparsep=10mm]{geometry}
+%%
+\usepackage{layout}
+\usepackage{parskip}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\renewcommand{\bfdefault}{sbc} 
+\usepackage{soul} % for consistently placed underlining
+%%
+%% \usepackage[style=authoryear]{biblatex}
+%% \addbibresource{probability.bib}
+%%
+\usepackage{amsmath}
+\usepackage{amssymb}
+%%
+\DeclareMathOperator{\pr}{Prob}
+\author{James Geddes}
+\date{\today}
+\title{Probability II\\ {\normalsize Probability and Measure}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[L]{\scriptsize\thepage}
+%%
+\begin{document}
+%\SweaveOpts{concordance=TRUE}
+\setcounter{page}{0}
+\newgeometry{textwidth=200mm}
+\maketitle\thispagestyle{empty}
+\restoregeometry
+\newpage
+%%
+%% Example Sweave R input:
+%%
+%% ============================================================================
+%% Setup
+%%
+%% <<R_setup, include=FALSE>>=
+%% library(tidyverse)
+%% library(ggthemes)
+%% options(width = 46, scipen = -2, digits = 2)
+%% <<R_convenience_functions>>
+%% knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE,
+%%                       dev='tikz', fig.width=3.3, fig.height=2,
+%%                       # prompt=TRUE, comment='',
+%%                       tidy=TRUE, highlight=FALSE, tidy.opts=list(width.cutoff=I(46)))
+%% set.seed(20210807)
+%% @ 
+%%
+%% ============================================================================
+%% Slide: Ensembles
+%%
+\section*{Overview}
+\label{slide:recap}
+\begin{enumerate}
+\item Recap of last time
+\item Continuous probability spaces (like $[0,1]$)
+\item Calculating expectations
+\item Very, very large spaces
+\item Entropy
+\end{enumerate}
+\hrulefill
+
+An \ul{ensemble}, $(X, p)$, is two things:
+\begin{enumerate}
+\item A set, $X$ (the \emph{sample space} of \emph{outcomes}); and
+\item $p : X \to [0,1]$ such that
+  \[
+  \sum_{a \in X} p(a) = 1.
+  \]
+\end{enumerate}
+\emph{Aside:} $X$ might be infinite and that's fine as long the sum
+converges.
+
+\hrulefill
+
+\emph{The sizes of sets}
+\begin{itemize}
+\item \emph{Finite}: 5, say.
+\item \emph{Countable}: As many as there are whole numbers 0, 1, 2, \ldots
+\item \emph{Uncountable}: More than countable.
+\end{itemize}
+\medskip
+
+\newpage
+\section*{Continuous spaces}
+\label{slide:continuous}
+\emph{Some rules of probability}
+
+\begin{enumerate}
+\item $\pr(E) \in [0, 1]$.
+\item $\pr(A\,\text{or}\,B) = \pr(A) + \pr(B)$ when $A$ and $B$ are mutually
+  exclusive events.
+\end{enumerate}
+
+\emph{Definition}
+
+An \ul{event} is a set of outcomes.
+
+\newpage
+\section*{Probability spaces}
+\label{slide:probability}
+A \ul{probability space} $(X, \mathcal{S}, P$) is three things:
+\begin{enumerate}
+\item A \emph{sample space} of \emph{outcomes}: A set, $X$;
+\item A set of \emph{events}: A collection, $\mathcal{S}$, of subsets of $X$;
+\item A \emph{probability measure}: A map, $P : \mathcal{S}\to[0,1]$;
+\end{enumerate}
+satisfying the following technical conditions:
+\begin{enumerate}
+\item For any $A,B\in \mathcal{S}$ both $A\cup B \in\mathcal{S}$ and $A-B\in\mathcal{S}$;
+\item If $A,B \in \mathcal{S}$ are disjoint then $P(A \cup B) = P(A)+P(B)$;
+\item If $A_i\in\mathcal{S}$ are disjoint and $\sum_i P(A_i)$ exists, then $\bigcup_i A_i\in \mathcal{S}$ and
+  $P(\bigcup_i A_i) = \sum_i P(A_i)$;
+\item $X\in\mathcal{S}$ and $P(X) = 1$.
+\end{enumerate}
+
+\newpage
+\section*{Expectations}
+\label{slide:expectations}
+\emph{Reminder: expectation for ensembles}
+
+On an ensemble $(X, p)$ let $f:X\to\mathbb{R}$ be a function.
+\[
+\langle f \rangle_X \equiv \sum_{a\in X} p(a) f(a).
+\]
+
+\emph{Step functions}
+
+Let $A$ be an event. The \emph{characteristic function of $A$} is
+\[
+\chi_A(x) = \begin{cases}
+  1 & \text{if $x\in A$}, \\
+  0 & \text{otherwise}.
+\end{cases}
+\]
+
+A \ul{step function} is $f(x) = \sum_{i=1}^N \alpha_i \chi_i(x)$ where
+  \begin{enumerate}
+  \item $\chi_i$ ($i=1,\dotsc,N$) are the characteristic functions of events $A_i$;
+  \item $\{A_1, A_2, \dotsc, A_N\}$ are a finite number of events such that (1) $A_i
+    \cap A_j = \emptyset$ when $i\neq j$; and (2) $\bigcup_i A_i = X$;
+  \item $\alpha_1, a_2, \dotsc, a_N \in \mathbb{R}$ are $N$ numbers.
+\end{enumerate}
+
+When $f(x)$ is a step function:
+\[
+\langle f \rangle = \int_X f(x)\,dP \equiv \sum_{i=1}^N \alpha_i P(A_i).
+\]
+
+\newpage
+\section*{Examples}
+\label{slide:examples}
+\begin{enumerate}
+\item Chance of drawing a rational.
+\item The $\delta$ probability measure.
+\item Probability density functions.
+\end{enumerate}
+
+\newpage
+\section*{Very, very large spaces}
+\label{slide:largespaces}
+
+\newpage
+\section*{Entropy}
+\label{slide:entropy}
+\emph{Review of information theory for ensembles}
+
+Information content of an outcome $a$ (in bits):
+\[
+h(a) \equiv \log_2\frac{1}{p(a)}.
+\]
+Shannon entropy of an ensemble (in bits):
+\[
+H(X) = \langle h \rangle_X = \sum_{a\in X} p(a) \log_2 \frac{1}{p(a)}.
+\]
+
+\hrulefill
+
+\emph{For continuous probability measures}
+
+Maybe write ``$dP = p(x)\,dx$'' and then perhaps
+\[
+H(P) = \int p(x)\log_2\frac{1}{p(x)}\,dx ?
+\]
+This is called \emph{continuous entropy}. 
+
+\newpage
+\section*{Summary}
+\begin{enumerate}
+\item Probability (and measure) is a \emph{set}-valued function.
+\item We measure the probability of events, not outcomes. This idea unifies
+    both the discrete and the continuous case.
+  \item Probability measures on function spaces (typically infinite-dimenionsal)
+    are hip and froody.
+    \begin{itemize}
+    \item Gaussian processes!
+    \item Kriging!
+    \end{itemize}
+  \item Kullback-Leibler.
+\end{enumerate}
+
+
+%% \printbibliography
+
+%% ============================================================================
+%% 
+%% Notes to the slides
+%%
+%% ============================================================================
+%%
+%%
+%% Revert to typeset material filling the page 
+\newgeometry{left=0.5in, top=0.25in, bottom=0.25in, textwidth=30em, marginparwidth=15em}
+\newpage
+\section*{Speaker's notes}
+\subsection*{Title page}
+\begin{enumerate}
+\item Discrete probability (including information theory, Bayes' theorem)
+\item Probability and measure [Today!]
+\item Sampling
+\item ?
+\item Practical probabilistic programming with monads 
+\end{enumerate}
+
+This talk builds on part 1 to give the full definition of a probability
+space. Part 1 dealt with finite probability spaces: that is, when there were
+only a finite number of outcomes. Today we talk about how to extend the ideas to
+continuous spaces.
+
+There are some ideas here that I expect most of you are not familiar with so the
+following will be a simplified sketch. I hope to outline the general idea, give
+you a sense of how things work, and talk about some places the subject might be
+developed.
+
+One interesting thing about this topic is that it is very closely related to the
+subject of integration---in fact, it is essentially the same topic. 
+
+\newpage
+\subsection*{Recap (slide~\pageref{slide:recap})}
+
+Last talk about was discrete, finite spaces. Most interesting bit was the
+definition of “Shannon information content” and the entropy. There were a few
+definitions, for example of “conditional probability” and then everything else
+follows from the definitions, including things like Bayes' law.
+
+As an aside it's perfectly okay for the sample space to be infinite as long as
+the sums converge. So you can certainly make sense of something like “choosing a
+whole number at random” but there's no way to do so such that every whole number
+has an equal probability of being chosen.
+
+We haven't talked much about how you “pick an outcome” at random but perhaps
+it's reasonably clear how you might do that for finite ensembles.
+
+Here's an example of sample from an infinite ensemble whose sample space is the
+set of non-negative integers: Flip a coin until it comes up tails. Report the
+number of heads you threw. Here the probability of reporting $N$ is $2^{-(N+1)}$.  
+
+Sometimes we want to “pick a real number between 0 and 1 at random, with equal
+probability of choosing any number.” Can we use the same ideas as before?
+
+What about assigning a probability mass function to this set? The immediate
+sticking point is that there are a \emph{lot} of numbers between 0 and 1. It's
+very hard to see how any probability mass function could work.
+
+What does a lot mean? It means, more than there are whole numbers: in other
+words, uncountably many. And the problem is that one can show that if an
+infinite sum of $p$'s exists at all, then at most countably many of the
+probabilities can be non-zero. Which is hardly any of them.
+
+And maybe that sounds reasonable, actually. Imagine there were some way of
+choosing a number between 0 and 1 at random, so that any number were as equally
+likely as any other number. What's the chance of picking exactly 0.5? Well,
+zero. And that's true of any particular number.
+
+\newpage
+\subsection*{Continuous spaces (slide~\pageref{slide:continuous})}
+
+Well, if we aren't going to be able to talk sensibly about the probability of a
+\emph{particular} outcome, perhaps we can make sense of the probability of a
+\emph{set} of outcomes.
+
+This sounds promising! What's the probability of choosing a number that is
+between 0 and 0.5? Well, 0.5, obviously. What's the chance of choosing a number
+in this set $(a, b)$? Well $b - a$.
+
+So: new plan. Let's assign a probability, not to the \emph{outcomes} but to sets of
+outcomes. A set of outcomes is called an \emph{event}.
+
+Are there any restrictions on events? Yes. Let's continue with this idea of a
+uniform probability on $[0,1]$. What does that means? Here are some things one
+would like to be true for $p$ to be a probability:
+\begin{equation}
+P(\emptyset) = 0;
+\end{equation}
+That is, if the set of outcomes is the things that could occur, then the
+probability of no outcome happening is zero. By the way, I've switched to using
+an uppercase $P$ just to remind you that it is a function on sets---that is,
+events---not on individual outcomes. 
+
+If $A$ and $B$ are events with no outcomes in common, \(A\cap B = \emptyset\), then
+\begin{equation}
+p(A \cup B) = p(A) + p(B).
+\end{equation}
+Finally, we'd like our probability to be uniform. Roughly roughly, that means
+that if we shift some set a little bit it should have the same probability:
+\begin{equation}
+p(A + \delta) = p(A);
+\end{equation}
+
+Thus, it would be very nice to assign a $p$ with these properties to all sets of
+numbers. Unfortunately, it turns out that this is impossible. There are some
+really weird sets in there, and some of them cannot consistently be assigned a
+probability, not even zero. Not if you want those other conditions to hold.
+
+So in practice what we do is only allow certain sets to be events. Only certain
+sets have a probability. 
+
+\newpage
+\subsection*{Examples (slide~\pageref{slide:probability})}
+
+On the right is the definition of a probability measure. The first few lines
+generalise the idea of an ensemble.
+
+[Go through setup, then discuss examples, then come back to technical
+  definitions.]
+
+The technical conditions roughly correspond to the idea
+that $p$ has properties one might expect of a probability.
+
+Property 1 says that if we can talk about the probability of an event $A$ and
+also the probability of an event $B$, then we ought to be able to talk about the
+probability of the event “$A$ or $B$ (or both)” as well as “$A$ but not $B$.”
+
+Property 2 says that probabilities add in the way you expect: the probability of
+rolling 1 or a2 is the sum of the probabilities of rolling 1 and of rolling 2.
+
+Property 3 is technical: it says, we can do countable collections too.
+
+Property 4 says that \emph{something} must happen and the probability of \emph{anything}œ
+happening is 1.
+
+\subsubsection*{Examples}
+\begin{enumerate}
+\item Sample space is heads or tails. Events are: $\{\emptyset\}$, $\{H\}$, $\{T\}$,
+  $\{H, T\}$. Probability measure is:
+
+  \begin{tabular}{cr}
+    \toprule
+    Event & Probability \\
+    \midrule
+    $\emptyset$ & 0 \\
+    $\{H\}$ & 0.5 \\
+    $\{T\}$ & 0.5 \\
+    $\{H, T\}$ & 1 \\
+    \bottomrule
+  \end{tabular}
+\item Any ensemble: Any set of outcomes is an event; the probability of the
+  event is the sum of the probabilities of each outcome.
+\item Go back to $[0,1]$. An outcome is all sets. The probability is 1 if the
+  set contains 0 and zero otherwise. This is called the “delta function.”
+\item It is possible to construct a probability measure such that every interval
+  $(a,b)$ is an event; the probability of this event is $b-a$; and the
+  probabilities are translation invariant. This is called \emph{Lebesgue
+  measure}.
+
+  Lebesgue measure is the one you normally think of when you think of a uniform
+  probability on $[0,1]$.
+\end{enumerate}
+
+\newpage
+\subsection*{Expectations (slide~\pageref{slide:expectations})}
+
+Alright, so we've got a way to talk sensibly about probabilities over continuous
+spaces. What can we do with them? One obvious thing we want to do is take
+expectations.
+
+In an ensemble, the expected value of some function is “the sum of the function
+over all outcomes, weighted by the probability of the outcome.” So we want
+something like that, only of course we can't sum because there are too many
+outcomes.
+
+You may already have the intuition that what we want to do is integrate. But we
+haven't said what integration is. So let's do that. I'll describe a quick and
+dirty version that is not too far off the truth. You may remember being taught
+the ``Riemann integral.'' This is not that, it's more general.
+
+First, let's talk about some functions where we can just write down the answer. 
+
+[Draw pictures of step functions.]
+
+What about other functions? Well, for lots of functions, we can approximate
+them by a sequence of step functions. And then one defines their expectation to
+be the limit of the expectations of the step functions.
+
+[Draw picture of bounded, continuous function.]
+
+\newpage
+\subsection*{Examples (slide~\pageref{slide:examples})}
+Perhaps we can do a few examples. All of these are about probability spaces
+based on the unit interval, $[0,1]$.
+
+[Draw unit interval at top to remind people.]
+
+\subsubsection*{The rationals w.r.t.\ Lebesgue measure}
+Here's a function:
+\[
+f(x) = \begin{cases}
+  1 & \text{if $x = m/n$ where $m,n\in\mathbb{N}$}; \\
+  0 & \text{otherwise}.
+\end{cases}
+\]
+What is the expectation of this function with respect to the uniform probability
+on the unit interval?
+
+In other words, what is the probability of a number chosen at random being a
+rational number?
+
+Well, $f$ is the characteristic function of an event: namely the event of a
+rational. Each individual rational is a (closed) interval $[x,x]$ and all
+rationals are a countable union of them. Its probability measure is 0.
+
+So the chance is 0. We say that the rationals are ``a set of measure zero.''
+Sometimes we say this function is ``zero almost everywhere.'' In this, pretty
+compelling, sense, almost all numbers are irrational. The probability of
+choosing an irrational number is 1.
+
+\subsubsection*{Any function w.r.t.\ the $\delta$-function probability}
+
+Remember that this one says that the probability of an event is 1, if that event
+contains 0; or 0 otherwise. Consider any step function: only one of events will
+count, the one containing 0. So in the end the expectation will be the value of
+the function at 0.
+\[
+\langle f(x) \rangle_\delta = f(0).
+\]
+
+Notice that you \emph{can't} write this as a probability density
+function. There's no function $\delta(x)$ such that $\int f(x)\delta(x)\,dx = f(0)$.
+
+So what is a probability density function?
+
+\subsubsection*{Probability density functions}
+
+Suppose you have a probability measure $P$ (on $[0,1]$, say). If $p(x)$ (small
+$p$!) is a suitably nice function, we can compute its expectation over any
+event, $A$. If $P$ is the uniform measure, we can even write it as an integral:
+\[
+P'(A) = \langle p\rangle_A = \int_A p(x) dP.
+\]
+If this $P'(A)$ is itself a probability measure, then what we've done is write
+$P'$ as a function multiplied by Lebesgue measure. We call the function $p(x)$
+the probability density function of $P'$
+
+
+
+\newpage
+\subsection*{Very, very large spaces (slide~\pageref{slide:largespaces})}
+
+Perhaps it's worth stopping here and asking whether all this is really
+necessary. All this talk about set-valued functions, I mean. Presumably, the
+alternative is just to talk, as we usually do, about probability density
+functions and their integrals. That seems to get us quite a long way, right?
+
+I think there are two reasons to get to grips with the truth. (Apart from it
+being, you know, the truth.)
+
+The first is that it nicely unifies the discrete and the continuous case. I
+don't know about you, but I was always slightly uncomfortable with the fact that
+the \emph{theory} was always described for the discrete case, with some
+handwaving ``now just replace the sums with integrals'' for the continuous
+case. It was never particularly satisfying. The subject we've described shows
+what's going on. Furthermore, it explains a lot of what's odd about the
+notation, once you realised that a probability is a probability of an
+\emph{event} (that is, a set) not an \emph{outcome}.
+
+And the second reason is that some things seem very difficult to do with
+probability density functions but are nonetheless possible. Contrariwise, some
+things \emph{don't} seem to generalise with the handwaving argument.
+
+
+Let's talk about the first of those.
+
+[Draw a space X, the unit interval, and a function.]
+
+What would it mean to choose a \emph{function} at random? It would mean that I
+had a set of functions and a probability measure over that set. What about the
+set of \emph{all} functions? Or anyway, most of them?
+
+Does such a probability measure exist? Well, trivial ones always do. But what
+about a probability measure that is ``uniform over all functions''?
+
+The thing is, we run into the same problem of infinities as we did before, only
+in a kind of worse sense.
+
+Here's one version. Consider a vector space of functions with an inner
+product. It's infinite dimensional. Is there a translation-invariant measure on
+this space? No. Consider a unit ball. It's got infinitely many balls of radius
+1/4 inside it. So they must have measure 0. But I can cover the entire space
+with countably many balls of radius 1/4. So the whole space has measure 0. 
+
+But it turns out that \emph{some} measures do exist!
+
+For example, on the space of all continuous functions $[0,1]\to\mathbb{R}$ there's a
+measure called ``Wiener measure''. Random functions drawn from this function
+look like random walks---but on a continuous space. This space is called Brownian
+motion or, sometimes, a Wiener process.
+
+The word ``process'' usually means that we are considering ``a probability space
+of functions''. Gausian processes are similar: they are probability measures on
+certain function spaces.
+
+\subsubsection*{Entropy (slide~\ref{slide:entropy})}
+
+Finally, the most interesting thing, for me, from the discrete case was the
+definition of information and entropy. Maybe we can just extend this to the
+continuous case? 
+
+There are two things you might try. One is to try to take the ``continuous
+limit'' of the discrete case. That's not crazy! After all, we got to integrals
+by taking the limit of step functions. So you might try to decompose the sample
+space into events. Each event has a probability. You could write down the
+entropy of \emph{that} distribution and then try to take the limit as we use
+more, smaller, events. 
+
+That kind of works, but only if you notice that part of the expression becomes
+infinite and then, you know, ignore it. Anyway, this thing is called the
+``limiting density of discrete points''.
+
+Or maybe you just write down the integral version, in the case where there's a pdf.
+
+[Draw graph of pdf, write formula.]
+
+This in fact is what Shannon wrote down. It's called the continuous entropy. It
+has two annoying properties: it can be negative, and it's not invariant under
+coordinate transformations. For me, it's the last point that makes it unnatural.
+
+However, it turns out that the Kullback-Leibler divergence -- you remember that
+horrible thing? -- that \emph{is} well-defined for continuous distributions.
+
+That is, somehow KL is the real thing, not the entropy. I plan to come back to
+this point in part 4 or 5.
+
+\end{document}

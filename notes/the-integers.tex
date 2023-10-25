@@ -1,0 +1,271 @@
+\documentclass[10pt, a4paper, twocolumn]{article}
+%\usepackage{graphicx}
+%\usepackage{textcomp}
+%\usepackage{amssymb}
+%\usepackage{fontspec}
+%\usepackage{minted}
+\usepackage[T1]{fontenc}
+\usepackage{concrete}
+\usepackage{eulervm}
+\usepackage{amsmath}
+%\usepackage[amssymb,sansbold]{concmath}
+\usepackage[margin=0.51in]{geometry}
+%\setlength{\parskip}{\smallskipamount}
+\usepackage{parskip}
+\usepackage{booktabs}
+%\usepackage{fancyhdr}
+%%
+\usepackage[style=authoryear]{biblatex}
+\addbibresource{notes.bib}
+%%
+%%
+\newcommand{\set}[1]{\mathbold{#1}}
+\newcommand{\N}{\set{N}}
+\newcommand{\pairs}{\set{P}}
+\newcommand{\minus}[1]{\underline{#1}}
+%%
+\author{James Geddes}
+\date{\today}
+\title{Negative numbers}
+\begin{document}
+\maketitle
+
+I assume you are familiar with the \emph{natural numbers}: 0, 1, 2, 3,
+and so on.
+
+One of the challenges in life is managing one's flock of sheep. The
+natural numbers provide a way of marshalling and working with certain
+facts about flocks. For example, one can count the number of sheep in
+one's flock. Suppose, on Monday, I count my flock of sheep and
+determine that I have 143 sheep. Then, on Tuesday I count again and
+discover that there are 140: I may infer that I am missing some
+sheep. What is more useful is that I am able to conclude that
+precisely three sheep are missing.
+
+The collection of these natural numbers is a set,
+$\N=\{0,1,2,\dotsc\}$, which comes equipped with a map,
+$+:\N\times\N\to\N$, known as \emph{addition}.\footnote{The notation
+``$\N\times\N$'' means the set consisting of all pairs of natural
+numbers. The notation ``$+:\N\times\N\to\N$'' means that $+$ is a rule
+which assigns, to every pair of natural numbers, a natural number.}
+Let us review some of the properties of the natural numbers.
+\begin{enumerate}
+\item There is a distinguished natural number, $0$, with the
+  property that for $n$ any natural number, $n+0=n$. (We say that $0$
+  is an ``identity'' for $+$.)\label{abmon:id}
+\item For $l,m,n\in\N$ any three natural numbers, $(l+m)+n=l+(m+n)$. (We say
+  that addition is ``associative''.)
+\item For $m,n\in\N$ any two natural numbers, $m+n=n+m$. (We say that
+  addition is ``commutative''.)
+\end{enumerate}
+Other properties of the natural numbers (but not all!) follow from
+these three.\footnote{Mathematicians have a name for a structure
+satisfying these three conditions: A set with an associative,
+commutative, binary operation with an identity element is called an
+\emph{abelian monoid}. However, we will not use this terminology nor
+will we use any results about abelian monoids.} For example, it
+follows that the element $0$ is unique, in the sense that if any other
+element, say $0'$, has the property of (\ref{abmon:id}) above, then
+$0'=0$. (\emph{Exercise:} Show this.)
+
+The introduction gave an example of a real-world problem that can be
+solved by use of the theory of natural numbers: Suppose I have 140
+sheep. How many additional sheep must I locate in order to have 143
+sheep? The question asks for a natural number, $n$, which makes the
+following equation true:
+\begin{equation*}
+140 + n = 143.
+\end{equation*}
+With some practice, one can obtain the answer for small numbers ``by
+inspection.'' In this case, the answer is $n=3$. For larger numbers,
+schoolchildren are taught a method of obtaining the result by an
+algorithm known as ``subtraction''. As a matter of notation, one
+writes $n = 143 - 140$, but this is just notation: it means that $n$
+satisfies the formula above.
+
+Not all such problems have an answer! For example, the following
+apparently similar problem does not have a solution:
+\begin{equation*}
+143 + n = 140. \quad\text{(No solution!)}
+\end{equation*}
+The answer would be written in the above notation as $n=140-143$ but there
+is no such~$n$. Children are taught the rubric ``you can't
+subtract a larger number from a smaller one,'' which has the same
+content as the assertion that there is no natural number satisfying
+the above equation.
+
+Nevertheless, there are occasionally times when it would be convenient
+to \emph{pretend} that we could find a natural number $n$ having the
+property that $143+n=140$. Such a natural number isn't ``real,'' of
+course, but pretending it exists can allow us to describe and solve
+real problems in a way that is more notationally appealing than would
+otherwise be the case. An example where this could prove useful is
+that of \emph{debt}. If I own $140$ sheep but I owe you $143$, there's
+a sense in which I will need another three sheep just to own no sheep!
+Let us try to make these ideas more precise.
+
+What might this $n$ look like if $143+n=140$? Observe that adding any natural
+number to $143$ produces a natural number that is larger than
+$143$. On the other hand, we want the result to be a natural number
+that is \emph{smaller} than $143$---namely, $140$. But the smallest
+natural number we could add to $143$ is $0$; so, in some sense, $n$
+would have to be ``less than $0$.'' That is clearly a very strange
+number of sheep!
+
+We can say something more. We know that $143-140=3$. So in some sense
+$n$ should be ``$3$ fewer than $0$.'' We will denote this strange
+object by $\minus{3}$. Don't be fooled! Right now, there is no meaning
+at all to $\minus{3}$: it's just a formal symbol. What we will do is
+give a \emph{meaning} to the symbol $\minus{3}$ so that the expression
+$143 + \minus{3} = 140$ ``makes sense.''
+
+Our strategy will be as follows: we ``enlarge'' the set $\N$, to
+include ``numbers less than zero, like $\minus{3}$ and $\minus{5}$;''
+at the same time exending the operation of addition to these new
+numbers so that the extended addition behaves in the way we expect
+addition to behave. It is slightly tricky to do this in a way that
+ensures we have included all the new numbers we need without
+including ``unnecessary'' new numbers, all while making sure addition
+does the right thing. In fact, we will first add ``too many'' new
+numbers, in a way that makes it obvious that addition is behaving
+appropriately, and then ``get rid of the redundancy.''
+
+Let $\pairs$ be the set of all pairs of natural numbers: $\pairs =
+\{(m, n) \mid m,n\in \N\}$. We introduce an operation
+$\oplus:\pairs\times\pairs\to\pairs$ by the following rule:
+\begin{equation}\label{pairs:addition}
+  (a, b) \oplus (m, n) \equiv (a + m, b + n).
+\end{equation}
+That is: to ``add'' two elements of $\pairs$, add together their
+corresponding components as natural numbers. This operation, $\oplus$, is
+associative and commutative, and $(m,n)\oplus(0,0) = (m,n)$ for any
+$(m,n)\in\pairs$. (Those properties follow immediately from the
+corresponding properties of $+$.) Thus $\oplus$ ``behaves the way addition
+is supposed to behave.''
+
+Why did we define $\pairs$ this way? The interpretation is intended to
+be something like this: If $m>n$, then $(m,n)$ should represent the
+natural number $m-n$. For example, $(3,0)$ is supposed to represent
+the natural number~$3$. On the other hand, if $m<n$, then $(m,n)$
+represents the number that is ``less than zero by $n-m$.'' For
+example, $(0,3)$ should represent the thing we wrote as $\minus{3}$
+earlier. This interpretation nearly gives us what we were looking
+for. For example---just following the rules---$(143,0) \oplus (0,3) =
+(143,3)$. And that looks a lot like $143+\minus{3}=140$, which is what
+we wanted to be able to write.
+
+Unfortunately, this $\pairs$ is ``too large.'' The elements $(140,0)$
+and $(143,3)$ are supposed to be ``the same number'' but they are
+\emph{not} the same element of $\pairs$.
+
+To fix this, we will say that $(m,n)$ and $(a,b)$ are
+\emph{equivalent} if $m + b = a + n$.\footnote{We'd like to
+write the condition for equivalence as $m-n=a-b$ but this expression
+might not make sense; for example, when $m<n$.} We denote this equivalence by
+writing $(m,n) \sim (a,b)$. For example $(143,3)\sim(140,0)$ because
+$143+0=140+3$. 
+
+Equivalent elements of $\pairs$ will have the interpretation as being
+``the same number.'' The crucial property of equivalence is that it
+plays nicely with the operation $\oplus$. For example, consider the
+equation $5+3=8$. Translated into $\pairs$, this becomes
+$(5,0)\oplus(3,0)=(8,0)$, which is true. But another way of writing $5$ is
+$(6,1)$, because $(6,1)\sim(5,0)$, and another way of writing $3$ is
+$(10,7)$, because $(10,7)\sim(3,0)$. Does the formula still work? Yes:
+$(6,1)\oplus(10,7)=(16,8)$ and $(16,8)\sim(8,0)$.
+
+The last step in our construction is therefore to make the previous
+remarks more precise. We will ``identify equivalent elements of
+$\pairs$, noting that $\oplus$ remains well-defined on the result.'' 
+
+Let $\mathbold{n}$ be an element of $\pairs$. Consider the set of all
+elements of $\pairs$ that are equivalent to $\mathbold{n}$. We call
+this the \emph{equivalence class of $\mathbold{n}$} and denote it by
+$\tilde{\mathbold{n}}$. That is: $\tilde{\mathbold{n}} \equiv \{
+\mathbold{q}\in\pairs \mid \mathbold{q}\sim\mathbold{n}\}$. An element of an
+equivalence class will be called a \emph{representative} of that
+equivalence class.
+
+Every element of $\pairs$ lies in one and only one equivalence
+class. (To see this, note that if $\mathbold{n}\sim\mathbold{p}$ and
+$\mathbold{n}\sim\mathbold{q}$ then $\mathbold{p}\sim\mathbold{q}$. In other
+words, if $\mathbold{n}$ is equivalent to two other members of
+$\pairs$, then those two members are in the same equivalence class.)
+Furthermore, for any two $\mathbold{m},\mathbold{n}\in\pairs$, the
+equivalence class of the sum $\mathbold{m}\oplus\mathbold{n}$ depends
+\emph{only} on the equivalence classes of $\mathbold{m}$ and
+$\mathbold{n}$. (This can be seen by working through the definition of
+$\sim$.) Thus, we can write $\tilde{\mathbold{m}}\oplus\tilde{\mathbold{n}}$
+to mean ``take any two representatives of $\tilde{\mathbold{m}}$ and
+$\tilde{\mathbold{n}}$, add them together with $\oplus$, and take the
+equivalence class of the result, noting that the result does not
+depend on which representatives of $\tilde{\mathbold{m}}$ and
+$\tilde{\mathbold{n}}$ were chosen.''
+
+We denote by $\pairs/{\sim}$ the set of equivalence classes; and we note
+that $\oplus$ is well-defined on these equivalence classes.
+
+Now we can finally construct the set we seek. By the \emph{integers},
+$(\set{Z}, +)$, we mean the set $P/{\sim}$ together with the operation
+$\oplus$ on equivalence classes, which we write as~$+$.
+
+\emph{Remarks}. At this point---following the big definition---you would
+normally be advised to try a few calculations in $\set{Z}$ to get the
+hang of this new mathematical object. These calculations will be a
+little tedious: you have to pick representatives of equivalence
+classes, do the calculations, and then decide whether the result is
+the representative you acually want.
+
+However, there is a simplification available which will make your life
+significantly easier: It turns out that any equivalence class of
+$\pairs$ will \emph{either} have a representative of the form $(m, 0)$
+for some $m$ \emph{or} a representative of the form $(0, n)$ for some
+$n$. (\emph{Exercise:} Convince yourself that this is true.) That is,
+you only have to worry about numbers like $(3,0)$ and
+$(0,5)$---everything else is equivalent to one of these.
+
+The numbers of the form $(m,0)$ behave exactly like the ordinary
+natural numbers $m$, and it is common to write the equivalence class
+of $(5,0)$ just as $5$. We call these \emph{positive numbers}. The
+numbers of the form $(0,n)$ also behave like the natural numbers, and
+we write the equivalence class of, say, $(0,3)$ as $\minus{3}$. We
+call numbers of the form $(0,n)$ \emph{negative numbers}. The content
+of the simplification is that you only need to worry about postive
+numbers like $5$ and negative numbers like $\minus{3}$.
+
+\emph{Example}. We can now answer the seemingly-impossible problem we
+posed at the beginning: find a ``number'' $n$ such that
+$143+n=140$. The answer is $n=\minus{3}$. \emph{Proof:} $\minus{3}$
+means the equivalence class in $\pairs$ having representative $(0,3)$,
+and $143$ means the equivalence class having representative
+$(143,0)$. Whence,
+\begin{equation*}
+(143,0) \oplus (0,3) = (143,3),
+\end{equation*}
+and, since $(143,3)\sim(140,0)$, we write the answer as simply $140$.
+
+\emph{Exercise:} What is $6-10$? (Note: the notation $x = m - n$ means
+$x+n=m$, so this exercise asks for a number which, when added to $10$,
+gives $6$.)
+
+\emph{Exercise:} Show that $m+\minus{m}=0$ for any positive number $m$.
+
+\emph{Exercise:} Define the map $-:\set{Z}\to\set{Z}$ by $-m\equiv 0-m$. Show
+that, for $m$ any positive number, $\minus{m}=-m$. 
+
+\emph{Exercise:} Show that, in general, $m-n=m+(-n)$. (Because of these
+results, it is usual to write $-5$ rather than $\minus{5}$.)
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
