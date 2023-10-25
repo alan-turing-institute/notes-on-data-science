@@ -23,6 +23,7 @@
 \setlength{\parskip}{\smallskipamount}
 %%
 \newcommand{\defn}[1]{\textbf{#1}}
+\newcommand{\isdef}{\stackrel{\text{\tiny def}}{=}}
 \newcommand{\set}[1]{\mathbold{#1}}
 \newcommand{\eg}{\emph{Example:}\relax}
 \newcommand{\id}{\text{id}}
@@ -94,8 +95,7 @@ $X$.
 Sometimes there is a set $\mathcal{U}$ that is understood to be the “set of all
 things presently under consideration.” In that case, the
 \defn{complement} of $X$, written $X^c$, is the set of all things in
-$\mathcal{U}$ but not in $X$; that is, $X^c \equiv \mathcal{U} \setminus X$. (The notation “$\equiv$” is
-used here to mean “equal to, by definition.”)
+$\mathcal{U}$ but not in $X$; that is, $X^c = \mathcal{U} \setminus X$. 
 
 There are many identities involving these operations that follow from
 the definitions.
@@ -109,8 +109,8 @@ is written $(x, y)$. We call $x$ the “first element” and $y$ the
 “second element.” The defining property of pairs is that $(x,y)=(p,q)$
 if and only if $x=p$ and $y=q$. One might wonder whether a pair is a
 new kind of thing. In fact, pairs can be defined in terms of
-sets. Here is one way to do so: $(x, y)\equiv \{\{x\}, \{x,y\}\}$. (Though
-it's surprisingly subtle to say why this works.)
+sets. Here is one way to do so: $(x, y) \isdef \{\{x\},
+\{x,y\}\}$. (Though it's surprisingly subtle to say why this works.)
 
 An \defn{$n$-tuple} (or just \defn{tuple}) is an ordered list of $n$
 things. A 3-tuple, say, is written $(x, y, z)$. (Note that any of $x$,
@@ -123,7 +123,7 @@ sets. Let $X$ and $Y$ be sets. Their \defn{Cartesian product} (or
 simply \defn{product}), $X \times Y$, is the set of all pairs $(x, y)$
 where $x \in X$ and $y \in Y$. That is,
 \begin{equation*}
-X\times Y\equiv \{(x, y) \mid x\in X\;\text{and}\; y\in Y\}.
+X\times Y = \{(x, y) \mid x\in X\;\text{and}\; y\in Y\}.
 \end{equation*}
 
 \eg\ $\set{R}^2$ is the set of all pairs of real numbers. If you think
@@ -139,7 +139,7 @@ unlike the set union, we keep track of which set the elements came
 from.” Let $X$ and $Y$ be sets. Their \defn{coproduct} (or sometimes,
 \defn{disjoint union}), $X \sqcup Y$, is the set
 \begin{equation*}
-  X \sqcup Y \equiv \{(0,x) \mid x\in X\} \cup \{(1, y)\mid y\in Y\}.
+  X \sqcup Y = \{(0,x) \mid x\in X\} \cup \{(1, y)\mid y\in Y\}.
 \end{equation*}
 The coproduct contains all the elements of $X$ “tagged” with $0$,
 together with all the elements of $Y$ “tagged” with $1$. If some
@@ -379,7 +379,7 @@ called the \emph{hom-set} (a term from category theory). The notation
 is suggestive of exponentiation as the following examples illustrate.
 
 \eg\ Denote by $\set{2}$ the set of two elements:
-$\set{2}\equiv\{0,1\}$.\footnote{We say \emph{the} set because we will not
+$\set{2} = \{0,1\}$.\footnote{We say \emph{the} set because we will not
 care what those elements are, just that there are two of them. If you
 don't like using numbers (because where do they come from?) you can
 use the set $\{\emptyset, \{\emptyset\}\}$.} Then, for $X$ any set, $X^\set{2}$ is the
