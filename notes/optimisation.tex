@@ -1,0 +1,51 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{beton}
+\usepackage{eulervm}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{microtype}
+%\usepackage[medium, compact]{titlesec}
+\usepackage[inline]{asymptote}
+\usepackage{tikz-cd}
+\DeclareFontSeriesDefault[rm]{bf}{sbc}
+% \usepackage{amssymb}
+%% Turing grid is 21 columns (of 1cm if we are using A4)
+%% Usually 4 "big columns", each of 4 text cols plus 1 gutter col;
+%% plus an additional gutter on the left.
+\usepackage[left=1cm, textwidth=11cm, marginparsep=1cm, marginparwidth=7cm]{geometry}
+\usepackage[Ragged, size=footnote, shape=up]{sidenotesplus}
+%% We used to use a two-column layout
+% \setlength{\columnsep}{1cm}
+\title{Optimisation, increasingly tricky}
+\author{James Geddes}
+\date{\today}
+%%
+\DeclareBoldMathCommand{\setR}{R}
+\DeclareBoldMathCommand{\bfC}{C}
+\DeclareBoldMathCommand{\bfG}{\Gamma}
+\newcommand{\id}{\mathbold{1}} 
+\newcommand{\bzero}{\mathbold{0}} % I don't know why \bm{0} fails.
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\nullspace}{null}
+\newcommand{\eg}{\emph{Example:}}
+\newcommand{\ie}{\emph{i.e.}}
+\hyphenation{anti-sym-met-ric}
+\begin{document}
+\maketitle
+
+We consider an increasinly tricky series of minimisation problems. 
+
+\section{Unconstrained, quadratic}
+
+Let $V$ be a finite-dimensional vector space, $Q$ a symmetric,
+positive-definite, bilinear form, $a$ a number and $b\in V^*$ a dual
+vector. What is $x_\text{min}\in V$ where
+\begin{equation*}
+x_\text{min} = \argmin_{x\in V} \bigl(a + b
+\end{equation*}
+
+
+
+\end{document}
