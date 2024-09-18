@@ -271,66 +271,52 @@ vector space.
 
 \section*{Gradients}
 
-Here is a coordinate-free version of gradients.
+The derivative of a function of one variable, $f(x)$, is an answer to
+the question, “at some point, $x$, how fast does $f$ increase as $x$
+increases?” We'd like to ask the same question of a function on a
+vector space, $f(x^a)$, where now $x^a\in V$.\sidenote{Remember that the
+  “$a$” in $x^a$ merely means that $x^a$ is a vector.}
 
-Let's start with the ordinary, one-dimensional case. The definition of
-the usual, one-dimensional derivative of some function $f(x)$ at the
-point $x$ is:
-\begin{equation*}
-  f'(x) = \lim_{\delta\to0} \frac{f(x+\delta) - f(x)}{\delta}.
-\label{eq:ordinary-derivative}
-\end{equation*}
+But of course, the obvious next question is, “in which
+\emph{direction} is $x^a$ increasing?” That is, the rate of change of
+$f$ at $x^a$ will in general now depend on the direction in which one
+is headed away from~$x^a$.
 
-That is, we take the difference in $f$ between its value at $x$ and
-its value a small distance away, $x+\delta$, and divide that
-by~$\delta$. We are computing “how fast $f$ is changing, with respect to
-very small changes in $x$?“ Then we let $\delta$ approach zero. If the
-resulting limit exists, then we say the derivative is the limiting
-value. (The limit may not exist, in which case $f$ is not
-differentiable at~$x$.)
+Thus, let $\delta^a$ be a vector. We shall use $\delta^a$ to specify “the
+direction in which one is headed away from $x^a$.”\sidenote{Both $x^a$
+  and $\delta^a$ are elements of $V$, but I always imagine “placing” the
+  $\delta^a$ with its tail at $x^a$ and its head pointing away
+  from~$x^a$. That is, I think of $\delta^a$ as representing the
+  displacement from $x^a$ to $x^a+\delta^a$.} Let $\lambda$ take on values in
+$\setR$ and consider the function $f(x^a+\lambda\delta^a)$. Think of this
+function as a function of $\lambda$, holding $x^a$ and $\delta^a$ fixed. It
+is “the function $f$, with its argument restricted to lie in the line
+$x^a+\lambda\delta^a$.”
 
-Now we'd like to extend this idea to the case where the function is
-defined over a vector space. Of course, the “rate of change” of $f$ as
-we change $x$ will, in general, now depend on the \emph{direction} in
-which we change~$x$. So, if we want to retain the idea of the
-derivative as a slope, we must pick a direction.
-
-Thus, let $\delta^a$ be a vector. The \emph{directional derivative} of $f$
-along $\delta^a$ is the limit, if it exists,
-\begin{equation*}
-  \lim_{\lambda\to0} \frac{f(x^a+\lambda \delta^a) - f(x^a)}{\lambda}.
+The \emph{directional derivative of $f$ along $\delta^a$}, which we write
+as $\partial_\delta f$, is defined by\sidenote*{There is unfortunately a profusion
+  of notation for the directional derivative. As well as
+  $\partial_\delta f$, I have seen $\nabla_\delta f$, $D_\delta f$, and
+  $\text{\pounds}_\delta f$. All of these mean the same thing\,--\,unless of
+  course they are used to mean different things.}
+\begin{equation}
+\partial_\delta f = \frac{d}{d\lambda} f(x^a+\lambda\delta^a) \quad\text{evaluated at $\lambda = 0$}.
   \label{eq:directional-derivative}
-\end{equation*}
-Compare this with eq.~\ref{eq:ordinary-derivative} above. There are
-two obvious questions! Why did we introduce a number, $\lambda$; and what
-notation should we use to represent this thing? Let's start with the
-first question.
+\end{equation}
 
-The $\lambda$ is there because we want to be able to take the limit as the
-change in $x^a$ becomes “closer and closer to zero,” but vectors do
-not come with a size. And even if they did, we need to be able to
-“divide by the distance,” and we can't divide by a vector. Introducing
-the $\lambda$ solves both of those problems. Of course, you might now wonder
-whether the directional derivative \emph{along} $\delta^a$ depends on the
-“\emph{size}” of $\delta^a$\,--\,for example, what about the directional
-derivative along $2\delta^a$?\,--\,and we will come back to that.
+Note that in one dimension, eq.~\ref{eq:directional-derivative}
+reduces to the usual derivative, $df/dx$, if we choose
+$\delta=1$.\sidenote{\emph{Exercise}: Show this. Hint: Use a change of
+  variables, $u = x+\lambda$.}
 
-Notice that we are taking the derivative \emph{at} $x^a$ in the
-\emph{direction} of $\delta^a$. Both $x^a$ and $\delta^a$ are elements of $V$,
-but when I look at eq.~\ref{eq:directional-derivative} I always
-imagine “placing” the $\delta^a$ with its tail at $x^a$ and its head
-pointing away from~$x^a$. 
 
-As to the notation, there is unfortunately a profusion of such. I have
-seen $\nabla_\delta f$, $\partial_\delta f$, $D_\delta f$, and
-$\text{\pounds}_\delta f$. All of these mean the same thing\,--\,unless of
-course they are used to mean different things. I am going to use
-$\partial_\delta f$ (and I've simplified a bit by dropping the index on
-$\delta$). Thus, by, say, $\partial_v f$ I mean the directional derivative of
-$f$ along~$v$. (One may consider $x$ fixed, in which case we obtain
-the directional derivative at a particular point, or we may allow $x$
-to range over all of $V$ in which case we obtain a \emph{function} on
-$V$.)
+
+
+
+
+
+
+
 
 By the way, you have probably come across the “partial derivative.”
 Very roughly speaking, the partial derivative is the directional
