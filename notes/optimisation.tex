@@ -6,9 +6,10 @@
 \usepackage{amsmath}
 \usepackage{bm}
 \usepackage{microtype}
-%\usepackage[medium, compact]{titlesec}
-\usepackage[inline]{asymptote}
-\usepackage{tikz-cd}
+\usepackage{booktabs}
+% \usepackage[medium, compact]{titlesec}
+%\usepackage[inline]{asymptote}
+%\usepackage{tikz-cd}
 \DeclareFontSeriesDefault[rm]{bf}{sbc}
 % \usepackage{amssymb}
 %% Turing grid is 21 columns (of 1cm if we are using A4)
@@ -91,6 +92,20 @@ this expression does \emph{not} denote an ordinary product of numbers,
 it looks like one, and therefore looks like it ought to distribute
 over addition, in the sense that $w_a(u^a+v^a) = w_au^a +
 w_av^a$. Which it does.
+
+\begin{margintable}
+  \centering
+  \begin{tabular}{@{}lllll@{}}
+    \toprule
+    Notation & Vect. & Dual & Op. & Contr. \\
+    \midrule
+    Abstr. ind. & $v^a$ & $w_a$ & $T^a{}_b$ & $v^a w_a$ \\
+    \bottomrule
+  \end{tabular}
+  \caption{Different notations}
+  \label{tab:notation}
+\end{margintable}
+
 
 We may have occasion to choose a basis for $V$. In that case, we will
 denote the $\mu$th component of $v^a$ in that basis by $v^\mu$. The
@@ -175,18 +190,27 @@ global minimum. Nevertheless, let's try this approach. We have
 whence $x_\text{min} = -\frac{1}{2}\gamma^{-1}\beta$. On this approach, we must
 do some extra work to decide whether we have found a minimum. That
 extra work is to examine the sign of the second derivative, $d^2f/dx^2$,
-which will be strictly positive at a minimum. Indeed,
+which will be strictly positive at a minimum. Indeed, since
 \begin{equation*}
   \frac{d^2f}{dx^2} = 2\gamma,
 \end{equation*}
-from which we conclude that we have found minimum only when $\gamma> 0$.
+we conclude that we have found minimum only when $\gamma> 0$.
 
 Now let's solve the same problem in more than one dimension.
 
 \section{Problem 2: A multi-dimensional quadratic}
 
-\emph{Problem:} Let $V$ be a finite-dimensional, real vector space,
-$\alpha\in\setR$ a number, $w_a\in V^*$ a dual vector and
+\emph{Problem}: Consider the function of two variables, 
+\begin{equation*}
+  f(x,y) = 1 + x + y + x^2 + y^2 + xy. 
+\end{equation*}
+For what value of $x$ and $y$ is $f(x,y)$ minimised?\sidenote*{You
+  should try to solve this problem!}
+
+Here is a more general version of this problem:
+
+\emph{Problem:} Fix a finite-dimensional, real vector space,~$V$. Let
+$\alpha\in\setR$ be a number, $w_a\in V^*$ a dual vector, and
 $Q_{ab} \in \mathcal{L}(V,V^*)$ a symmetric, positive-definite, bilinear
 form. Find
 \begin{equation*}
@@ -227,7 +251,7 @@ there are two approaches. The first is to complete the square:
   \frac{1}{2}{(Q^{-1})}^{bc}w_c\Bigr) - \frac{1}{4}w_aw_b{(Q^{-1})}^{ab}.
 \end{equation*}
 This time, the right-hand side looks rather complicated. However, the
-terms in large parenthesis are each the same vector. That is to say,
+terms in large parentheses are each the same vector. That is to say,
 if we write
 \begin{equation*}
   \xi^a = x^a +  \frac{1}{2}{(Q^{-1})}^{ac}w_c,
@@ -237,9 +261,9 @@ simpler-looking
 \begin{equation*}
   f(x^a) = Q_{ab}\xi^a\xi^b + \text{a constant}.
 \end{equation*}
-Noting that $Q_{ab}$ is positive-definite, we conclude that a minimum
-exists when $\xi^a = \bzero$ (the zero vector) from which
-eq.~\ref{eq:sol-quadr-vect} follows.
+Noting that $Q_{ab}$ is positive-definite, we conclude that the
+condition for $x^a$ to be a minimiser is that $\xi^a = \bzero$ (the zero
+vector) from which eq.~\ref{eq:sol-quadr-vect} follows.
 
 Alternatively, we might try taking the derivative again. For that, we
 will need to understand how to take derivatives of functions on a
@@ -347,6 +371,38 @@ and the directional derivative is:
 That was a digression. However, these formula will be useful when we
 come to do actual calculations, in the same way that the matrix
 representations of operators are useful for doing calculations.
+
+Let us return to the directional derivative and, for the moment,
+concentrate on the directional derivative at a particular
+point,~$x^a$. One way to think of the directional derivative at $x^a$
+is as rule: given some vector, $\delta^a$, the directional derivative of
+$f$ at $x^a$ produces a number, $(\partial_\delta f)(x^a)$. In other words, we
+have a map:
+\begin{align*}
+  \partial \colon & V \to \setR \\
+           & \delta^a \mapsto \partial_\delta f.
+\end{align*}
+In fact, this map is a linear map! To see this, suppose $u^a$ and
+$v^a$ are vectors and consider the function $g(\alpha,\beta)$ given by
+\begin{equation*}
+  g(\alpha,\beta) = f(x^a + \alpha u^a + \beta v^a).
+\end{equation*}
+That is, $g(\alpha,\beta)$ is the function $f$, evaluated at $\alpha$ away from $x^a$
+in the $u^a$ direction and $\beta$ away from $x^a$ in the $v^a$
+direction. From ordinary calculus, we can write
+\begin{equation*}
+  g(\alpha,\beta) = g(0,0) + \alpha\frac{\partial g}{\partial \alpha} + \beta\frac{\partial g}{\partial \beta} +
+  \text{terms of $O(\alpha^2)$, $O(\beta^2)$, and $O(\alpha\beta)$}.
+\end{equation*}
+
+
+
+
+, and consider the directional derivative along
+$u^a+v^a$. We have
+\begin{equation*}
+\partial_{u+v}f = \lim_{\lambda\to 0}\frac{f(x^a + \lambda(u^a+v^a)) - f(x^a)}{\lambda}. 
+\end{equation*}
 
 
 
