@@ -95,14 +95,34 @@ w_av^a$. Which it does.
 
 \begin{margintable}
   \centering
-  \begin{tabular}{@{}lllll@{}}
+  % \begin{tabular}{@{}lcccc@{}}
+  %   \toprule
+  %   Notation & Vect. & Dual & Op. & Contr. \\
+  %   \midrule
+  %   Abstr.\ ind. & $v^a$ & $w_a$ & $T^a{}_b$ & $v^a w_a$ \\
+  %   \midrule
+  %   Physics     & $\mathbold{v}$ & $\mathbold{w}^T$
+  %                           & $\mathbold{T}$ & $\mathbold{w}^T\mathbold{v}$ \\
+  %               & $\vec{v}$ & $\tilde{w}$ & $\overline{T}$ &
+  %                                                $\mathbold{v}\cdot\mathbold{w}
+  %                                                $\\
+  %   Maths       & $v$ & $w$ & $T$ & $w(v)$ \\
+  %   Components  & $v^i$ & $w_j$ & $T^i{}_j $ & $v^iw_j$ \\
+  %   \bottomrule
+  % \end{tabular}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}lc|cccc@{}}
     \toprule
-    Notation & Vect. & Dual & Op. & Contr. \\
+    Concept & A.I. & \multicolumn{4}{c}{Alternatives} \\
     \midrule
-    Abstr. ind. & $v^a$ & $w_a$ & $T^a{}_b$ & $v^a w_a$ \\
-    \bottomrule
+  Vector      & $v^a$      & $\mathbold{v}$   & $\vec{v}$     & $v$ & $v^i$ \\
+  Dual        & $w_a$      & $\mathbold{w}^T$ & $\tilde{w}$   & $w$ & $w_j$ \\
+  Operator    & $T^a{}_b$  & $\mathbold{T}$   & $\overline{T}$ & $T$ & $T^i{}_j$ \\
+  Contraction & $v^a w_a$  & $\mathbold{w}^T\mathbold{v}$ 
+              & $\mathbold{v}\cdot\mathbold{w}$ & $w(v)$ & $v^iw_j$ \\   
+  \bottomrule
   \end{tabular}
-  \caption{Different notations}
+  \caption{Different notations. “A.I.” is “Abstract Index notation.”}
   \label{tab:notation}
 \end{margintable}
 
