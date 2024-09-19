@@ -52,18 +52,17 @@ We consider a series of increasingly tricky minimisation problems.
 that case, $x_\text{min} = -\frac{1}{2}\gamma^{-1}\beta$.
 
 Why is that the solution? Here are two ways to approach the
-problem. One might “complete the square,” in the term on the right;
-that is, write $f(x)$ as:
+problem. One might rewrite $f(x)$ in a way known colloquially as
+“completing the square:”
 \begin{equation*}
   f(x) = \gamma\bigl(x + \frac{1}{2}\gamma^{-1}\beta\bigr)^2 - \frac{\beta^2}{4\gamma}. 
 \end{equation*}
 (To see that this reproduces the original expression for $f(x)$,
 expand the right-hand side.) Now, the second term on the right is
 constant and therefore cannot affect the location of the minimum. And
-observe that the first term on the right is strictly positive if and
-only if $\gamma>0$ in which its minimum value is therefore zero, and it
-attains that minimum precisely when $x = \frac{1}{2}\gamma^{-1}\beta$, as
-claimed above.
+observe that when $\gamma>0$ the first term on the right is strictly
+positive, so that its minimum cannot be less than zero; and its value
+is zero precisely when $x = \frac{1}{2}\gamma^{-1}\beta$, as claimed above.
 
 Another way to approach the problem is to note that, at a minimum, the
 derivative of $f(x)$ must be zero. That is,
@@ -255,7 +254,7 @@ Notice that even to say what we mean by a “multidimensional
 quadratric” we had to use the vector space structure of $V$ (in order
 to introduce $w_a$ and $Q_{ab}$).
 
-\subsubsection{Solution by completing the square}
+\subsection{Solution by completing the square}
 
 \emph{Solution} (to eq.~\eqref{eq:quadr-vect}):
 \begin{equation}
@@ -349,9 +348,9 @@ These remarks lead to the following definition.
 
 The directional derivative of a function $f$ depends on the
 direction,~$\delta^a$. Perhaps surprisingly, however, it turns out that
-after all it is possible to capture a notion of ``the'' derivative of
-$f$, independent of the direction. The idea is to think of
-$\partial_\delta f$ as a function of $\delta^a$: it is this function that is ``the''
+after all it \emph{is} possible to capture a notion of ``the''
+derivative of $f$, independent of the direction. The idea is to think
+of $\partial_\delta f$ as a function of $\delta^a$: it is this function that is ``the''
 derivative. In other words, ``the'' derivative of $f$ at $x^a$ is that
 map $\phi\colon \delta^a\to\setR$ defined by
 $\phi(\delta^a) = \partial_\delta(f)$ (evaluated at $x^a$).
@@ -359,28 +358,36 @@ $\phi(\delta^a) = \partial_\delta(f)$ (evaluated at $x^a$).
 On the face of it, one might imagine that this $\phi$ is some terribly
 complicated thing, depending in various difficult-to-express ways on
 its argument,~$\delta^a$. Remarkably, however, it is not; it is in fact, a
-linear map. In other words, $\phi$ (as a function) is an element of the
-dual space~$V^*$.
-
-To see this, let $u^a$ and $v^a$ be vectors. We shall show that
-$\partial_{\alpha u+\beta v}f = \alpha\partial_u f+ \beta\partial_v f$. Let
-$\tilde{\alpha}(\lambda)$ and $\tilde{\beta}(\lambda)$ be functions of
-$\lambda$ and consider the derivative of the function
-$f(x^a+\tilde{alpha}u^a+\tilde{\beta}v^a)$,
+linear map.
+In other words, there is some dual vector, written
+$\nabla_a f$, having the property that
 \begin{equation*}
+  (\nabla_a f)\delta^a = \partial_\delta f
+\end{equation*}
+for all vectors $\delta^a\in V$. The dual vector $\nabla_af$ is known as the
+\emph{gradient} of~$f$. It has a ``down'' index to indicate that it
+is, in fact, an element of~$V^*$.\sidenote*{To see that the
+  directional derivative is linear, let $u^a$ and $v^a$ be vectors. We
+  shall show that
+  $\partial_{\alpha u+\beta v}f = \alpha\partial_u f+ \beta\partial_v f$. Let
+  $\tilde{\alpha}(\lambda)$ and $\tilde{\beta}(\lambda)$ be functions of
+  $\lambda$ and consider the derivative, with respect to $\lambda$, of the
+  function $f(x^a+\tilde{\alpha}u^a+\tilde{\beta}v^a)$. The chain rule tells
+  us:
+\begin{equation}
   \frac{df}{d\lambda} = \frac{\partial f}{\partial \tilde{\alpha}} \frac{d\tilde{\alpha}}{d\lambda} +
   \frac{\partial f}{\partial \tilde{\beta}} \frac{d\tilde{\beta}}{d\lambda}
   \label{eq:chain-rule}
-  \end{equation*}
-  (using the chain rule). Now, consider the special case of
-  $\tilde{\alpha}=\alpha\lambda$ and $\tilde{\beta}=\beta\lambda$. On the left-hand side of
-  eq.~\eqref{eq:chain-rule} we have:
-  \begin{equation*}
-    \frac{df}{d\lambda} = \frac{d}{d\lambda} f\bigl(x^a+\lambda(\alpha u^a +\beta v^a)\bigr), 
-  \end{equation*}
-which, evaluated at $\lambda=0$, is the directional derivative $\partial_{\alpha u+\beta v}
-f$.
-
+\end{equation}
+Now, consider the special case of
+$\tilde{\alpha}=\alpha\lambda$ and $\tilde{\beta}=\beta\lambda$. On the left-hand side of
+eq.~\eqref{eq:chain-rule} we have:
+\begin{equation*}
+  \frac{df}{d\lambda} = \frac{d}{d\lambda} f\bigl(x^a+\lambda(\alpha u^a +\beta v^a)\bigr), 
+\end{equation*}
+which, evaluated at $\lambda=0$, is the directional derivative
+$\partial_{\alpha u+\beta v} f$.
+\sidepar%
 To evaluate the right-hand side of eq.~\eqref{eq:chain-rule}, note
 that $d\tilde{\alpha}/d\lambda = \alpha$ and
 $d\tilde{\beta}d\lambda = \beta$. Furthermore,
@@ -390,59 +397,25 @@ derivative~$\partial_u f$. Thus we have,
 \begin{equation*}
   \partial_{\alpha u+\beta v} f = \alpha\partial_u f + \beta\partial_v f.
 \end{equation*}
-In other words, the map $\partial$ is a linear map.
+In other words, the map $\partial$ is a linear map.}
 
+It is a common misconception to believe that the gradient is a vector,
+and that it “points” in the direction of steepest descent. It is
+rather a dual vector, not a vector, and so does not determine a
+direction away from~$x^a$.
 
+\subsection{Solution by setting the gradient to zero}
 
-
-
-
-
-
-
-
-
-By the way, you have probably come across the “partial derivative.”
-Very roughly speaking, the partial derivative is the directional
-derivative “in a coordinate direction.” Suppose you were a coordinate
-person. Perhaps you are working in $\setR^2$. Of course, $\setR^2$ is
-a vector space, but you are not particularly concerned with that. What
-you have is a function, $f(x,y)$, defined for each pair of numbers
-$(x,y)$. If you were asked to take a derivative of $f$, you would
-naturally ask, “in which direction? Along $x$ or along $y$?“ For
-example, you might compute
+The original problem was to find the minimum of the function,
+$f(x^a)$, defined in eq.~\eqref{eq:quadr-vect}. A condition that some
+value of $x^a$ is a minimum is that the directional derivative is zero
+at $x^a$ along all possible directions. That is, for all $\delta^a$, a
+necessary condition for a minimum is $\delta^a(\nabla_a f)$. Since this must be
+true for all $\delta^a$, it follows that a necessary condition for a
+minimum is
 \begin{equation*}
-  \frac{\partial f}{\partial x} = \lim_{\delta\to 0} \frac{f(x + \delta, y) - f(x, y)}{\delta}.
+  \nabla_a f = 0 \quad\text{(evaluated at $x^a = x^a_\text{min}$)}.
 \end{equation*}
-That is the “partial derivative with respect to~$x$.” Similarly, you
-might compute
-\begin{equation*}
-  \frac{\partial f}{\partial y} = \lim_{\delta\to 0} \frac{f(x, y+\delta) - f(x, y)}{\delta},
-\end{equation*}
-the “partial derivative with respect to~$y$.” Since your $\delta$ is a
-number, you don't have to mess around with~$\lambda$.
-
-These partial derivatives are directional derivatives. If we now
-remember that $\setR^2$ is a vector space (albeit one with a natural
-coordinate system) one very natural basis to choose is the set
-$\{(1,0), (0,1)\}$. Those are the “unit vectors in the $x$ and $y$
-directions.” Sometimes people write these basis vectors as $\hat{x}$
-and $\hat{y}$. For example, $\hat{x} = (1,0)$. (Technically speaking,
-we ought to write $\hat{x}^a$ but I'm going ignore the index just for
-this section.)
-
-With all this notation, the connection between the partial derivatives
-and the directional derivative is:
-\begin{equation*}
-  \partial_{\hat{x}}f = \frac{\partial f}{\partial x} \quad\text{and}\quad 
-  \partial_{\hat{y}}f = \frac{\partial f}{\partial y} 
-\end{equation*}
-
-That was a digression. However, these formula will be useful when we
-come to do actual calculations, in the same way that the matrix
-representations of operators are useful for doing calculations.
-
-
 
 
 
