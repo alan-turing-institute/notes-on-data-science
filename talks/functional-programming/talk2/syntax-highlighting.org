@@ -1,0 +1,5 @@
+#+title: How to syntax highlight the code
+
+#+begin_src
+  highlight --syntax=python --out-format=rtf --style=darkblue file.py | pbcopy
+#+end_src
