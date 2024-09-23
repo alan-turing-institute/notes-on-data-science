@@ -1,10 +1,12 @@
 reset
 # set terminal qt
 # set terminal cairolatex pdf lw 2 fontscale 0.5 size 7cm,5cm
-set terminal pdfcairo font "Fira Code,9" fontscale 0.5 rounded size 7cm,5cm
+set terminal pdfcairo font "Fira Code,9" fontscale 0.5 rounded size 7cm,4cm
 
 # set lmargin explicitly to line up plotting areas
 set margin 0
+set bmargin at screen 0.2
+set tmargin at screen 0.85
 
 load "moreland.pal"
 

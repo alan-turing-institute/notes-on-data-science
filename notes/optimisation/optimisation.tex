@@ -47,26 +47,22 @@
 \maketitle
 
 We consider a series of increasingly tricky minimisation
-problems.
-\begin{quote}
-  \emph{Exercise:} Find the value of $x$ that minimises the function
-  $f(x) = x^2 - 4x + 5$.
-\end{quote}
+problems.\sidenote*{\emph{Exercise:} Find the value of $x$ that
+  minimises the function $f(x) = x^2 - 4x + 5$.}
 
 \section{Functions of a single variable}\label{sec:univariate}
 \begin{marginfigure}
   \centering
   \includegraphics{sinxpx2.pdf}
-  \margincaption{The function $f(x) = x^2+\sin x$. What is the value
-    of its minimizer?}\label{fig:sinxpx2}
+  \margincaption{The function $f(x) = x^2+\sin x$.}\label{fig:sinxpx2}
 \end{marginfigure}
 
 Figure~\ref{fig:sinxpx2} is a graph of the function
 $f(x) = x^2+\sin x$. By inspection of the graph, one can see that $f$
 has a minimum. The \emph{minimiser} of $f$\,--\,the value of $x$ at
 which $f$ attains its minimum\,--\,is clearly somewhere around
-$x \approx -0.5$. How might we compute the actual value? That is, how might
-we find
+$x \approx -0.5$. How might we compute the actual value? That is, how
+might we find
 \begin{equation*}
   x_\text{min} = \argmin_{x\in\setR} f(x)?
 \end{equation*}
@@ -122,7 +118,7 @@ The zero of this function is at
   x = \hat{x} - \frac{f'(\hat{x})}{f''(\hat{x})},
   \label{eq:linearroot}
 \end{equation}
-and so the update procedure, from guess $x_i$ to guess $x_{i+1}$ is
+and so the update procedure, from guess $x_i$ to guess $x_{i+1}$, is
 \begin{equation}
   x_{i+1} = x_i - \frac{f'(x_i)}{f''(x_i)}.
   \label{eq:newtonraphson}
@@ -137,9 +133,13 @@ and so the update procedure, from guess $x_i$ to guess $x_{i+1}$ is
 There is another way of viewing this iterative procedure. The Newton
 Raphson method relies upon the fact that we know how to find the zero
 of a linear function. But we already knew how to find the
-\emph{minimum} of a \emph{quadratic} function. Perhaps we could have
-approximated the original function $f(x)$ by a quadratic directly and
-skipped taking the derivative?
+\emph{minimum} of a \emph{quadratic} function.\sidenote{The minimum of
+  $f(x)=\alpha+\beta x + \gamma x^2$ is $x = -\beta/(2\gamma)$, so
+  long as $\gamma>0$. (When $\gamma<0$ the function has a maximum, not
+  a minimum; when $\gamma=0$ it is a linear function, not a
+  quadratic.)} Perhaps we could have approximated the original
+function $f(x)$ by a quadratic directly and skipped taking the
+derivative?
 
 We now briefly pursue this idea. (See figure~\ref{fig:sinxpx2-approx}
 for an illustration.) The approximation method is similar to that of a
@@ -154,10 +154,7 @@ $\alpha+\beta x+\gamma x^2$ near to $x=\hat{x}$, set
   2\gamma = f''(\hat{x}).
 \end{equation*}
 
-The minimum of the quadratic is at $x=-\beta/2\gamma$,\sidenote{The minimum of
-  $f(x)=\alpha+\beta x + \gamma x^2$ is $x = -\beta/(2\gamma)$, so long as
-  $\gamma>0$. (When $\gamma<0$ the function has a maximum, not a minimum; when
-  $\gamma=0$ it is a linear function, not a quadratic.)} which is:
+The minimum of the quadratic is at $x=-\beta/2\gamma$, which is:
 \begin{equation*}
   x = -\frac{\beta}{2\gamma}
   = -\frac{f'(\hat{x})-2\gamma\hat{x}}{2\gamma}
@@ -184,39 +181,33 @@ problems merely close to such a place. If the second derivative is
 negative, then the iteration step will take the guess towards a local
 \emph{maximum} rather than towards a minimum.
 
-One might ask why we don't simply ``follow the gradient of $f(x)$
-downhill.'' That would solve the problem of moving towards a local
-maximum and would avoid the computation of the second derivative. This
-idea is the basis of \emph{gradient descent}. Its main difficulty (as
-I understand it) is that it is necessary to decide how \emph{far} to
-follow the gradient downhill on each iteration. Too small a step and
-the rate of convergence will be very slow; too large a step and one
-risks overshooting the minimum one is trying to find. In some sense,
-the right step size should be determined by how “wiggly” the function
-is at the current guess. If the function is very wiggly, one should
-take small steps to avoid missing detail in the function. If the
-function is changing slowly, there is more license to take a large
-step. Of course, an obvious measure of “wiggliness” is the size of the
-second and higher derivatives.
+There are other approaches to finding the minimum. One might ask why
+we don't simply ``follow the gradient of $f(x)$ downhill.'' That would
+solve the problem of moving towards a local maximum and would avoid
+the computation of the second derivative. This idea is the basis of
+\emph{gradient descent}. Its main difficulty (as I understand it) is
+that it is necessary to decide how \emph{far} to follow the gradient
+downhill on each iteration. Too small a step and the rate of
+convergence will be very slow; too large a step and one risks
+overshooting the minimum one is trying to find. In some sense, the
+right step size should be determined by how “wiggly” the function is
+at the current guess. If the function is very wiggly, one should take
+small steps to avoid missing detail in the function. If the function
+is changing slowly, there is more license to take a large step. Of
+course, an obvious measure of “wiggliness” is the size of the second
+and higher derivatives.
 
 
 \section{Multivariate functions}
-\begin{marginfigure}
-  \centering \includegraphics{quadratic.pdf}%
-  \margincaption{A function of two variables:
-    $f(x,y) = 1 + x + y + x^2 + y^2 + xy$.\label{fig:quadratic}}
-\end{marginfigure}
-\begin{quote}
-  \emph{Exercise:} Figure~\ref{fig:quadratic} shows a function of two
-  variables, $f(x,y)=1+x+y+x^2+y^2+xy$. For which value of the pair
-  $(x,y)$ is $f(x,y)$ a minimum?
-\end{quote}
-\sidenote*{At the location of a minimum,
-  the derivatives of the function along each of the coordinate
-  directions must be zero. These are the partial derivatives: the
-  derivative along each coordinate, holding the other coordinate
-  constant. For this function, the partial derivatives are not hard to
-  compute:
+\sidenote*{\emph{Exercise:} The figure below shows a
+  function of two variables, $f(x,y)=1+x+y+x^2+y^2+xy$. For which
+  value of the pair $(x,y)$ is $f(x,y)$ a minimum?\sidepar%
+    {\centering\includegraphics[width=\marginparwidth]{quadratic.pdf}}\sidepar%
+  At the location of a minimum, the derivatives of the function along
+  each of the coordinate directions must be zero. These are the
+  partial derivatives: the derivative along each coordinate, holding
+  the other coordinate constant. For this function, the partial
+  derivatives are not hard to compute:
 \begin{equation*}
   \frac{\partial f}{\partial x} = 1 + 2x + y;\quad\text{and}\quad
   \frac{\partial f}{\partial y} = 1 + 2y + x.
@@ -245,11 +236,11 @@ $x = y = -1/3$.}
 We would now like to generalise the method of
 Section~\ref{sec:univariate} to the multi-dimensional case. In order
 to do so, we must confront a technical question: what is the domain of
-the function whose minimiser we wish to find? (We assume that its
-codomain is the reals.) In Section~\ref{sec:univariate} we considered
-functions $f\colon\setR\to\setR$; now we are considering functions
-$f\colon M\to \setR$, where $M$ is some “space.” But what kind of space,
-exactly?
+the function whose minimiser we wish to find? In
+Section~\ref{sec:univariate} we considered functions
+$f\colon\setR\to\setR$; now we are considering functions
+$f\colon M\to \setR$, where $M$ is some sort of “space.” But what kind
+of space, exactly?
 
 It is common, in machine learning, to say that this space is $\setR^n$
 (for some $n$) and, in addition, to imply strongly that it comes with
@@ -261,58 +252,104 @@ explicitly at the beginning of section 7.1 (pp.~228) that,
 machine learning problem at hand.''
 
 In point of fact, the spaces that arise in applications are rarely the
-vector space $\setR^n$. (Although, as we shall see, they are often
-``close enough, in the ways that matter.'') There are two reasons for
-this. First, the space $M$ may not have the topological structure of
-$\setR^n$ ``in the large.'' One might want to find the minimiser of a
-function defined on a sphere,\sidenote{Here is an example of a problem
-  set on a sphere. Let $h(p)$ be the height above sea-level of a
-  point, $p$, on the Earth. Here of course we are modelling the Earth
-  as a sphere,~$S^2$. It seems perfectly reasonable to ask for the
-  maximiser of $h(p)$ (presumably, it is the location of Mt.\ Everest)
-  but $h$ is not a function $h\colon \setR^2\to\setR$, it is a function
-  $h\colon S^2\to\setR$.} but a sphere is not the same as the
-plane. There is no ``reasonable'' coordinate system that works for the
-whole sphere. Second, there is, typically, no notion available of a
-``linear combination'' of elements of~$M$ and so no vector space
-structure on~$M$.\sidenote{There \emph{is} one important application
-  in which $M$ does have a vector-space structure and that is linear
-  regression. Here $M$ is a space of canidate functions
-  $f\colon M\to \setR$ is a ``loss function.''. If the set $M$ is a
-  vector space, the problem is known as linear regression. Note that
-  linear regression is a special case of regression: that's why it has
-  a special name.}
+vector space $\setR^n$. Indeed, they are rarely a vector space at all;
+even when they are, there is typically no ``canonical basis,'' akin to
+the canonical basis of~$\setR^n$. In order for $M$ to be a vector
+space, it is necessary for there to be a notion of ``linear
+combinations'' of elements in~$M$. It is easy to think of examples
+where there is no such notion: consider a model, one of whose
+parameters is constrained to be strictly positive. One cannot take
+arbitrary linear combinations of positive numbers and still produce a
+positive number.\sidenote{Of course, one might be able to
+  \emph{impose} a vector space structure by \emph{fiat}, as it
+  were. For example, one could define the ``sum'' of two non-negative
+  parameters, $p$ and $q$, as $pq$. But such an imposition will be
+  unnatural: it does not reflect any truth about the situation we are
+  attempting to analysis. Relying on any particular, arbitrary
+  definition like this is likely to produce a result that
+  \emph{depends} upon the particular definition chosen.}
 
-Both of these problems can be solved. Roughly speaking, the first
-problem is solved by restricting attention to a region of $M$, one
-that is ``large enough'' to cover the features of interest but ``small
-enough'' to ``look like a piece of $\setR^n$.'' The solution to the
-second problem, again very roughly, is to note that we really only use
-vectors to describe directional derivatives; and directional
-derivatives, it turns out, 
+Fortunately, it turns out that, in general, it is not necessary to
+have available a notion of ``addition of points'' in~$M$. With one
+important caveat, we will be able to get away with thinking of $M$ (or
+at least, a region of $M$) as ``rather like'' a region of
+$\setR^n$. That is, we shall imagine there is a coordinate system on
+$M$ that allows us to refer to points in $M$ as if they were points
+in~$\setR^n$. The caveat is that we must remember that all our results
+should be independent of coordinate system: it should not matter, for
+the theory, what particular parametrisation we choose.
 
-
-
-They are more like vectors in the
-computer science sense of a one-dimensional list\,--\,what in
-mathematics would be called a ``tuple.''
-
-
-
+To reinforce this idea, we shall typically write points in $M$ as,
+simply, $p\in M$, making no reference to any particular
+parametrisation. That is, we shall not refer to some element of $M$ as
+``a parameter vector, $\mathbold{p}$,'' because, in general, $p$ is not a
+vector.\sidenote{There is another sense of ``vector,'' which I suspect
+  causes confusion. That is the computer scientists notion of ``a
+  list-like data structure'' (often with $O(1)$ access time). For that
+  notion, we shall the terms ``pair,'' (for two) ``triple,'' (for
+  three) and ``tuple'' (in general).}
 
 
-  
-\emph{Problem:} Find the values of $x_1$, $x_2$, \dots, $x_n$ for
-which the function $f(x_1, x_2, \dotsc, x_n)$ is
-minimised.
 
-In general, this is a much harder problem. To make some progress we
-shall make two simplifications. First, we suppose that the function
-$f$ is defined not over some arbitrary $n$-dimensional space but over
-an $n$-dimensional, real vector space, $V$. That will allow us to make
-the second simplification, which is to suppose that $f$ has a
-particularly simple form, a multi-dimensional generalisation of the
-quadratic from Section~\ref{sec:univariate}.
+
+
+
+\sidenote{There \emph{is} one important application}
+%   in which $M$ does have a vector-space structure. In a regression
+%   problen, $M$ is a space of candidate functions and
+%   $f\colon M\to \setR$ is a ``loss function.''. If the set $M$ is a
+%   vector space, the problem is known as \emph{linear} regression. Note
+%   that linear regression is a special case of regression: that's why
+%   it has a special name.}
+
+
+% (Although, as we shall see, they are often
+% ``close enough, in the ways that matter.'') There are two reasons for
+% this. First, the space $M$ may not have the topological structure of
+% $\setR^n$ ``in the large.'' One might want to find the minimiser of a
+% function defined on a sphere,\sidenote{Here is an example of a problem
+%   set on a sphere. Let $h(p)$ be the height above sea-level of a
+%   point, $p$, on the Earth. Here of course we are modelling the Earth
+%   as a sphere,~$S^2$. It seems perfectly reasonable to ask for the
+%   maximiser of $h(p)$ (presumably, it is the location of Mt.\ Everest)
+%   but $h$ is not a function $h\colon \setR^2\to\setR$, it is a function
+%   $h\colon S^2\to\setR$.} but a sphere is not the same as the
+% plane. There is no ``reasonable'' coordinate system that works for the
+% whole sphere. Second, there is, typically, no notion available of a
+% ``linear combination'' of elements of~$M$ and so no vector space
+% structure on~$M$.\sidenote{There \emph{is} one important application
+%   in which $M$ does have a vector-space structure. In a regression
+%   problen, $M$ is a space of candidate functions and
+%   $f\colon M\to \setR$ is a ``loss function.''. If the set $M$ is a
+%   vector space, the problem is known as \emph{linear} regression. Note
+%   that linear regression is a special case of regression: that's why
+%   it has a special name.}
+
+% Both of these problems can be solved.
+
+% Roughly speaking, the first problem is solved by restricting attention
+% to regions of $M$, ones that are ``large enough'' to cover the
+% features of interest but ``small enough'' to ``look like a piece of
+% $\setR^n$.'' The solution to the second problem, again very roughly,
+% is to observe that we really only use vectors to describe directional
+% derivatives; and directional derivatives, it turns out, \emph{do} form
+% a vector space.
+
+% The mathematical structure that one needs to implement these ideas is
+% that of a \emph{differentiable manifold}. In the following, we will
+% not make use of this general notion. Nonetheless, there is a certain
+% intuition arising from the subject that one should keep in mind. Here
+% is how one should think about things. The concept of a vector space
+% clarifies what one means by ``a space like $\setR^n$, only there is no
+% preferred basis.'' If, in a particular application, there is no
+% preferred basis, then one should avoid writing down expressions that
+% make use of one; modelling the domain with a vector space allows one
+% to keep straight what depends on a basis and what does not. In a
+% similar way, the concept of a differentiable manifold clarifies what
+% one means by ``a space like $\setR^n$, only there is no preferred
+% coordinate system.'' 
+
+
 
 We digress to introduce some notation.
 
