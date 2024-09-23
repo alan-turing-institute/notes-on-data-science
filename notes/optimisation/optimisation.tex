@@ -7,6 +7,8 @@
 \usepackage{bm}
 \usepackage{microtype}
 \usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{color}
 % \usepackage[medium, compact]{titlesec}
 %\usepackage[inline]{asymptote}
 %\usepackage{tikz-cd}
@@ -19,7 +21,7 @@
 \usepackage[Ragged, size=footnote, shape=up]{sidenotesplus}
 %% We used to use a two-column layout
 % \setlength{\columnsep}{1cm}
-\title{Increasingly tricky minimisation problems}
+\title{Increasingly tricky optimisation problems}
 \author{James Geddes}
 \date{\today}
 %%
@@ -34,68 +36,275 @@
 \newcommand{\ie}{\emph{i.e.}}
 \newcommand{\isdef}{\mathrel{\stackrel{\text{def}}{=}}}
 \hyphenation{anti-sym-met-ric}
+%%
+\usepackage[backend=biber]{biblatex}
+\addbibresource{../references.bib}
+\DefineBibliographyStrings{english}{
+  andothers = {\mkbibemph{et\addabbrvspace al\adddot}}
+}
+%%
 \begin{document}
 \maketitle
 
-We consider a series of increasingly tricky minimisation problems. 
+We consider a series of increasingly tricky minimisation
+problems.
+\begin{quote}
+  \emph{Exercise:} Find the value of $x$ that minimises the function
+  $f(x) = x^2 - 4x + 5$.
+\end{quote}
 
-\section{Problem 1: A one-dimensional quadratic} \label{sec:one-d-quadratic}
-  
-\emph{Problem:} Find
-\sidenote*{\emph{Exercise:} Find the value of $x$ that minimises the
-  function $f(x) = x^2 - 4x + 5$.}
+\section{Functions of a single variable}\label{sec:univariate}
+\begin{marginfigure}
+  \centering
+  \includegraphics{sinxpx2.pdf}
+  \margincaption{The function $f(x) = x^2+\sin x$. What is the value
+    of its minimizer?}\label{fig:sinxpx2}
+\end{marginfigure}
+
+Figure~\ref{fig:sinxpx2} is a graph of the function
+$f(x) = x^2+\sin x$. By inspection of the graph, one can see that $f$
+has a minimum. The \emph{minimiser} of $f$\,--\,the value of $x$ at
+which $f$ attains its minimum\,--\,is clearly somewhere around
+$x \approx -0.5$. How might we compute the actual value? That is, how might
+we find
+\begin{equation*}
+  x_\text{min} = \argmin_{x\in\setR} f(x)?
+\end{equation*}
+
+At the minimum of a function its derivative is zero. So one approach
+to finding the minimum of $f(x)$ is to find the values of $x$ for
+which $f'(x)=0$.
+
+\begin{marginfigure}
+  \centering \includegraphics{cosxp2x.pdf} \margincaption{One step in
+    the iterative approach to finding the zero of a function. Blue
+    line: The derivative of the function shown in
+    figure~\ref{fig:sinxpx2}: $f'(x) = 2x+\cos x$. Orange line: the
+    linear approximation to $f'(x)$ around $x=0$. The point $x_1$ is
+    the zero of this linear approximation and will, we hope, be a
+    better approximation to the true zero than~$x_0$.}
+  \label{fig:cosxp2x}
+\end{marginfigure}
+
+The blue line in figure~\ref{fig:cosxp2x} shows the derivative:
+$f'(x) = 2x+\cos x$. Although it is clear that this function is indeed
+zero near $x\approx-0.5$, the task of finding the \emph{exact} value of the
+root does not immediately appear to be any easier than that of finding
+the minimum of the original function. There are, to be sure,
+\emph{some} functions whose zeros can be found analytically. If
+$f'(x)$ had been a \emph{linear} function then finding its root would
+have been straightforward. Perhaps we might obtain a guess as to the
+zero of $f'(x)$ by replacing $f'(x)$ with an approximating linear
+function and then finding the zero of that.
+
+This observation is the basis of the \emph{Newton Raphson}
+method. Starting from some initial guess for the minimiser, say
+$x_0=0$, we approximate $f'(x)$ near $x=x_0$ by a linear function (the
+orange line in figure~\ref{fig:cosxp2x}). We then take, as our next
+guess $x_1$, the zero of that function. Continuing in this way, we
+construct a new linear approximation to $f'(x)$ around $x=x_1$, find
+the zero of that, and so on. For this problem the first few values,
+starting from $x=0$, are: $x_0=0$, $x_1=-0.5$, $x_2= -0.450627$, and
+$x_3 = -0.450184$. That is already the correct answer to six decimal
+places.
+
+How did we compute the linear function that approximates $f'(x)$ at
+some $x=\hat{x}$? It is the straight line that is tangent to $f'(x)$
+at $\hat{x}$. That is, its value at $\hat{x}$ is $f'(\hat{x})$, and
+its slope is the derivative of $f'(x)$ at $\hat{x}$: which is to say,
+$f''(\hat{x})$. To write the same thing, the linear function we are
+seeking is the function
+\begin{equation*}
+  f'(\hat{x}) + f''(\hat{x})(x - \hat{x}).
+\end{equation*}
+The zero of this function is at
 \begin{equation}
-  x_\text{min} = \argmin_{x\in\setR} f(x), \quad\text{where $f(x) = \alpha + \beta x + \gamma x^2$}.
-\label{problem-quadr-one-d}
+  x = \hat{x} - \frac{f'(\hat{x})}{f''(\hat{x})},
+  \label{eq:linearroot}
 \end{equation}
-\emph{Solution:} A solution exists if and only if $\gamma>0$; and, in
-that case, $x_\text{min} = -\frac{1}{2}\gamma^{-1}\beta$.
+and so the update procedure, from guess $x_i$ to guess $x_{i+1}$ is
+\begin{equation}
+  x_{i+1} = x_i - \frac{f'(x_i)}{f''(x_i)}.
+  \label{eq:newtonraphson}
+\end{equation}
 
-Why is that the solution? Here are two ways to approach the
-problem. One might rewrite $f(x)$ in a way known colloquially as
-“completing the square:”
+\begin{marginfigure}
+  \centering
+  \includegraphics{sinxpx2-approx.pdf}
+  \margincaption{A quadratic approximation to the original function.\label{fig:sinxpx2-approx}}
+\end{marginfigure}
+
+There is another way of viewing this iterative procedure. The Newton
+Raphson method relies upon the fact that we know how to find the zero
+of a linear function. But we already knew how to find the
+\emph{minimum} of a \emph{quadratic} function. Perhaps we could have
+approximated the original function $f(x)$ by a quadratic directly and
+skipped taking the derivative?
+
+We now briefly pursue this idea. (See figure~\ref{fig:sinxpx2-approx}
+for an illustration.) The approximation method is similar to that of a
+linear function. The value of the quadratic, the value of its first
+derivative, and the value of its second derivative are set to the
+values of the corresponding quantites of the function. (The quadratic
+has no higher derivatives.) That is, to approximate $f(x)$ by
+$\alpha+\beta x+\gamma x^2$ near to $x=\hat{x}$, set
 \begin{equation*}
-  f(x) = \gamma\bigl(x + \frac{1}{2}\gamma^{-1}\beta\bigr)^2 - \frac{\beta^2}{4\gamma}. 
+  \alpha +\beta\hat{x} + \gamma\hat{x}^2 = f(\hat{x});\quad
+  \beta +2\gamma\hat{x} = f'(\hat{x});\quad\text{and}\quad
+  2\gamma = f''(\hat{x}).
 \end{equation*}
-(To see that this reproduces the original expression for $f(x)$,
-expand the right-hand side.) Now, the second term on the right is
-constant and therefore cannot affect the location of the minimum. And
-observe that when $\gamma>0$ the first term on the right is strictly
-positive, so that its minimum cannot be less than zero; and its value
-is zero precisely when $x = \frac{1}{2}\gamma^{-1}\beta$, as claimed above.
 
-Another way to approach the problem is to note that, at a minimum, the
-derivative of $f(x)$ must be zero. That is,
+The minimum of the quadratic is at $x=-\beta/2\gamma$,\sidenote{The minimum of
+  $f(x)=\alpha+\beta x + \gamma x^2$ is $x = -\beta/(2\gamma)$, so long as
+  $\gamma>0$. (When $\gamma<0$ the function has a maximum, not a minimum; when
+  $\gamma=0$ it is a linear function, not a quadratic.)} which is:
 \begin{equation*}
-  \left.\frac{df}{dx}\right|_{x = x_\text{min}} = 0.
+  x = -\frac{\beta}{2\gamma}
+  = -\frac{f'(\hat{x})-2\gamma\hat{x}}{2\gamma}
+  = -\frac{f'(\hat{x})}{f''(\hat{x})} +\hat{x}. 
 \end{equation*}
-In the general case, there may be other places where the derivative is
-zero (namely, at a maximum or a point of inflection) and in any case
-we may only have located a \emph{local} minimum, not necessarily the
-true, global minimum. Nevertheless, let's set the derivative to zero
-and see what falls out. We have
+Perhaps it should not be surprising that this formula is precisely the
+same as eq.~\eqref{eq:linearroot}. In particular, we were not, in the
+end, able to skip the computation of the second derivative.
+
+\begin{marginfigure}|5ex|
+  \begin{equation*}
+    x_{i+1} = x_i - \frac{f'(x_i)}{f''(x_i)}.
+  \end{equation*}
+  \margincaption{Iterative solution to the problem of finding the
+    minimiser of $f(x)$ using the Newton Raphson method.}
+\end{marginfigure}
+There is a lot more to be said about the minimisation of functions of
+a single variable. We might ask for the conditions under which
+eq.~\eqref{eq:newtonraphson} is guaranteed to converge to the
+minimiser. If one is unlucky enough to choose (or arrive at) a place
+where the second derivative is zero, then eq.~\eqref{eq:newtonraphson}
+will not be applicable. Indeed, there are likely to be numerical
+problems merely close to such a place. If the second derivative is
+negative, then the iteration step will take the guess towards a local
+\emph{maximum} rather than towards a minimum.
+
+One might ask why we don't simply ``follow the gradient of $f(x)$
+downhill.'' That would solve the problem of moving towards a local
+maximum and would avoid the computation of the second derivative. This
+idea is the basis of \emph{gradient descent}. Its main difficulty (as
+I understand it) is that it is necessary to decide how \emph{far} to
+follow the gradient downhill on each iteration. Too small a step and
+the rate of convergence will be very slow; too large a step and one
+risks overshooting the minimum one is trying to find. In some sense,
+the right step size should be determined by how “wiggly” the function
+is at the current guess. If the function is very wiggly, one should
+take small steps to avoid missing detail in the function. If the
+function is changing slowly, there is more license to take a large
+step. Of course, an obvious measure of “wiggliness” is the size of the
+second and higher derivatives.
+
+
+\section{Multivariate functions}
+\begin{marginfigure}
+  \centering \includegraphics{quadratic.pdf}%
+  \margincaption{A function of two variables:
+    $f(x,y) = 1 + x + y + x^2 + y^2 + xy$.\label{fig:quadratic}}
+\end{marginfigure}
+\begin{quote}
+  \emph{Exercise:} Figure~\ref{fig:quadratic} shows a function of two
+  variables, $f(x,y)=1+x+y+x^2+y^2+xy$. For which value of the pair
+  $(x,y)$ is $f(x,y)$ a minimum?
+\end{quote}
+\sidenote*{At the location of a minimum,
+  the derivatives of the function along each of the coordinate
+  directions must be zero. These are the partial derivatives: the
+  derivative along each coordinate, holding the other coordinate
+  constant. For this function, the partial derivatives are not hard to
+  compute:
 \begin{equation*}
-  \frac{df}{dx} = \beta + 2 \gamma x,
+  \frac{\partial f}{\partial x} = 1 + 2x + y;\quad\text{and}\quad
+  \frac{\partial f}{\partial y} = 1 + 2y + x.
 \end{equation*}
-which is zero only when $x = -\frac{1}{2}\gamma^{-1}\beta$. On this approach,
-we must in addition do some extra work to decide whether we have found
-a minimum (as opposed to a maximum or a point of inflection). That
-extra work is to examine the sign of the second derivative,
-$d^2f/dx^2$, which will be strictly positive at a minimum. Indeed,
-since
-\begin{equation*}
-  \frac{d^2f}{dx^2} = 2\gamma,
- \end{equation*}
-we conclude that we have found a minimum only when $\gamma> 0$. This is th
-only minimum so it must be a global one.
+Setting $\partial f/\partial x$ and $\partial f/\partial y$ to zero, we obtain
+$x = y = -1/3$.}
 
-\section{Problem 2: A multi-dimensional quadratic}
+% As in the one-dimensional case, the condition that the
+% partial derivatives at $(x,y)$ are zero is necessary but not
+% sufficient for the existence of a local minimum at~$(x,y$). It is
+% therefore necessary to check what kind of extremum one has found: the
+% partial derivatives will also be zero at a local maximum, as well as
+% at so-called “saddle points” where the function is a local minimum
+% along one direction but a local maximum along another direction.
 
+% One might also worry, \emph{a priori}, whether it is necessary to
+% check the derivatives along other directions as well as the coordinate
+% directions. Even if the partial derivatives along lines of constant
+% $x$ and along lines of constant $y$ are zero, is that sufficient to
+% say that the derivative in \emph{any} direction is zero? It is common
+% practice to simply problems by means of a “change of variables.” One
+% attempts to find “new coordinates,” $u(x,y)$ and $v(x,y)$ in the hope
+% that when $f$ is expressed in terms of these new variables it will
+% present a simpler problem. 
+
+We would now like to generalise the method of
+Section~\ref{sec:univariate} to the multi-dimensional case. In order
+to do so, we must confront a technical question: what is the domain of
+the function whose minimiser we wish to find? (We assume that its
+codomain is the reals.) In Section~\ref{sec:univariate} we considered
+functions $f\colon\setR\to\setR$; now we are considering functions
+$f\colon M\to \setR$, where $M$ is some “space.” But what kind of space,
+exactly?
+
+It is common, in machine learning, to say that this space is $\setR^n$
+(for some $n$) and, in addition, to imply strongly that it comes with
+the natural vector space stucture on~$\setR^n$. One speaks of a
+``vector'' of parameters, say, or a ``vector'' of
+observations. \textcite{deisenroth2020mathematics}, for example, say
+explicitly at the beginning of section 7.1 (pp.~228) that,
+``$f\colon\setR^d\to\setR$ is an objective function that captures the
+machine learning problem at hand.''
+
+In point of fact, the spaces that arise in applications are rarely the
+vector space $\setR^n$. (Although, as we shall see, they are often
+``close enough, in the ways that matter.'') There are two reasons for
+this. First, the space $M$ may not have the topological structure of
+$\setR^n$ ``in the large.'' One might want to find the minimiser of a
+function defined on a sphere,\sidenote{Here is an example of a problem
+  set on a sphere. Let $h(p)$ be the height above sea-level of a
+  point, $p$, on the Earth. Here of course we are modelling the Earth
+  as a sphere,~$S^2$. It seems perfectly reasonable to ask for the
+  maximiser of $h(p)$ (presumably, it is the location of Mt.\ Everest)
+  but $h$ is not a function $h\colon \setR^2\to\setR$, it is a function
+  $h\colon S^2\to\setR$.} but a sphere is not the same as the
+plane. There is no ``reasonable'' coordinate system that works for the
+whole sphere. Second, there is, typically, no notion available of a
+``linear combination'' of elements of~$M$ and so no vector space
+structure on~$M$.\sidenote{There \emph{is} one important application
+  in which $M$ does have a vector-space structure and that is linear
+  regression. Here $M$ is a space of canidate functions
+  $f\colon M\to \setR$ is a ``loss function.''. If the set $M$ is a
+  vector space, the problem is known as linear regression. Note that
+  linear regression is a special case of regression: that's why it has
+  a special name.}
+
+Both of these problems can be solved. Roughly speaking, the first
+problem is solved by restricting attention to a region of $M$, one
+that is ``large enough'' to cover the features of interest but ``small
+enough'' to ``look like a piece of $\setR^n$.'' The solution to the
+second problem, again very roughly, is to note that we really only use
+vectors to describe directional derivatives; and directional
+derivatives, it turns out, 
+
+
+
+They are more like vectors in the
+computer science sense of a one-dimensional list\,--\,what in
+mathematics would be called a ``tuple.''
+
+
+
+
+
+  
 \emph{Problem:} Find the values of $x_1$, $x_2$, \dots, $x_n$ for
 which the function $f(x_1, x_2, \dotsc, x_n)$ is
-minimised.\sidenote*{\emph{Exercise}: Consider the function of two
-  variables, $f(x,y) = 1 + x + y + x^2 + y^2 + xy$. For what value of
-  $x$ and $y$ is $f(x,y)$ minimised?}
+minimised.
 
 In general, this is a much harder problem. To make some progress we
 shall make two simplifications. First, we suppose that the function
@@ -103,12 +312,11 @@ $f$ is defined not over some arbitrary $n$-dimensional space but over
 an $n$-dimensional, real vector space, $V$. That will allow us to make
 the second simplification, which is to suppose that $f$ has a
 particularly simple form, a multi-dimensional generalisation of the
-quadratic from
-Section~\ref{sec:one-d-quadratic}.
+quadratic from Section~\ref{sec:univariate}.
 
 We digress to introduce some notation.
 
-\subsection{Notation for vectors (and other objects of that ilk)}
+\subsection{Notation for vectors}
 
 For $V$ a vector space, we write $v^a$ to represent an element of
 $V$. \begin{margintable}
@@ -406,24 +614,42 @@ direction away from~$x^a$.
 
 \subsection{Solution by setting the gradient to zero}
 
-The original problem was to find the minimum of the function,
-$f(x^a)$, defined in eq.~\eqref{eq:quadr-vect}. A condition that some
-value of $x^a$ is a minimum is that the directional derivative is zero
-at $x^a$ along all possible directions. That is, for all $\delta^a$, a
-necessary condition for a minimum is $\delta^a(\nabla_a f)$. Since this must be
-true for all $\delta^a$, it follows that a necessary condition for a
-minimum is
+A condition that some value of $x^a$ minimises a function is that the
+directional derivative of the function is zero at $x^a$ along all
+possible directions. That is, for all $\delta^a$, a necessary condition for
+a minimum is $\delta^a(\nabla_a f)=0$. Since this must be true for \emph{every}
+$\delta^a$, it follows that a necessary condition for a minimum is
 \begin{equation*}
-  \nabla_a f = 0 \quad\text{(evaluated at $x^a = x^a_\text{min}$)}.
+  \nabla_a f = \bzero \quad\text{(evaluated at $x^a = x^a_\text{min}$)}.
 \end{equation*}
 
+To apply this idea to the original question, we need to compute the
+gradient of the function defined in  
+eq.~\eqref{eq:quadr-vect}, we need to 
+
+
+.  Let $\delta^a$ be any vector. Clearly, for
+$\alpha$ a constant, $\partial_\delta \alpha=0$. Thus $\nabla_a \alpha=\bzero$.
+
+Let $w_a$ be a dual vector. We have
+\begin{equation*}
+  \partial_\delta (w_ax^a) = \frac{d}{d\lambda} w_a(x^a + \lambda \delta^a) = w_a\delta^a.
+\end{equation*}
+Thus $\nabla_a (w_b x^b) = w_a$.
+
+Now let $Q_{ab}$ be a bilinear form. We have
+\begin{align*}
+  \partial_\delta (Q_{ab}x^ax^b) &= \frac{d}{d\lambda}\bigm|_{\lambda=0} Q_{ab}(x^a+\lambda\delta^a)(x^b+\lambda\delta^b) \\
+  &= Q_{ab}(x^a\delta^b + \delta^ax^b) + 2\lambda Q_{ab}\delta^a\delta^b \quad\text{at $\lambda=0$}.
+\end{align*}
+Evaluating this at $\lambda=0$ gives $\partial_\delta (Q_{ab}x^ax^b)=$
 
 
 
 
+\subsection{Taking the gradient under a choice of basis}
 
-
-
+\printbibliography
 
 
 \end{document}
