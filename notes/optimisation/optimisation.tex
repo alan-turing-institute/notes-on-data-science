@@ -199,7 +199,9 @@ and higher derivatives.
 
 
 \section{Multivariate functions}
-\sidenote*{\emph{Exercise:} The figure below shows a
+\subsection{What is a ``multivariate function''?}
+
+\sidenote*|-6cm|{\emph{Exercise:} The figure below shows a
   function of two variables, $f(x,y)=1+x+y+x^2+y^2+xy$. For which
   value of the pair $(x,y)$ is $f(x,y)$ a minimum?\sidepar%
     {\centering\includegraphics[width=\marginparwidth]{quadratic.pdf}}\sidepar%
@@ -243,22 +245,26 @@ $f\colon M\to \setR$, where $M$ is some sort of “space.” But what kind
 of space, exactly?
 
 It is common, in machine learning, to say that this space is $\setR^n$
-(for some $n$) and, in addition, to imply strongly that it comes with
-the natural vector space stucture on~$\setR^n$. One speaks of a
-``vector'' of parameters, say, or a ``vector'' of
-observations. \textcite{deisenroth2020mathematics}, for example, say
+(for some $n$) and strongly to imply that it comes with the natural
+vector space stucture on~$\setR^n$. One speaks of a ``vector'' of
+parameters, say, or a ``vector'' of observations.\sidenote{There is
+  another sense of ``vector,'' which I suspect causes confusion, which
+  is the computer scientists' notion of ``a list-like data structure''
+  (often with $O(1)$ access time). For that concept, we use the terms
+  ``pair,'' (for two) ``triple,'' (for three) and ``tuple'' (in
+  general).} \textcite{deisenroth2020mathematics}, for example, say
 explicitly at the beginning of section 7.1 (pp.~228) that,
 ``$f\colon\setR^d\to\setR$ is an objective function that captures the
 machine learning problem at hand.''
 
 In point of fact, the spaces that arise in applications are rarely the
 vector space $\setR^n$. Indeed, they are rarely a vector space at all;
-even when they are, there is typically no ``canonical basis,'' akin to
-the canonical basis of~$\setR^n$. In order for $M$ to be a vector
-space, it is necessary for there to be a notion of ``linear
+and even when they are, there is typically no ``canonical basis,''
+akin to the canonical basis of~$\setR^n$. In order for $M$ to be a
+vector space, it is necessary for there to be a notion of ``linear
 combinations'' of elements in~$M$. It is easy to think of examples
-where there is no such notion: consider a model, one of whose
-parameters is constrained to be strictly positive. One cannot take
+where there is no such notion: consider a model, containing a
+parameter that is constrained to be strictly positive. One cannot take
 arbitrary linear combinations of positive numbers and still produce a
 positive number.\sidenote{Of course, one might be able to
   \emph{impose} a vector space structure by \emph{fiat}, as it
@@ -275,33 +281,30 @@ important caveat, we will be able to get away with thinking of $M$ (or
 at least, a region of $M$) as ``rather like'' a region of
 $\setR^n$. That is, we shall imagine there is a coordinate system on
 $M$ that allows us to refer to points in $M$ as if they were points
-in~$\setR^n$. The caveat is that we must remember that all our results
-should be independent of coordinate system: it should not matter, for
-the theory, what particular parametrisation we choose.
+in~$\setR^n$.
 
-To reinforce this idea, we shall typically write points in $M$ as,
-simply, $p\in M$, making no reference to any particular
-parametrisation. That is, we shall not refer to some element of $M$ as
-``a parameter vector, $\mathbold{p}$,'' because, in general, $p$ is not a
-vector.\sidenote{There is another sense of ``vector,'' which I suspect
-  causes confusion. That is the computer scientists notion of ``a
-  list-like data structure'' (often with $O(1)$ access time). For that
-  notion, we shall the terms ``pair,'' (for two) ``triple,'' (for
-  three) and ``tuple'' (in general).}
+The caveat is that we must remember that all our results ought to be
+independent of coordinate system: it should not matter, for the
+theory, what particular parametrisation we choose. To reinforce this
+idea, we shall typically write points in $M$ as simply $p\in M$, making
+no reference to any particular parametrisation. That is, we shall not
+refer to some element of $M$ as ``a parameter vector,
+$\mathbold{p}$,'' because, in general, $p$ is not a
+vector.\sidenote{There \emph{is} one important application in which
+  $M$ does have a vector-space structure. In a regression problen, $M$
+  is a space of candidate functions and $f\colon M\to \setR$ is a ``loss
+  function.'' If $M$ is a vector space, the problem is known as
+  \emph{linear} regression. Note that linear regression is a special
+  case of regression: that's why it has a special name.}
 
-
-
-
-
-
-\sidenote{There \emph{is} one important application}
-%   in which $M$ does have a vector-space structure. In a regression
-%   problen, $M$ is a space of candidate functions and
-%   $f\colon M\to \setR$ is a ``loss function.''. If the set $M$ is a
-%   vector space, the problem is known as \emph{linear} regression. Note
-%   that linear regression is a special case of regression: that's why
-%   it has a special name.}
-
+Sometimes, as in the next section, we shall go along with conventional
+practice and assume that (at least in the region of some point) $M$
+has a vector-space structure. A version of the caveat applies here as
+well: we must remember that our results should be independent of
+basis. To reinforce \emph{this} idea, we will typically write a vector
+space as simply $V$. Even though $V$ might be isomorphic to some
+$\setR^n$ we shall not write it as such because that implies making a
+choice of a particular basis.
 
 % (Although, as we shall see, they are often
 % ``close enough, in the ways that matter.'') There are two reasons for
@@ -349,11 +352,10 @@ vector.\sidenote{There is another sense of ``vector,'' which I suspect
 % one means by ``a space like $\setR^n$, only there is no preferred
 % coordinate system.'' 
 
+\subsection{Minimisation on a vector space}
 
 
-We digress to introduce some notation.
 
-\subsection{Notation for vectors}
 
 For $V$ a vector space, we write $v^a$ to represent an element of
 $V$. \begin{margintable}
