@@ -48,7 +48,7 @@
 
 We consider a series of increasingly tricky minimisation
 problems.\sidenote*{\emph{Exercise:} Find the value of $x$ that
-  minimises the function $f(x) = x^2 - 4x + 5$.}
+  minimises the function $f(x) = x^2 - 4x + 5$.} 
 
 \section{Functions of a single variable}\label{sec:univariate}
 \begin{marginfigure}
@@ -59,12 +59,12 @@ problems.\sidenote*{\emph{Exercise:} Find the value of $x$ that
 
 Figure~\ref{fig:sinxpx2} is a graph of the function
 $f(x) = x^2+\sin x$. By inspection of the graph, one can see that $f$
-has a minimum. The \emph{minimiser} of $f$\,--\,the value of $x$ at
-which $f$ attains its minimum\,--\,is clearly somewhere around
-$x \approx -0.5$. How might we compute the actual value? That is, how
-might we find
+has a minimum somewhere around $x = 0.5$. The value of $x$ at which
+$f$ attains its minimimum is called the \emph{minimiser} of $f$ and
+written~$x^*$. For this function the minimiser is $x^* \approx -0.5$. How
+might we compute a more accurate value? That is, how might we find
 \begin{equation*}
-  x_\text{min} = \argmin_{x\in\setR} f(x)?
+  x^* = \argmin_{x\in\setR} f(x)?
 \end{equation*}
 
 At the minimum of a function its derivative is zero. So one approach
@@ -185,20 +185,24 @@ There are other approaches to finding the minimum. One might ask why
 we don't simply ``follow the gradient of $f(x)$ downhill.'' That would
 solve the problem of moving towards a local maximum and would avoid
 the computation of the second derivative. This idea is the basis of
-\emph{gradient descent}. Its main difficulty (as I understand it) is
-that it is necessary to decide how \emph{far} to follow the gradient
-downhill on each iteration. Too small a step and the rate of
-convergence will be very slow; too large a step and one risks
-overshooting the minimum one is trying to find. In some sense, the
-right step size should be determined by how “wiggly” the function is
-at the current guess. If the function is very wiggly, one should take
-small steps to avoid missing detail in the function. If the function
-is changing slowly, there is more license to take a large step. Of
-course, an obvious measure of “wiggliness” is the size of the second
-and higher derivatives.
+\emph{gradient descent}.
+
+\emph{tbd}
+
+Its main difficulty (as I understand it) is that it is necessary to
+decide how \emph{far} to follow the gradient downhill on each
+iteration. Too small a step and the rate of convergence will be very
+slow; too large a step and one risks overshooting the minimum one is
+trying to find. In some sense, the right step size should be
+determined by how “wiggly” the function is at the current guess. If
+the function is very wiggly, one should take small steps to avoid
+missing detail in the function. If the function is changing slowly,
+there is more license to take a large step. Of course, an obvious
+measure of “wiggliness” is the size of the second and higher
+derivatives.
 
 
-\section{Multivariate functions}
+\section{Functions on a vector space}
 \subsection{What is a ``multivariate function''?}
 
 \sidenote*|-6cm|{\emph{Exercise:} The figure below shows a
@@ -354,7 +358,11 @@ choice of a particular basis.
 
 \subsection{Minimisation on a vector space}
 
-
+Let $V$ be a finite-dimensional vector space and $f\colon V\to\setR$ a
+real-valued function on~$V$. Our plan is:
+\begin{enumerate}
+\item 
+\end{enumerate}
 
 
 For $V$ a vector space, we write $v^a$ to represent an element of
