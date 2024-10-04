@@ -18,7 +18,8 @@
 %% Usually 4 "big columns", each of 4 text cols plus 1 gutter col;
 %% plus an additional gutter on the left.
 \usepackage[left=1cm, textwidth=11cm, marginparsep=1cm, marginparwidth=7cm]{geometry}
-\usepackage[Ragged, size=footnote, shape=up]{sidenotesplus}
+\usepackage[Ragged, size=footnote, shape=up, alerton]{sidenotesplus}
+\definecolor{Red}{rgb}{1,0,0}
 %% We used to use a two-column layout
 % \setlength{\columnsep}{1cm}
 \title{Increasingly tricky optimisation problems}
@@ -283,32 +284,33 @@ Fortunately, it turns out that, in general, it is not necessary to
 have available a notion of ``addition of points'' in~$M$. With one
 important caveat, we will be able to get away with thinking of $M$ (or
 at least, a region of $M$) as ``rather like'' a region of
-$\setR^n$. That is, we shall imagine there is a coordinate system on
+$\setR^n$.\sidealert{tbd: I am not entirely sure, anymore, that this
+  is true.} That is, we shall imagine there is a coordinate system on
 $M$ that allows us to refer to points in $M$ as if they were points
 in~$\setR^n$.
 
-The caveat is that we must remember that all our results ought to be
-independent of coordinate system: it should not matter, for the
-theory, what particular parametrisation we choose. To reinforce this
-idea, we shall typically write points in $M$ as simply $p\in M$, making
-no reference to any particular parametrisation. That is, we shall not
-refer to some element of $M$ as ``a parameter vector,
-$\mathbold{p}$,'' because, in general, $p$ is not a
-vector.\sidenote{There \emph{is} one important application in which
-  $M$ does have a vector-space structure. In a regression problen, $M$
-  is a space of candidate functions and $f\colon M\to \setR$ is a ``loss
-  function.'' If $M$ is a vector space, the problem is known as
-  \emph{linear} regression. Note that linear regression is a special
-  case of regression: that's why it has a special name.}
+The caveat is that all our results ought to be independent of
+coordinate system: it should not matter, for the theory, what
+particular parametrisation we choose. To reinforce this idea, we shall
+typically write points in $M$ as simply $p\in M$, making no reference to
+any particular parametrisation. That is, we shall not refer to some
+element of $M$ as ``a parameter vector, $\mathbold{p}$,'' because, in
+general, $p$ is not a vector.\sidenote{There \emph{is} one important
+  application in which $M$ does have a vector-space structure. In a
+  regression problen, $M$ is a space of candidate functions and
+  $f\colon M\to \setR$ is a ``loss function.'' If $M$ is a vector space,
+  the problem is known as \emph{linear} regression. Note that linear
+  regression is a special case of regression: that's why it has a
+  special name.}
 
 Sometimes, as in the next section, we shall go along with conventional
 practice and assume that (at least in the region of some point) $M$
 has a vector-space structure. A version of the caveat applies here as
-well: we must remember that our results should be independent of
-basis. To reinforce \emph{this} idea, we will typically write a vector
-space as simply $V$. Even though $V$ might be isomorphic to some
-$\setR^n$ we shall not write it as such because that implies making a
-choice of a particular basis.
+well: any results should be independent of basis. To reinforce
+\emph{this} idea, we will typically write a vector space as simply
+$V$. Even though $V$ might be isomorphic to some $\setR^n$ we shall
+not write it as such because that implies making a choice of a
+particular basis.
 
 % (Although, as we shall see, they are often
 % ``close enough, in the ways that matter.'') There are two reasons for
@@ -356,22 +358,37 @@ choice of a particular basis.
 % one means by ``a space like $\setR^n$, only there is no preferred
 % coordinate system.'' 
 
-\subsection{Minimisation on a vector space}
+\subsection{Vector derivatives}
+\sidenote*{\textbf{Notation.} There is a
+  profusion of notation for vectors (see the table). We shall write
+  $v^a\in V$ to denote a vector\,---\,an element of some vector
+  space,~$V$. Note that we do \emph{not} mean by this notation ``the
+  $a$th element of the vector;'' we mean ``the vector itself,'' the
+  \emph{Ding an sich}. To write the number that is the component of
+  $v^a$ in some (understood) basis, we shall write $v^\mu$, with a Greek
+  index. \sidepar The notation we use is known as ``abstract index
+  notation'' and is due to Penrose. It has the advantage that it
+  extends nicely to other denizens of the vector universe. To For
+  example, an element of $\mathcal{L}(V, V)$, an operator, is written
+  $T^a{}_b$, with one raised and one lowered index. The action of
+  $T^a{}_b$ on some vector $v^a$ is written $T^a{}_b v^b$, which has
+  obvious similarities to basis-dependent computation,
+  $\sum_\mu T^\mu{}_\nu v^\nu$.}
 
 Let $V$ be a finite-dimensional vector space and $f\colon V\to\setR$ a
-real-valued function on~$V$. Our plan is:
-\begin{enumerate}
-\item 
-\end{enumerate}
+real-valued function on~$V$.
 
-
-For $V$ a vector space, we write $v^a$ to represent an element of
-$V$. \begin{margintable}
+We would like to say, as we did in the one-dimensional case, that the
+condition for some $p^*\in V$ to be a minimiser of $f$ is that the
+``derivative'' of $f$ is zero at~$p^*$. Thus, we must give a meaning,
+in the case where $f$ is defined over a vector space, to the notion of
+a derivative.
+\begin{margintable}
   \centering
   \renewcommand{\arraystretch}{1.2}
   \begin{tabular}{@{}l@{\hspace{4pt}}c@{\hspace{3pt}}|@{\hspace{3pt}}c@{\hspace{4pt}}c@{\hspace{4pt}}c@{\hspace{4pt}}c@{\hspace{4pt}}c@{}}
     \toprule
-    Concept & A.I. & \multicolumn{5}{c}{Alternative notations} \\
+    Concept & & \multicolumn{5}{c}{Alternative notations} \\
     \midrule
     Vector      & $v^a$      & $\mathbold{v}$   & $\vec{v}$
                              & $v$ & $v^i$ & $\lvert v\rangle$ \\
@@ -384,206 +401,134 @@ $V$. \begin{margintable}
     w \mid v \rangle$ \\   
   \bottomrule
   \end{tabular}
-  \caption{Various notations for the objects in vector spaces and
-    related spaces. The notation shown in the first column (labelled
-    “A.I.”) is “abstract index notation.”\label{tab:notation}}
+  \caption{Notation for elements of vector spaces and related
+    spaces. The notation we will use is shown in the first column and
+    is known as ``abstract index notation.''\label{tab:notation}}
 \end{margintable}
 
-The superscript, in this case “$a$,” should be a roman letter towards
-the beginning of the alphabet. Its meaning is simply that $v^a$ is a
-vector; it does \emph{not} denote that $v^a$ is the $a$th component of a
-vector in some basis. The expression $v^b$ is the same
-vector. Similarly, $w_a$, with the index lowered, denotes an element
-of the dual space, $V^*$. This notation, due to Penrose, is known as
-\emph{abstract index notation}.
+% The superscript, in this case “$a$,” should be a roman letter towards
+% the beginning of the alphabet. Its meaning is simply that $v^a$ is a
+% vector; it does \emph{not} denote that $v^a$ is the $a$th component of a
+% vector in some basis. The expression $v^b$ is the same
+% vector. Similarly, $w_a$, with the index lowered, denotes an element
+% of the dual space, $V^*$. This notation, due to Penrose, is known as
+% \emph{abstract index notation}.
 
-There are other ways of notating an element of some vector space (see
-table~\ref{tab:notation} for some example). A typical approach in a
-mathematics text is to write simply $v\in V$, with no adornment of the
-symbol. A physicist might instead decorate the vector, as in
-$\mathbold{v}\in V$, or $\vec{v}\in V$.
+% There are other ways of notating an element of some vector space (see
+% table~\ref{tab:notation} for some example). A typical approach in a
+% mathematics text is to write simply $v\in V$, with no adornment of the
+% symbol. A physicist might instead decorate the vector, as in
+% $\mathbold{v}\in V$, or $\vec{v}\in V$.
 
-A problem with these other notations is that they do not naturally
-extend to other denizens of the vector universe. For example, if one
-frequently encounters dual vectors, then the mathematician now has to
-remember which symbols are being used for dual vectors, which for
-vectors, and which for ordinary numbers. A physicst, which using a
-distinguishing typography for vectors, typically struggles with things
-other than vectors. For example, a dual vector might be written using
-the cumbersome (and coordinate-dependent) transpose,
-$\mathbold{v}^T$.\sidenote*{What does $\mathbold{v}^T$ mean? It
-  means, “the matrix representation of that dual vector obtained, from
-  the vector $\mathbold{v}$, by means of the isomorphism between $V$
-  and $V^*$ generated by some particular basis that I have in mind.”}
-And of course there are other spaces whose inhabitants are useful: the
-space of linear maps $V\to V$, say, or the space $V\to V^*$ (where
-bilinear forms live). How should these be written?
+% A problem with these other notations is that they do not naturally
+% extend to other denizens of the vector universe. For example, if one
+% frequently encounters dual vectors, then the mathematician now has to
+% remember which symbols are being used for dual vectors, which for
+% vectors, and which for ordinary numbers. A physicst, which using a
+% distinguishing typography for vectors, typically struggles with things
+% other than vectors. For example, a dual vector might be written using
+% the cumbersome (and coordinate-dependent) transpose,
+% $\mathbold{v}^T$.\sidenote*{What does $\mathbold{v}^T$ mean? It
+%   means, “the matrix representation of that dual vector obtained, from
+%   the vector $\mathbold{v}$, by means of the isomorphism between $V$
+%   and $V^*$ generated by some particular basis that I have in mind.”}
+% And of course there are other spaces whose inhabitants are useful: the
+% space of linear maps $V\to V$, say, or the space $V\to V^*$ (where
+% bilinear forms live). How should these be written?
 
-Abstract index notation provides a convenient approach to denoting all
-of these objects. Consider, for example, the dual space, $V^*$, which
-is the space of linear maps from $V$ to the reals (or the
-complexes). A mathematician might write, say, $w(v)$ to denote the
-action of $w\in V^*$ on $v\in V$. That is straightforward, yet some things
-are lost. The value $w(v)$ is, by definition, linear in both $w$ and
-$v$ but that linearity is not apparent from the notation. The action
-of $w$ on $v$ can equally well be thought of as the action of $v$ on
-$w$ but that symmetry is not apparent either.
+% Abstract index notation provides a convenient approach to denoting all
+% of these objects. Consider, for example, the dual space, $V^*$, which
+% is the space of linear maps from $V$ to the reals (or the
+% complexes). A mathematician might write, say, $w(v)$ to denote the
+% action of $w\in V^*$ on $v\in V$. That is straightforward, yet some things
+% are lost. The value $w(v)$ is, by definition, linear in both $w$ and
+% $v$ but that linearity is not apparent from the notation. The action
+% of $w$ on $v$ can equally well be thought of as the action of $v$ on
+% $w$ but that symmetry is not apparent either.
 
-In abstract index notation, the action of $w_a\in V^*$ on $v^a\in V$ is
-written $w_av^a$. That is, we write the $w_a$ and $v^a$ next to each
-other, as if we were “multiplying” them, and ensure that the
-\emph{same} index is used for both. (The expression $w_av^b$, with two
-different indices, means something else.) Now the linearity and
-symmetry are clearer: although this expression does \emph{not} denote
-an ordinary product of numbers, it looks like one, and therefore looks
-like it ought to distribute over addition, in the sense that
-$w_a(u^a+v^a) = w_au^a + w_av^a$. Which it does.
+% In abstract index notation, the action of $w_a\in V^*$ on $v^a\in V$ is
+% written $w_av^a$. That is, we write the $w_a$ and $v^a$ next to each
+% other, as if we were “multiplying” them, and ensure that the
+% \emph{same} index is used for both. (The expression $w_av^b$, with two
+% different indices, means something else.) Now the linearity and
+% symmetry are clearer: although this expression does \emph{not} denote
+% an ordinary product of numbers, it looks like one, and therefore looks
+% like it ought to distribute over addition, in the sense that
+% $w_a(u^a+v^a) = w_au^a + w_av^a$. Which it does.
 
-We may sometimes have occasion to choose a basis for $V$. In that
-case, we will denote the $\mu$th component of $v^a$ in that basis by
-$v^\mu$. The distinction is that now we have written a greek index. That
-is to say, whereas $v^a$ is a vector, the \emph{Ding an sich}, the
-expression $v^\mu$ denotes a number, one number for each
-basis. Likewise, by $w_\nu$ we will mean the $\nu$th element of the dual
-vector $w_a$ with respect to some basis on $V^*$ (which will almost
-always be dual basis to whatever basis we have chosen for~$V$).
+% We may sometimes have occasion to choose a basis for $V$. In that
+% case, we will denote the $\mu$th component of $v^a$ in that basis by
+% $v^\mu$. The distinction is that now we have written a greek index. That
+% is to say, whereas $v^a$ is a vector, the \emph{Ding an sich}, the
+% expression $v^\mu$ denotes a number, one number for each
+% basis. Likewise, by $w_\nu$ we will mean the $\nu$th element of the dual
+% vector $w_a$ with respect to some basis on $V^*$ (which will almost
+% always be dual basis to whatever basis we have chosen for~$V$).
 
-The following highly convenient fact is one reason that this notation
-is useful: Fix a basis for $V$ and choose, for a basis of $V^*$, the
-dual basis. Then for $v^a\in V$ and $w_b\in V^*$ we have
-$w_av^a = \sum_{\mu=1}^{\dim V} w_\mu v^\mu$.
+% The following highly convenient fact is one reason that this notation
+% is useful: Fix a basis for $V$ and choose, for a basis of $V^*$, the
+% dual basis. Then for $v^a\in V$ and $w_b\in V^*$ we have
+% $w_av^a = \sum_{\mu=1}^{\dim V} w_\mu v^\mu$.
 
-\sidenote*{As a matter of history, physicists have typically written
-  vectors using a basis-dependent representation. As it turns out,
-  physical laws involve a lot of terms like $\sum_\mu v^\mu w_\mu$. It was
-  decided that it would make life easier to drop the “$\sum$” and instead
-  follow the convetion that the summation is implied, so long as some
-  index is repeated, once “up” and once “down.” Abstract index
-  notation has the great benefit of looking \emph{just like} the
-  physicists' notation whilst being coordinate-free.}
+% \sidenote*{As a matter of history, physicists have typically written
+%   vectors using a basis-dependent representation. As it turns out,
+%   physical laws involve a lot of terms like $\sum_\mu v^\mu w_\mu$. It was
+%   decided that it would make life easier to drop the “$\sum$” and instead
+%   follow the convetion that the summation is implied, so long as some
+%   index is repeated, once “up” and once “down.” Abstract index
+%   notation has the great benefit of looking \emph{just like} the
+%   physicists' notation whilst being coordinate-free.}
 
-What about other objects? It turns out that this notation handles
-those nicely as well, as long as there aren't too many “individual”
-vector spaces around. For example, we denote an element of
-$\mathcal{L}(V,V^*)$ by means of two lowered indices, like so:
-$Q_{ab}$. To act on some $v^a\in V$ we write $Q_{ab}v^b$. Note that
-after we have “paired up” the $b$s, there is only one index left
-“free,” and that index, $a$, is lowered. Our convention is that a
-thing with a lowered index is an element of $V^*$ and that is indeed
-what the action of $Q$ produces.
+% What about other objects? It turns out that this notation handles
+% those nicely as well, as long as there aren't too many “individual”
+% vector spaces around. For example, we denote an element of
+% $\mathcal{L}(V,V^*)$ by means of two lowered indices, like so:
+% $Q_{ab}$. To act on some $v^a\in V$ we write $Q_{ab}v^b$. Note that
+% after we have “paired up” the $b$s, there is only one index left
+% “free,” and that index, $a$, is lowered. Our convention is that a
+% thing with a lowered index is an element of $V^*$ and that is indeed
+% what the action of $Q$ produces.
 
-There's no \emph{content} to the above; it's just notation, albeit a
-very suggestive one.\sidenote{Although you could make the case that
-  the content of this notation is the existence of the natural
-  isomorphism between $\mathcal{L}(A\otimes B, C)$ and
-  $\mathcal{L}(A, \mathcal{L}(B, C))$}. It is suggestive because, if one chooses a basis
-for $V$ (and the corresponding dual basis for $V^*$), then one obtains
-true formulae on replacing roman superscripts and subscripts by greek
-ones and adding summations where necessary. For example, suppose
-$Q_{\mu\nu}$ is the matrix representation of $Q_{ab}$. Then the
-$\mu$th component of $Q_{ab}v^b$ is precisely $\sum_\nu Q_{\mu\nu}v^\nu$.
+% There's no \emph{content} to the above; it's just notation, albeit a
+% very suggestive one.\sidenote{Although you could make the case that
+%   the content of this notation is the existence of the natural
+%   isomorphism between $\mathcal{L}(A\otimes B, C)$ and
+%   $\mathcal{L}(A, \mathcal{L}(B, C))$}. It is suggestive because, if one chooses a basis
+% for $V$ (and the corresponding dual basis for $V^*$), then one obtains
+% true formulae on replacing roman superscripts and subscripts by greek
+% ones and adding summations where necessary. For example, suppose
+% $Q_{\mu\nu}$ is the matrix representation of $Q_{ab}$. Then the
+% $\mu$th component of $Q_{ab}v^b$ is precisely $\sum_\nu Q_{\mu\nu}v^\nu$.
 
-Abstract index notation has some additional advantages when we come to
-take gradients.
-
-\subsection{A multi-dimensional quadratic}
-
-Now that we have the appropriate notation we can state the problem of
-this section.
-
-\emph{Problem:} Fix a finite-dimensional, real vector space,~$V$. Let
-$\alpha\in\setR$ be a number, $w_a\in V^*$ a dual vector, and
-$Q_{ab} \in \mathcal{L}(V,V^*)$ a symmetric, positive-definite, bilinear
-form. Find 
-\begin{equation}
-x^a_\text{min} = \argmin_{x^a\in V} f(x^a),\quad\text{where $f(x^a) = \alpha + w_ax^a + Q_{ab}x^ax^b$}.
-\label{eq:quadr-vect}
-\end{equation}
-
-In some sense, this is the simplest, non-trivial, function we might
-have attempted to minimise. We can't simplify much futher: a constant
-function attains its minimum everywhere; and a linear function has no
-minimum value.
-
-Notice that even to say what we mean by a “multidimensional
-quadratric” we had to use the vector space structure of $V$ (in order
-to introduce $w_a$ and $Q_{ab}$).
-
-\subsection{Solution by completing the square}
-
-\emph{Solution} (to eq.~\eqref{eq:quadr-vect}):
-\begin{equation}
-  x^a_\text{min} = -\frac{1}{2} {(Q^{-1})}^{ab}w_b.
-\label{eq:sol-quadr-vect}
-\end{equation}
-
-Before explaining why this is the solution, we describe what it
-means. What is the term ${(Q^{-1})}^{ab}$? Ignoring the indices for a
-minute, it is the inverse of the map $Q$. Since
-$Q\in\mathcal{L}(V, V^*)$, the inverse, $Q^{-1}$, must be an element of
-$\mathcal{L}(V^*, V)$ (that is, it goes the other way). In other words,
-$Q^{-1}$ acts on an element of the dual space, such as $w_a$, to
-produce an element of~$V$. In abstract index notation, that is
-expressed by writing $Q^{-1}$ with two raised indices. To say that
-$Q^{-1}$ is the inverse of $Q$ is to say that
-${(Q^{-1})}^{ac}Q_{cb} = \id^a{}_b$, where, on the right, $\id^a{}_b$
-is the identity operator on~$V$.
-
-Why is this the solution? By analogy with the one-dimensional case, we
-might try to “complete the square,” by rewriting $f(x^a)$ as:
-\begin{equation*}
-  f(x^a) = Q_{ab}\Bigl(x^a +
-  \frac{1}{2}{(Q^{-1})}^{ac}w_c\Bigr)\Bigl(x^b +
-  \frac{1}{2}{(Q^{-1})}^{bc}w_c\Bigr) - \frac{1}{4}w_aw_b{(Q^{-1})}^{ab}.
-\end{equation*}
-The right-hand side looks rather complicated. However, the two terms
-in large parentheses are in fact the same vector. That is to say, if
-we set
-\begin{equation*}
-  \xi^a = x^a +  \frac{1}{2}{(Q^{-1})}^{ac}w_c,
-\end{equation*}
-then $f$ becomes the much simpler-looking
-\begin{equation*}
-  f(x^a) = Q_{ab}\xi^a\xi^b + \text{a constant}.
-\end{equation*}
-Now, noting that $Q_{ab}$ is positive-definite\,--\,meaning that
-$Q_{ab}\xi^a\xi^b >0$ unless $\xi^a=\bzero$\,--\,we conclude that the condition
-for $x^a$ to be a minimiser is that $\xi^a = \bzero$ (the zero vector)
-from which eq.~\eqref{eq:sol-quadr-vect} follows.
-
-Alternatively, we might try taking the derivative again. For that, we
-need to understand how to take derivatives of functions on a vector
-space.
-
-\subsection{Gradients}
+% Abstract index notation has some additional advantages when we come to
+% take gradients.
 
 The derivative of a function of one variable, $f(x)$, is an answer to
-the question, “how fast does $f$ increase as $x$ increases?” We'd like
-to ask the same question of a function on a vector space, $f(x^a)$,
-where now $x^a\in V$. (Remember that the “$a$” in $x^a$ merely means
-that $x^a$ is a vector.)
+the question, ``how fast does $f$ increase as $x$ increases?'' In the
+present case, the rate of change of $f(p)$ at $p$ will, in general,
+depend on the direction in which one is “headed away from~$p$,” and so
+any straightforward extension of the one-dimensional derivative will
+need to specify such a direction. Fortunately, we have a convenient
+object with which to capture the idea of a direction, and that is a
+vector.
 
-In contrast to the one-dimensional case, however, the rate of change
-of $f$ at $x^a$ will, in general, now depend on the \emph{direction}
-in which one is “headed away from~$x^a$,” and so any straightforward
-extension of the one-dimensional derivative will need to specify such
-a direction.  Fortunately, we have a convenient object with which to
-capture the idea of a direction, and that is a vector.
+Thus, let $\delta^a$ be a vector. What is the rate of change of $f(p)$ in
+the direction of~$\delta^a$? Consider the straight line, passing through
+$p$, consisting of the points $p+\lambda\delta^a$ for
+$\lambda\in\setR$. (Note: there is a slight inconsistency of notation
+here. Both $p$ and $\delta^a$ are elements of $V$\,---\,that is,
+vectors\,---\,and so really we should write $p^a$ rather
+than~$p$. However, while we are using $p$ to denote a \emph{point} in
+$V$, we are using $\delta^a$ to denote a displacement \emph{from} $p$. I
+always imagine the $\delta^a$ as having its ``tail'' at $p$ and its
+``head'' pointing away from~$p$.)
 
-Thus, let $\delta^a$ be a vector. Instead of asking, ``what is the rate of
-change of $f(x)$ as $x$ increases?'' we shall ask, ``what is the rate
-of change of $f(x^a)$ as $x^a$ changes in the direction
-of~$\delta^a$?''\sidenote{Both $x^a$ and $\delta^a$ are elements of
-  $V$ but, while we are using $x^a$ to denote a point in $V$, we are
-  using $\delta^a$ to denote a displacement from $x^a$. I always imagine
-  the $\delta^a$ as having its ``tail'' at $x^a$ and its ``head'' pointing
-  away from~$x^a$.} And, in order to capture the idea of ``moving away
-from $x^a$ along $\delta^a$,'' we shall introduce a number, $\lambda$, and
-consider the point $x^a+\lambda\delta^a$ as $\lambda$ changes. This point has the
-property that it is $x^a$ when $\lambda=0$, and ``moves in the direction of
-$\delta^a$'' as $\lambda$ increases.
-
-These remarks lead to the following definition.
+The line traced out by $p+\lambda\delta^a$ as $\lambda$ varies over numbers is the ray
+of all points that lie ``in the direction of $\delta^a$'' from~$p$. The
+function $f$ restricted to this line is a function of the single
+variable~$\lambda$. We define the derivative of $f$ in the direction
+of $\delta^a$ to be th ordinary derivative of $f(p+\lambda\delta^a)$ with respect
+to~$\lambda$.
 
 \emph{Definition:} The \textbf{directional derivative of $f$ along
   $\delta^a$}, which we write as $\partial_\delta f$, is defined by\sidenote*{There is
@@ -596,34 +541,18 @@ These remarks lead to the following definition.
 \partial_\delta f \isdef \frac{d}{d\lambda} f(x^a+\lambda\delta^a) \quad\text{evaluated at $\lambda = 0$}.
   \label{eq:directional-derivative}
 \end{equation}
-\sidenote*{\emph{Exericse:} Show that in one dimension
+
+\sidenote*{\emph{Exercise:} Show that in one dimension
   eq.~\eqref{eq:directional-derivative} reduces to the usual
   derivative, $df/dx$, under the choice $\delta=1$. Hint: Use a change of
   variables, $u = x+\lambda$.}
-
-The directional derivative of a function $f$ depends on the
-direction,~$\delta^a$. Perhaps surprisingly, however, it turns out that
-after all it \emph{is} possible to capture a notion of ``the''
-derivative of $f$, independent of the direction. The idea is to think
-of $\partial_\delta f$ as a function of $\delta^a$: it is this function that is ``the''
-derivative. In other words, ``the'' derivative of $f$ at $x^a$ is that
-map $\phi\colon \delta^a\to\setR$ defined by
-$\phi(\delta^a) = \partial_\delta(f)$ (evaluated at $x^a$).
-
-On the face of it, one might imagine that this $\phi$ is some terribly
-complicated thing, depending in various difficult-to-express ways on
-its argument,~$\delta^a$. Remarkably, however, it is not; it is in fact, a
-linear map.
-In other words, there is some dual vector, written
-$\nabla_a f$, having the property that
-\begin{equation*}
-  (\nabla_a f)\delta^a = \partial_\delta f
-\end{equation*}
-for all vectors $\delta^a\in V$. The dual vector $\nabla_af$ is known as the
-\textbf{gradient} of~$f$. It has a ``down'' index to indicate that it
-is, in fact, an element of~$V^*$.\sidenote*{To see that the
-  directional derivative is linear, let $u^a$ and $v^a$ be vectors. We
-  shall show that
+The directional derivative at $p$ of a function $f$ depends on the
+direction,~$\delta^a$, in which the derivative is taken. One might imagine
+that the dependence of $\partial_\delta f$ on $\delta^a$ is some terribly complicated
+thing, depending in various difficult-to-express ways on the
+direction. Remarkably, however, it is not; it is in fact, a linear
+map.\sidenote{To see that the directional derivative is linear,
+  let $u^a$ and $v^a$ be vectors. We shall show that
   $\partial_{\alpha u+\beta v}f = \alpha\partial_u f+ \beta\partial_v f$. Let
   $\tilde{\alpha}(\lambda)$ and $\tilde{\beta}(\lambda)$ be functions of
   $\lambda$ and consider the derivative, with respect to $\lambda$, of the
@@ -653,43 +582,209 @@ derivative~$\partial_u f$. Thus we have,
   \partial_{\alpha u+\beta v} f = \alpha\partial_u f + \beta\partial_v f.
 \end{equation*}
 In other words, the map $\partial$ is a linear map.}
+That is, for given $f$ and $p$, there exists a \emph{dual} vector,
+written $\nabla_a f$, having the property that
+\begin{equation*}
+  (\nabla_a f)\delta^a = \partial_\delta f \quad\text{for all $\delta^a\in V$ (evaluated at $p$)}.
+\end{equation*}
+The dual vector $\nabla_af$ is known as the \textbf{gradient} of~$f$. It
+has a ``down'' index to indicate that it is, in fact, an element
+of~$V^*$.
 
-It is a common misconception to believe that the gradient is a vector,
-and that it “points” in the direction of steepest descent. It is
-rather a dual vector, not a vector, and so does not determine a
-direction away from~$x^a$.
+It is a common misconception to imagine that the gradient is a vector,
+and that it ``points'' in the direction of greatest increase
+in~$f$. But it is, rather, a dual vector and so does not determine a
+direction away from~$p$.
 
-\subsection{Solution by setting the gradient to zero}
+\subsection{Minimisation of a function on a vector space}
 
-A condition that some value of $x^a$ minimises a function is that the
-directional derivative of the function is zero at $x^a$ along all
-possible directions. That is, for all $\delta^a$, a necessary condition for
-a minimum is $\delta^a(\nabla_a f)=0$. Since this must be true for \emph{every}
+A necessary condition that $f(p)$ is a minimum at $p^*$ is that its
+directional derivative, in any direction, is zero there. That is, for
+all $\delta^a$, it must be the case that, evaluated at $p^*$,
+$\delta^a(\nabla_a f)=0$. Since this must be true for \emph{every}
 $\delta^a$, it follows that a necessary condition for a minimum is
 \begin{equation*}
-  \nabla_a f = \bzero \quad\text{(evaluated at $x^a = x^a_\text{min}$)}.
+  \nabla_a f = \bzero.
 \end{equation*}
 
-To apply this idea to the original question, we need to compute the
-gradient of the function defined in  
-eq.~\eqref{eq:quadr-vect}, we need to 
+Here is a practical example: the multivariate equivalent of the
+quadratic. Let $\alpha\in\setR$ be a number; $\beta_a\in V^*$ a dual vector; and
+$\Gamma_{ab}$ a symmetric, bilinear form.\sidenote{A bilinear form is an
+  element of $\mathcal{L}(V,V^*)$. Equivalently, it is an element
+  of~$V^*\otimes V^*$. Equivalently, it is an element of
+  $\mathcal{L}(V\otimes V,\setR)$.} We shall attempt to find the minimiser of:
+\begin{equation}
+  f(v^a) = \alpha + \beta_a v^a + \Gamma_{ab}v^av^b.
+\label{eq:quadratic-form}
+\end{equation}
 
-
-.  Let $\delta^a$ be any vector. Clearly, for
-$\alpha$ a constant, $\partial_\delta \alpha=0$. Thus $\nabla_a \alpha=\bzero$.
-
-Let $w_a$ be a dual vector. We have
+To find the minimiser, we seek a point where the directional
+derivative is zero in any direction. Let $\delta^a$ be any vector. The
+condition for a minimum is
 \begin{equation*}
-  \partial_\delta (w_ax^a) = \frac{d}{d\lambda} w_a(x^a + \lambda \delta^a) = w_a\delta^a.
+  \partial_\delta f = \partial_\delta\bigl(\alpha + \beta_a v^a + \Gamma_{ab}v^av^b\bigr) = 0.
 \end{equation*}
-Thus $\nabla_a (w_b x^b) = w_a$.
+The directional derivative of a sum is the sum of the directional
+derivatives (this follows from the corresponding property of the
+ordinary derivative). $\partial_\delta \alpha = 0$ because the derivative of a constant
+is zero. For the next term, we have
+\begin{equation*}
+  \partial_\delta (\beta_av^a) = \frac{d}{d\lambda}\biggm|_{\lambda=0}\beta_a(v^a + \lambda \delta^a) = \beta_a\delta^a.
+\end{equation*}
 
-Now let $Q_{ab}$ be a bilinear form. We have
+Finally, for the bilinear form, we have
 \begin{align*}
-  \partial_\delta (Q_{ab}x^ax^b) &= \frac{d}{d\lambda}\bigm|_{\lambda=0} Q_{ab}(x^a+\lambda\delta^a)(x^b+\lambda\delta^b) \\
-  &= Q_{ab}(x^a\delta^b + \delta^ax^b) + 2\lambda Q_{ab}\delta^a\delta^b \quad\text{at $\lambda=0$}.
+  \partial_\delta (\Gamma_{ab}v^av^b) &= \frac{d}{d\lambda}\biggm|_{\lambda=0} \Gamma_{ab}(v^a+\lambda\delta^a)(v^b+\lambda\delta^b) \\
+  &= \Gamma_{ab}(v^a\delta^b + \delta^av^b) + 2\lambda \Gamma_{ab}\delta^a\delta^b \quad\text{at $\lambda=0$}.
 \end{align*}
-Evaluating this at $\lambda=0$ gives $\partial_\delta (Q_{ab}x^ax^b)=$
+Evaluating this at $\lambda=0$ gives $\partial_\delta
+(\Gamma_{ab}v^av^b)=\Gamma_{ab}(v^a\delta^b+\delta^av^b)$. Since $\Gamma_{ab}$ is symmetric,
+this is $2\Gamma_{ab}\delta^av^b$.
+
+Thus, in summary:
+\begin{equation*}
+  \partial_\delta f(v^a) = \beta_a \delta^a + 2\Gamma_{ab}\delta^av^b =(\beta_a+2\Gamma_{ab}v^b)\delta^a,
+\end{equation*}
+whence
+\begin{equation*}
+  \nabla_af = \beta_a+2\Gamma_{ab}v^b.
+\end{equation*}
+
+At a minimum, we must have
+$\nabla_af = \beta_a+2\Gamma_{ab}v^b = \bzero$. If $\Gamma$ is invertible, so that
+$\Gamma^{-1}$ exists, we obtain
+\begin{equation*}
+  {(p^*)}^a = -\frac{1}{2}{(\Gamma^{-1})}^{ab}\beta_b.
+\end{equation*}
+(It is also necessary to check that this $p^*$ is a minimum, rather
+than a maximum or point of inflection.)
+
+\subsection{Iterative methods}
+
+Now suppose $f\colon V\to\setR$ is a more general function, not
+necessarily of the form of eq.~\eqref{eq:quadratic-form}. 
+
+\section{Constrained optimsation}
+
+Solve
+\begin{equation*}
+    \label{eq:linear-constraint}
+    v^* = \argmin_{v\in W} f(v)
+\end{equation*}
+where
+\begin{equation*}
+   W=\{w \in V \mid g(w) = 0\}.
+\end{equation*}
+
+We might be tempted to give the condition for a minimum to be
+$\nabla_a f=0$, as before. However, that point may occur at a place that
+does not lie in~$W$. The condition we really want is that $f$ has zero
+gradient ``in any direction that lies within~$W$.'' That is, for any
+$\delta^a$ which ``points only within $W$,'' we should have
+$\partial_\delta f = 0$ at~$v^*$. For $\delta^a$ to ``point within
+$W$'' means that $\delta^a$ is tangent to the level surface
+$g(w) = 0$; in other words, that $g$ remains constant (namely, zero)
+in the direction of~$\delta^a$. In other words, that
+$\partial_\delta g = 0$.\sidealert{tbd: This is a convincing argument, but we have
+  not shown that the condition that $\partial_\delta f = 0$ at $v^*$ for any
+  $\delta^a$ such that $\partial_\delta g = 0$ at $v^*$ implies that
+  $f\rvert_W$ is an extremum there.} 
+
+Now suppose $s_a$ and $t_a$ are dual vectors, having the property that
+$s_av^a = 0 \implies t_av^a=0$ for all $v^a\in V$. It follows that
+$s_a$ and $t_a$ are colinear; that is, that $s_a=\lambda t_a$ for some~$\lambda$. 
+
+
+
+
+
+
+\section{Linear constraints}
+
+Solve (where $f$ is a quadratic form)
+\begin{equation*}
+    \label{eq:linear-constraint}
+    v^* = \argmin_{v\in W} f(v), 
+\end{equation*}
+where
+\begin{equation*}
+    W=\{w^b \in V \mid W^a{}_b w^b = q^a\}
+\end{equation*}
+
+
+
+
+
+
+% \subsection{A multi-dimensional quadratic}
+
+% Now that we have the appropriate notation we can state the problem of
+% this section.
+
+% \emph{Problem:} Fix a finite-dimensional, real vector space,~$V$. Let
+% $\alpha\in\setR$ be a number, $w_a\in V^*$ a dual vector, and
+% $Q_{ab} \in \mathcal{L}(V,V^*)$ a symmetric, positive-definite, bilinear
+% form. Find 
+% \begin{equation}
+% x^a_\text{min} = \argmin_{x^a\in V} f(x^a),\quad\text{where $f(x^a) = \alpha + w_ax^a + Q_{ab}x^ax^b$}.
+% \label{eq:quadr-vect}
+% \end{equation}
+
+% In some sense, this is the simplest, non-trivial, function we might
+% have attempted to minimise. We can't simplify much futher: a constant
+% function attains its minimum everywhere; and a linear function has no
+% minimum value.
+
+% Notice that even to say what we mean by a “multidimensional
+% quadratric” we had to use the vector space structure of $V$ (in order
+% to introduce $w_a$ and $Q_{ab}$).
+
+% \subsection{Solution by completing the square}
+
+% \emph{Solution} (to eq.~\eqref{eq:quadr-vect}):
+% \begin{equation}
+%   x^a_\text{min} = -\frac{1}{2} {(Q^{-1})}^{ab}w_b.
+% \label{eq:sol-quadr-vect}
+% \end{equation}
+
+% Before explaining why this is the solution, we describe what it
+% means. What is the term ${(Q^{-1})}^{ab}$? Ignoring the indices for a
+% minute, it is the inverse of the map $Q$. Since
+% $Q\in\mathcal{L}(V, V^*)$, the inverse, $Q^{-1}$, must be an element of
+% $\mathcal{L}(V^*, V)$ (that is, it goes the other way). In other words,
+% $Q^{-1}$ acts on an element of the dual space, such as $w_a$, to
+% produce an element of~$V$. In abstract index notation, that is
+% expressed by writing $Q^{-1}$ with two raised indices. To say that
+% $Q^{-1}$ is the inverse of $Q$ is to say that
+% ${(Q^{-1})}^{ac}Q_{cb} = \id^a{}_b$, where, on the right, $\id^a{}_b$
+% is the identity operator on~$V$.
+
+% Why is this the solution? By analogy with the one-dimensional case, we
+% might try to “complete the square,” by rewriting $f(x^a)$ as:
+% \begin{equation*}
+%   f(x^a) = Q_{ab}\Bigl(x^a +
+%   \frac{1}{2}{(Q^{-1})}^{ac}w_c\Bigr)\Bigl(x^b +
+%   \frac{1}{2}{(Q^{-1})}^{bc}w_c\Bigr) - \frac{1}{4}w_aw_b{(Q^{-1})}^{ab}.
+% \end{equation*}
+% The right-hand side looks rather complicated. However, the two terms
+% in large parentheses are in fact the same vector. That is to say, if
+% we set
+% \begin{equation*}
+%   \xi^a = x^a +  \frac{1}{2}{(Q^{-1})}^{ac}w_c,
+% \end{equation*}
+% then $f$ becomes the much simpler-looking
+% \begin{equation*}
+%   f(x^a) = Q_{ab}\xi^a\xi^b + \text{a constant}.
+% \end{equation*}
+% Now, noting that $Q_{ab}$ is positive-definite\,---\,meaning that
+% $Q_{ab}\xi^a\xi^b >0$ unless $\xi^a=\bzero$\,---\,we conclude that the condition
+% for $x^a$ to be a minimiser is that $\xi^a = \bzero$ (the zero vector)
+% from which eq.~\eqref{eq:sol-quadr-vect} follows.
+
+% Alternatively, we might try taking the derivative again. For that, we
+% need to understand how to take derivatives of functions on a vector
+% space.
+
 
 
 
