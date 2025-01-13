@@ -1,0 +1,69 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{beton}
+\usepackage{eulervm}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{microtype}
+\usepackage{ellipsis}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{hyperref}
+% \usepackage{siunitx}
+%
+%\usepackage[medium, compact]{titlesec}
+%\usepackage[inline]{asymptote}
+%\usepackage{tikz-cd}
+\DeclareFontSeriesDefault[rm]{bf}{sbc}
+% \usepackage{amssymb}
+%% Turing grid is 21 columns (of 1cm if we are using A4)
+%% Usually 4 "big columns", each of 4 text cols plus 1 gutter col;
+%% plus an additional gutter on the left.
+\usepackage[top=2.82cm, bottom=2.82cm, left=1cm, textwidth=11cm, marginparsep=1cm, marginparwidth=7cm]{geometry}
+\usepackage[Ragged, size=footnote, shape=up]{sidenotesplus}
+%% We used to use a two-column layout
+% \setlength{\columnsep}{1cm}
+\title{Automatic differentiation}
+\author{James Geddes}
+\date{\today}
+%%
+\newcommand{\eg}{\emph{Example:}}
+\newcommand{\ie}{\emph{i.e.}}
+\newcommand{\isdef}{\mathrel{\stackrel{\text{def}}{=}}}
+\newcommand{\set}[1]{\boldmath{#1}}
+\newcommand{\setR}{\set{R}}
+\hyphenation{anti-sym-met-ric}
+%%
+% \usepackage[backend=biber]{biblatex}
+% \addbibresource{../cyberdefence.bib}
+% \DefineBibliographyStrings{english}{
+%   andothers = {\mkbibemph{et\addabbrvspace{al}\adddot}}
+% }
+%%
+\begin{document}
+\maketitle
+
+Here is an example of a certain class of problems. Suppose we are
+given functions $f\colon \setR^3 \to \setR$,
+$g\colon \setR^2\to\setR$, and $h\colon \setR\to\setR$, in such a way that
+we are able to evaluate these functions and their derivatives at any
+point. In addition, suppose we are given some expression involving
+composititions of these functions; for example,
+\begin{equation}
+  F(x, y, z) = f(x, g(y, z), h(z)).
+\label{eq:example}\end{equation}
+The problem is to evaluate $F$ and \emph{its} derivatives at some
+point.
+
+What does it mean to say that we are ``given'' some expression? That
+is, what is the meaning of eq.~\eqref{eq:example}? It is a tree, shown
+on the right in figure~\ref{fig:example-as-tree}.
+\begin{marginfigure}
+
+\end{marginfigure}
+
+
+
+\end{document}

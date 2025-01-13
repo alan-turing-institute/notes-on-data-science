@@ -664,7 +664,38 @@ than a maximum or point of inflection.)
 Now suppose $f\colon V\to\setR$ is a more general function, not
 necessarily of the form of eq.~\eqref{eq:quadratic-form}. 
 
-\section{Constrained optimsation}
+\section{Constrained optimisation}
+\begin{marginfigure}
+  \centering
+  \includegraphics{contour-annotated.pdf}
+  \margincaption{Contour plot of two functions, $f$ (in blue) and $g$
+    (in orange), on~$\setR^2$. The goal is to find the minimiser of
+    $f$ subject to the constraint that $g(x) = 0$ (highlighted).  Note
+    that $f$ has a global minimum at $(0,0)$ but that is not on the
+    constraint line.  The orange lines show the lines of constant
+    $g(x)$, with the ``constraint surface'' $g(x)=0$ (here just a
+    line) highlighted. The point $p^*$ is the minimiser of $f$ subject
+    to the constraint $g(x)=0$. The vector $\mathbold{v}$ (thought of
+    as extending from $p^*$) lies within the constraint surface and
+    also has the property that $\partial_\mathbold{v} f = 0$
+    at~$p^*$.\label{fig:contour}}
+\end{marginfigure}
+
+
+\section{Linear constraints}
+
+
+Solve (where $f$ is a quadratic form)
+\begin{equation*}
+    \label{eq:linear-constraint}
+    v^* = \argmin_{v\in W} f(v), 
+\end{equation*}
+where
+\begin{equation*}
+    W=\{w^b \in V \mid W^a{}_b w^b = q^a\}
+\end{equation*}
+
+
 
 Solve
 \begin{equation*}
@@ -678,7 +709,10 @@ where
 
 We might be tempted to give the condition for a minimum to be
 $\nabla_a f=0$, as before. However, that point may occur at a place that
-does not lie in~$W$. The condition we really want is that $f$ has zero
+does not lie in~$W$. 
+
+
+The condition we really want is that $f$ has zero
 gradient ``in any direction that lies within~$W$.'' That is, for any
 $\delta^a$ which ``points only within $W$,'' we should have
 $\partial_\delta f = 0$ at~$v^*$. For $\delta^a$ to ``point within
@@ -697,19 +731,6 @@ $s_a$ and $t_a$ are colinear; that is, that $s_a=\lambda t_a$ for some~$\lambda$
 
 
 
-
-
-\section{Linear constraints}
-
-Solve (where $f$ is a quadratic form)
-\begin{equation*}
-    \label{eq:linear-constraint}
-    v^* = \argmin_{v\in W} f(v), 
-\end{equation*}
-where
-\begin{equation*}
-    W=\{w^b \in V \mid W^a{}_b w^b = q^a\}
-\end{equation*}
 
 
 
