@@ -168,17 +168,40 @@ and recursively computes the derivatives of each node:
 
 The complete set of derivatives of $F$ can thus be computed in a
 single, depth-first traversal of the tree. Say the expression graph
-has $V$ nodes and $E$ edges. The cost of the original expression is
-$O(V)$, since one performs one function evaluation for each node.
-What is the computational cost of the derivative calculation?
+has $V$ nodes and $E$ edges; and there are $N$ variables. The cost of
+the original expression is $O(V)$, since one performs one function
+evaluation for each node. What is the computational cost of the
+calculation of the derivatives?
 
-Suppose we are compting the derivative with respect to some
-variable,~$x$. Consider some node, $f$, encountered during the
-calculation, having $n$ arguments. We must evaluate $f$, as before,
-and in addition each of its derivatives,~$\partial_i f$ (for
-$i=1,\dotsc,n$). Then there are $n$ multiplications of the
-$\partial_i f$ with the $x$-derivative of the $i$-th argument (as well as the
-sum).
+Suppose we are computing the derivative with respect to~$x$. Consider
+some node, $f$, encountered during the calculation, having $n$
+arguments. We must evaluate $f$, as before, and, in addition, each of
+its derivatives,~$\partial_i f$ (for $i=1,\dotsc,n$). Then there are
+$n$ multiplications of the $\partial_i f$ with the $x$-derivatives of the
+arguments (as well as the sum).
+
+Overall, the total number of arguments over all nodes is~$E$. So we
+have a cost of $O(V+E)$ for the evaluation of the function and its
+derivatives, along with $O(V+E)$ multiplications. That was to
+calculate the derivative with respect to a single variable. The
+calculation of the $f$s and the $\partial_i f$s can be done once, but the
+multiplications must be repeated for each variable and thus are
+$O(N(V+E))$.
+
+The above approach is called ``forward mode automatic
+differentiation.'' Roughly, the story of forward mode automatic
+differentiation is as follows: ``for each node, compute the derivative
+with respect to $x$, and propagate this up towards the root of the
+expression.''
+
+However, it turns out that there is an alternative approach. The
+alternative approach, known as ``reverse mode,'' is ``starting at the
+root of the expression tree, for each node, compute the $\partial_i$, the
+derivative with respect to that node's arguments, and propagate these
+downwards towards the leaves.'' It is necessary to precompute the
+values of the nodes beforehand (in order to be able to evaluate each
+of the $\partial_i f$). The propagation step is then $O(E)$ (in
+multiplications). 
 
 
 
@@ -188,5 +211,12 @@ sum).
 
 
 
+
+\section{Outline of talk}
+
+\begin{enumerate}
+\item Composition of functions of a single variable.
+\item 
+\end{enumerate}
 
 \end{document}
