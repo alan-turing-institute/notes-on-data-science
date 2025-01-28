@@ -10,6 +10,9 @@
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{color}
+%%
+\usepackage{minted}
+%%
 \usepackage[hidelinks]{hyperref}
 % \usepackage{siunitx}
 %
@@ -45,6 +48,73 @@
 \begin{document}
 \maketitle
 
+Automatic differentiation is the process of transforming a program
+that computes a function into a program that computes the derivative
+of that function. Note that the input is a \emph{program}, not a
+mathematical expression.
+
+It may be that, in a particular system, only a restricted set of
+programming constructs are allowed as inputs to the automatic
+differentiation system. For example, one may disallow unbounded loops,
+or general recursion, or higher-order functions, and so on. When all
+programs are allowed, one sometimes refers to the process as
+``differentiable programming.''
+
+In order to transform a program, we had better be able to represent
+that program in some way. Here is a simple example. Consider the
+function
+\begin{equation}
+  \label{eq:gaussian-example}
+  G(x) = e^{-x^2/2}.
+\end{equation}
+Suppose we were writing a programming language. How might we represent
+this function as a program, which we could execute?
+
+\begin{marginfigure}
+  \centering
+  \includegraphics[width=0.8\marginparwidth]{images/expr-gauss.pdf}
+  \caption{A tree, representing the expression $G(x) =
+    \exp(-x^2/2)$. The functions ``$\exp$'' and ``$-$'' (additive
+    inverse) take a single argument; the functions ``$expt$'' (``to
+    the power'') and ``$/$'' (divide) take two
+    arguments.\label{fig:expression-tree-gaussian}}
+\end{marginfigure}
+One way is to design a programming language to have a surface syntax
+that is similar to the mathematical form. For example, in Rhombus one
+would write the function definition as:\footnote{Rhombus is a language
+  that is almost, but not quite, entirely unlike Python.}
+\begin{minted}[xleftmargin=\parindent]{ocaml}
+fun G(x):
+  math.exp(-x**2/2)
+\end{minted}
+However, the expression \mintinline{ocaml}{math.exp(-x**2)} is
+complicated: as well as a numeric constant and a variable, it contains
+a function, an infix operator, and a prefix operator. The first thing
+the Python interpreter will do is to convert this expression into a
+uniform representation.
+
+Each part of the expression is either:
+\begin{enumerate}
+\item a constant (like \mintinline{ocaml}{2});
+\item a variable reference (like \mintinline{ocaml}{x}); or 
+\item a function applied to a list of expression (the arguments of the
+  function).
+\end{enumerate}
+That is, an expression is naturally represented as a \emph{tree}, as
+shown in figure~\ref{fig:expression-tree-gaussian}. Here, constants or
+variables form the leaves of the tree, and functions are the nodes of
+the tree where the children of the node are the arguments to the
+function.
+
+
+
+
+
+
+
+
+
+\end{document}
 Suppose we are given functions $f\colon \setR^3 \to \setR$,
 $g\colon \setR^2\to\setR$, and $h\colon \setR\to\setR$, in such a way that
 we are able to evaluate these functions and their derivatives at any
@@ -220,3 +290,7 @@ multiplications).
 \end{enumerate}
 
 \end{document}
+
+% Local Variables:
+% TeX-command-extra-options: "-shell-escape"
+% End:
