@@ -39,6 +39,8 @@
 \newcommand{\setR}{\set{R}}
 \hyphenation{anti-sym-met-ric}
 %%
+\newcommand{\cd}[1]{\mintinline{python}{#1}}
+%%
 % \usepackage[backend=biber]{biblatex}
 % \addbibresource{../cyberdefence.bib}
 % \DefineBibliographyStrings{english}{
@@ -50,13 +52,19 @@
 
 \section{Introduction}
 
+
+\begin{marginfigure}<0pt>
+  \centering
+  \includegraphics[width=\marginparwidth]{images/gaussian-plot.pdf}
+  \caption{A plot of $\exp(-x^2/2)$.\label{fig:gaussian-plot}}
+\end{marginfigure}
 Automatic differentiation is the process of programmatically
-transforming a program to compute some function into a program that
+transforming a program that computes some function into a program that
 computes the derivative of that function. Note that the input to
 automatic differentiation is a \emph{program}, not a mathematical
 expression.
 
-It may be that, in a particular application, only a restricted set of
+It may be, in a particular application, that only a restricted set of
 programming constructs are allowed as inputs to the automatic
 differentiation system. For example, one may disallow unbounded loops,
 or general recursion, or higher-order functions, and so on. When all
@@ -66,104 +74,115 @@ programs are allowed, one sometimes refers to the process as
 \section{Representing programs}
 
 In order to programmatically transform a program, we had better be
-able to \emph{represent} that program in some way. Consider the
-function
+able to \emph{represent} that program as data. Consider the function
 \begin{equation}
   \label{eq:gaussian-example}
   G(x) = e^{-x^2/2}.
 \end{equation}
-We might implement this program in Rhombus as:\footnote{Rhombus is
-  a language that is almost, but not quite, entirely unlike Python.}
+We might implement this function as a program in Rhombus
+as follows:\footnote{Rhombus is a language that is almost, but not quite,
+  entirely unlike Python.}
 \begin{minted}[xleftmargin=\parindent]{ocaml}
-fun G(x):
+fun gaussian(x):
   math.exp(-x**2/2)
 \end{minted}
+In order to operate \emph{on} this program we will need to represent
+it as a data structure. For now, consider just the expression in the
+body of the procedure definition. We \emph{could} choose to represent
+this expression just as its surface syntax: that is, as the string
+``\cd{math.exp(-x**2/2)}'' (perhaps broken into tokens). However,
+there is a great deal of unnecessary complexity in this
+representation: As well as a numeric constant and a variable, it
+contains a function, an infix operator (with a particular precedence
+and associativity), and a prefix operator (also with a particular
+precedence). The very first thing an interpreter will do is to convert
+expressions like this into a uniform, intermediate representation. It
+will be more convenient to work with this intermediate representation
+directly.
 
-\begin{marginfigure}
-  \centering
-  \includegraphics[width=0.8\marginparwidth]{images/expr-gauss.pdf}
-  \caption{A tree, representing the expression $G(x) =
-    \exp(-x^2/2)$. The functions ``$\exp$'' and ``$-$'' (additive
-    inverse) take a single argument; the functions ``$expt$'' (``to
-    the power'') and ``$/$'' (divide) take two
-    arguments.\label{fig:expression-tree-gaussian}}
+\begin{marginfigure}<0pt>
+  \footnotesize
+\begin{minted}{python}
+#lang rhombus
+
+class Expr():
+  nonfinal
+
+class Lit(val :: Any):
+  extends Expr
+
+class Var(name :: String):
+  extends Expr
+
+class App(name :: String,
+          args :: List.of(Expr)):
+  extends Expr
+\end{minted}
+  \caption{Rhombus class definitions for the ``expression''
+    type. These definitions introduce classes for literals, variables,
+    and procedure applications, all of which are subtypes of
+    expression (indicated by the option ``\cd{extends Expr}.'' The
+    operator ``\cd{::}'' introduces a type annotation.\label{fig:class-defs}}
 \end{marginfigure}
-We could choose to represent this program just as the surface syntax;
-that is, as the string ``\mintinline{ocaml}{math.exp(-x**2/2)},''
-perhaps tokenised. However, there is a great deal of unnecessary
-complexity in this representation: As well as a numeric constant and a
-variable, it contains a function, an infix operator, and a prefix
-operator. Indeed, the very first thing an interpreter will do is to
-convert this expression into a more uniform, intermediate
-representation, and it will be more convenient to work with this
-intermediate representation directly.
-
-The natural representation of an expression is a \emph{tree}, as shown
-in figure~\ref{fig:expression-tree-gaussian}. Here, constants or
-variables form the leaves of the tree, and functions are the nodes of
-the tree where the children of the node are the arguments to the
-function.
-
-To evaluate such an expression (in an environment where the variables
-are bound to some values) 
-
-
-Each part of the expression is either:
+In general, the meaning of ``expression'' is given by a recursive
+definition. An \emph{expression} is either
 \begin{enumerate}
-\item a constant (like \mintinline{ocaml}{2});
-\item a variable reference (like \mintinline{ocaml}{x}); or 
-\item a function applied to a list of expression (the arguments of the
-  function).
+\item A \emph{literal} (e.g., the number~2). Given a suitable class
+  definition (see figure~\ref{fig:class-defs}) we shall represent
+  literal 2 in Rhombus as \cd{Lit(2)}.
+\item A \emph{variable} (e.g., $x$). We shall represent the variable
+  $x$ in Rhombus as \cd{Var("x")}, where the name of the variable is
+  given as a string.
+\item A \emph{procedure application} (e.g, $-1$, or $x + 2$, or
+  $\exp(3)$). Note that procedure applications cover operators as well
+  as what one ordinarily thinks of as functions. We shall represent
+  these in Rhombus as, say \cd{App("+", [Lit(1), Lit(2)])}: the name
+  of the procedure (as a string) together with a list of
+  arguments. The definition is recursive because the arguments must
+  themselves be one of the three kinds of expression.
 \end{enumerate}
 
+A suitable set of class definitions for these types is shown in
+figure~\ref{fig:class-defs}. Written as a data structure, using those
+classes, the expression of the example looks like this:
+\begin{marginfigure}<0pt>
+  \centering
+  \includegraphics{images/tree.pdf}
+  \caption{A tree, representing the expression denoted by
+    ``\cd{gaussian}'' in the main text.\label{fig:expression-tree-gaussian}}
+\end{marginfigure}
+\begin{minted}{python}
+def gaussian:
+  App("exp",
+      [App("-",
+       [App("/",
+        [App("**", [Var("x"), Lit(2)]),
+         Lit(2)])])])
+\end{minted}
+Figure~\ref{fig:expression-tree-gaussian} shows the same data
+structure as a tree, which is perhaps slightly more
+readable as the leaves are simply written as their textual
+representations.
 
+This intermediate representation (of a program in the language) is
+sometimes known as a ``parse tree,'' or ``syntax tree,'' or
+``expression tree.'' It is more convenient than the surface syntax to
+when used as input to a program-transforming program but it is not
+very convenient to read and write directly. One might hope for a
+serialisable format for a parse tree that is both easy for the
+computer to parse and easy for people to read and write. We will come
+back to this point later.
 
-
+Notice what is missing from the above. We have developed a data
+structure for expressions but not for general programs. We don't have
+a way to express bindings, for example (assigment of values to
+variables), nor can we express function definitions.
 
 
 
 
 
 \end{document}
-Suppose we are given functions $f\colon \setR^3 \to \setR$,
-$g\colon \setR^2\to\setR$, and $h\colon \setR\to\setR$, in such a way that
-we are able to evaluate these functions and their derivatives at any
-value of their arguments. In addition, suppose we are given some
-expression involving composititions of these functions; for example,
-\begin{equation}
-  F(x, y, z) = f(x, g(y, z), h(z)).
-\label{eq:example}\end{equation}
-The problem is to evaluate $F$ and \emph{its} derivatives at some
-point.
-
-What is an expression? It is either a variable, like $x$, or the name
-of a function together with a list of arguments, which are also
-expressions. That is, it is a tree, shown on the right in
-figure~\ref{fig:expression}.
-\begin{marginfigure}
-  \centering
-  \includegraphics{images/expression.pdf}
-  \caption{A tree, representing the expression $f(x, g(y, z), h(z))$.\label{fig:expression}}
-\end{marginfigure}
-An expression is either a \emph{variable}, like $x$, or the
-\emph{application} of a function to its arguments, which are also
-expressions. Note that there is a distinction, in
-eq.~\eqref{eq:example}, between the names of functions (like $f$) and
-the names of variables (like $x$). The function names are supposed to
-refer to functions that are given to us in some way. The variable
-names are merely placeholders to indicate which argument of $F$ is
-being referred to. That is, the meaning of eq.~\eqref{eq:example}
-would be unchanged if $x$ were replaced by $u$ everywhere; but its
-meaning would be different if $f$ were replaced by $m$ everywhere.
-
-Evaluating an expression is reasonably straightforward. To evaluate
-an expression at a particular value of the variables:
-\begin{enumerate}
-\item If the expression is a variable, its value is the value of that
-  variable;
-\item Otherwise, the expression is a function application. Evaluate
-  the arguments and then apply the function. 
-\end{enumerate}
 
 What about the derivative? For example, we may wish to evaluate
 \begin{equation}
