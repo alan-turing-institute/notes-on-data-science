@@ -86,13 +86,13 @@ as follows:\footnote{Rhombus is a language that is almost, but not quite,
 fun gaussian(x):
   math.exp(-x**2/2)
 \end{minted}
-In order to operate \emph{on} this program we will need to represent
-it as a data structure. For now, consider just the expression in the
-body of the procedure definition. We \emph{could} choose to represent
-this expression just as its surface syntax: that is, as the string
-``\cd{math.exp(-x**2/2)}'' (perhaps broken into tokens). However,
-there is a great deal of unnecessary complexity in this
-representation: As well as a numeric constant and a variable, it
+However, in order to operate \emph{on} this program, we still need to
+represent it as a data structure. For now, consider just the
+expression in the body of the procedure definition. We \emph{could}
+choose to represent this expression just as its surface syntax: that
+is, as the string ``\cd{math.exp(-x**2/2)}'' (perhaps broken into
+tokens). However, there is a great deal of unnecessary complexity in
+this representation: As well as a numeric constant and a variable, it
 contains a function, an infix operator (with a particular precedence
 and associativity), and a prefix operator (also with a particular
 precedence). The very first thing an interpreter will do is to convert
@@ -127,14 +127,14 @@ class App(name :: String,
 In general, the meaning of ``expression'' is given by a recursive
 definition. An \emph{expression} is either
 \begin{enumerate}
-\item A \emph{literal} (e.g., the number~2). Given a suitable class
+\item A \emph{literal} (e.g., \cd{2}). Given a suitable class
   definition (see figure~\ref{fig:class-defs}) we shall represent
   literal 2 in Rhombus as \cd{Lit(2)}.
-\item A \emph{variable} (e.g., $x$). We shall represent the variable
+\item A \emph{variable} (e.g., \cd{x}). We shall represent the variable
   $x$ in Rhombus as \cd{Var("x")}, where the name of the variable is
   given as a string.
-\item A \emph{procedure application} (e.g, $-1$, or $x + 2$, or
-  $\exp(3)$). Note that procedure applications cover operators as well
+\item A \emph{procedure application} (e.g, \cd{-1}, or \cd{x + 2}, or
+  \cd{exp(3)}). Note that procedure applications cover operators as well
   as what one ordinarily thinks of as functions. We shall represent
   these in Rhombus as, say \cd{App("+", [Lit(1), Lit(2)])}: the name
   of the procedure (as a string) together with a list of
@@ -164,19 +164,35 @@ structure as a tree, which is perhaps slightly more
 readable as the leaves are simply written as their textual
 representations.
 
-This intermediate representation (of a program in the language) is
-sometimes known as a ``parse tree,'' or ``syntax tree,'' or
+This intermediate representation (of a program, as a data structure)
+is sometimes known as a ``parse tree,'' or ``syntax tree,'' or
 ``expression tree.'' It is more convenient than the surface syntax to
-when used as input to a program-transforming program but it is not
-very convenient to read and write directly. One might hope for a
-serialisable format for a parse tree that is both easy for the
-computer to parse and easy for people to read and write. We will come
-back to this point later.
+to use as input to a program-transforming program but it is not very
+convenient to read and write directly. One might hope for a
+serialisable format that is both easy for the computer to parse
+\emph{and} easy for people to read and write. We will come back to
+this point later.
 
 Notice what is missing from the above. We have developed a data
 structure for expressions but not for general programs. We don't have
-a way to express bindings, for example (assigment of values to
-variables), nor can we express function definitions.
+a way to express bindings, for example, nor can we express function
+definitions.
+
+However, we can certainly represent some interesting mathematical
+functions, such as $G(x)$, as a data struction, such as
+\cd{gaussian}. Our next task is to be able to \emph{evaluate} these
+expressions. That is, we should write a program which takes, as input,
+an object of type ``\cd{Expr}'' and produces a value. Here is the
+general rule:
+\begin{enumerate}
+\item The value of a literal is just that literal;
+\item To evaluate a variable, look up the value of that variable;
+\item To evaluate a procedure application, first evaluate the
+  arguments (this is the recursive step), then look up the function
+  in a set of ``built-in functions,'' then apply the function to the
+  values of the arguments.
+\end{enumerate}
+
 
 
 
