@@ -1,0 +1,38 @@
+#lang rhombus
+
+export:
+  gaussian
+  Expr
+  Lit
+  Var
+  App
+
+/*
+An expression is either
+ - a literal;
+ - a variable; or
+ - a procedure application of a procedure to a list of arguments
+*/
+
+class Expr():
+  nonfinal
+
+class Lit(val :: Any):
+  extends Expr
+
+class Var(name :: String):
+  extends Expr
+
+class App(name :: String,
+          args :: List.of(Expr)):
+  extends Expr
+
+
+def gaussian:
+  App("exp",
+      [App("-",
+           [App("/",
+                [App("**", [Var("x"), Lit(2)]),
+                 Lit(2)])
+            ])
+       ])
