@@ -86,6 +86,29 @@ as follows:\footnote{Rhombus is a language that is almost, but not quite,
 fun gaussian(x):
   math.exp(-x**2/2)
 \end{minted}
+\begin{marginfigure}\footnotesize
+  Expressions follow a familiar syntax:
+\begin{minted}{python}
+1 + 2 * 3
+\end{minted}
+  Definitions of variables use \cd{def} and are immutable by default:
+\begin{minted}{python}
+def x = 1 + 2 * 3
+\end{minted}
+  Lists look just like Python lists:
+\begin{minted}{python}
+[1, 2, 3]
+\end{minted}
+  Classes are defined a bit like in Python but with fields specified
+  along with the class name; in simple cases, that avoids the need to
+  muck about with \cd{__init__}.
+\begin{minted}{python}
+class Lit(val)
+def literal_two = Lit(2)
+literal_two.val 
+\end{minted}
+  \caption{Examples of Rhombus syntax.}
+\end{marginfigure}
 However, in order to operate \emph{on} this program, we still need to
 represent it as a data structure. For now, consider just the
 expression in the body of the procedure definition. We \emph{could}
@@ -121,7 +144,7 @@ class App(name :: String,
   \caption{Rhombus class definitions for the ``expression''
     type. These definitions introduce classes for literals, variables,
     and procedure applications, all of which are subtypes of
-    expression (indicated by the option ``\cd{extends Expr}.'' The
+    expression (indicated by the option ``\cd{extends Expr}''). The
     operator ``\cd{::}'' introduces a type annotation.\label{fig:class-defs}}
 \end{marginfigure}
 In general, the meaning of ``expression'' is given by a recursive
@@ -166,8 +189,8 @@ representations.
 
 This intermediate representation (of a program, as a data structure)
 is sometimes known as a ``parse tree,'' or ``syntax tree,'' or
-``expression tree.'' It is more convenient than the surface syntax to
-to use as input to a program-transforming program but it is not very
+``expression tree.'' It is more convenient than the surface syntax for
+the purpose of programmatic transformation, but it is not very
 convenient to read and write directly. One might hope for a
 serialisable format that is both easy for the computer to parse
 \emph{and} easy for people to read and write. We will come back to
