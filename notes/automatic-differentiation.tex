@@ -119,9 +119,9 @@ this representation: As well as a numeric constant and a variable, it
 contains a function, an infix operator (with a particular precedence
 and associativity), and a prefix operator (also with a particular
 precedence). The very first thing an interpreter will do is to convert
-expressions like this into a uniform, intermediate representation. It
-will be more convenient to work with this intermediate representation
-directly.
+expressions like this into a uniform structure known as an absrtract
+syntax tree. It will be more convenient to work with this intermediate
+representation directly.
 
 \begin{marginfigure}<0pt>
   \footnotesize
@@ -141,33 +141,41 @@ class App(name :: String,
           args :: List.of(Expr)):
   extends Expr
 \end{minted}
-  \caption{Rhombus class definitions for the ``expression''
-    type. These definitions introduce classes for literals, variables,
-    and procedure applications, all of which are subtypes of
-    expression (indicated by the option ``\cd{extends Expr}''). The
-    operator ``\cd{::}'' introduces a type annotation.\label{fig:class-defs}}
+  \caption{Rhombus class definitions for the construction of an
+    abstract syntax tree. These definitions introduce classes for
+    literals, variables, and procedure applications, all of which are
+    subtypes of expression (indicated by the option ``\cd{extends
+      Expr}''). The operator ``\cd{::}'' introduces a type
+    annotation.\label{fig:class-defs}}
 \end{marginfigure}
-In general, the meaning of ``expression'' is given by a recursive
-definition. An \emph{expression} is either
+The body of the \cd{gaussian} function contains literal values (like
+\cd{2}), variables (like \cd{x}) and procedure calls (like
+\cd{exp(...)}).
+
+The body of \cd{gaussian} also contains operators, but these are
+really syntactic sugar for functions. That is, ``\cd{2/3},'' for
+example, is converted by the parser into ``\cd{div(2, 3)}'' before the
+interpreter sees it. Likewise, the expression ``\cd{-3}'' becomes
+``\cd{neg(3)},'' and so on.\footnote{Usually this happens in a way
+  that is not accessible to the programmer but in Python the functions
+  corresponding to operators \emph{are} visible: they are things like
+  ``\cd{__add__}''.}
+
+Altogether, these elements form an expression. The abstract syntax
+tree representation of an expression is constructed from data types
+representing each of these elements. That is, an expression is either:
 \begin{enumerate}
-\item A \emph{literal} (e.g., \cd{2}). Given a suitable class
-  definition (see figure~\ref{fig:class-defs}) we shall represent
-  literal 2 in Rhombus as \cd{Lit(2)}.
-\item A \emph{variable} (e.g., \cd{x}). We shall represent the variable
-  $x$ in Rhombus as \cd{Var("x")}, where the name of the variable is
-  given as a string.
-\item A \emph{procedure application} (e.g, \cd{-1}, or \cd{x + 2}, or
-  \cd{exp(3)}). Note that procedure applications cover operators as well
-  as what one ordinarily thinks of as functions. We shall represent
-  these in Rhombus as, say \cd{App("+", [Lit(1), Lit(2)])}: the name
-  of the procedure (as a string) together with a list of
-  arguments. The definition is recursive because the arguments must
-  themselves be one of the three kinds of expression.
+\item A literal, \cd{Lit(val)}, where \cd{val} is a value;
+\item A variable, \cd{Var(name)}, where \cd{name} is a string; 
+\item A procedure application, \cd{App(name, args)}, where \cd{name}
+  is a string and \cd{args} is a list of expressions.
 \end{enumerate}
+The definition of expression is recursive because, in a procedure
+call, the arguments are themselves expressions.
 
 A suitable set of class definitions for these types is shown in
-figure~\ref{fig:class-defs}. Written as a data structure, using those
-classes, the expression of the example looks like this:
+figure~\ref{fig:class-defs}. Using these classes, the abstract syntax
+tree for the body of \cd{gaussian} looks like this:
 \begin{marginfigure}<0pt>
   \centering
   \includegraphics{images/tree.pdf}
@@ -177,9 +185,9 @@ classes, the expression of the example looks like this:
 \begin{minted}{python}
 def gaussian:
   App("exp",
-      [App("-",
-       [App("/",
-        [App("**", [Var("x"), Lit(2)]),
+      [App("neg",
+       [App("div",
+        [App("pow", [Var("x"), Lit(2)]),
          Lit(2)])])])
 \end{minted}
 Figure~\ref{fig:expression-tree-gaussian} shows the same data
@@ -187,35 +195,40 @@ structure as a tree, which is perhaps slightly more
 readable as the leaves are simply written as their textual
 representations.
 
-This intermediate representation (of a program, as a data structure)
-is sometimes known as a ``parse tree,'' or ``syntax tree,'' or
-``expression tree.'' It is more convenient than the surface syntax for
-the purpose of programmatic transformation, but it is not very
-convenient to read and write directly. One might hope for a
+The abstract syntax tree is more convenient than the surface syntax
+for the purpose of programmatic transformation; that is why
+the first step of a compiler or interpreter is to convert
+
+converstion , but it is not very
+convenient to read and write directly. (One might hope for a
 serialisable format that is both easy for the computer to parse
 \emph{and} easy for people to read and write. We will come back to
-this point later.
+this point later.)
 
 Notice what is missing from the above. We have developed a data
 structure for expressions but not for general programs. We don't have
 a way to express bindings, for example, nor can we express function
-definitions.
+definitions. However, we can certainly represent \emph{some}
+interesting mathematical functions, such as $G(x)$, as a data
+struction. Before trying to differentiate these expressions we should
+probably try \emph{evaluate} them. That is, we should write a program
+which takes, as input, an object of type ``\cd{Expr}'' and produces a
+value.
 
-However, we can certainly represent some interesting mathematical
-functions, such as $G(x)$, as a data struction, such as
-\cd{gaussian}. Our next task is to be able to \emph{evaluate} these
-expressions. That is, we should write a program which takes, as input,
-an object of type ``\cd{Expr}'' and produces a value. Here is the
-general rule:
+Here are the general rules:
 \begin{enumerate}
 \item The value of a literal is just that literal;
-\item To evaluate a variable, look up the value of that variable;
+\item To evaluate a variable, look up the value of that variable;\label{item:eval-var}
 \item To evaluate a procedure application, first evaluate the
   arguments (this is the recursive step), then look up the function
   in a set of ``built-in functions,'' then apply the function to the
-  values of the arguments.
+  values of the arguments.\label{item:eval-app}
 \end{enumerate}
 
+Rule (\ref{item:eval-var}) implies that we will need some sort of
+environment containing a mapping from variables to values. Rule
+(\ref{item:eval-app}) implies we will need something similar to map
+  the names of built-in functions to actual functions.
 
 
 

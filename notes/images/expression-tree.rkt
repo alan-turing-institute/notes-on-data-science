@@ -47,7 +47,7 @@
    (write-bytes
     (convert 
      (naive-layered 
-      (expr '(exp (- (/ (** x 2) 2))))
+      (expr '(exp (neg (div (pow x 2) 2))))
       #:x-spacing 5)
      'pdf-bytes))
    )
