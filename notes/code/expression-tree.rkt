@@ -61,6 +61,15 @@
     'pdf-bytes)))
    #:exists 'replace)
 
+(with-output-to-file "dgaussian-tree.pdf"
+  (thunk
+   (write-bytes
+    (convert 
+     (naive-layered 
+      (expr dgaussian_expr)
+      #:x-spacing 5)
+    'pdf-bytes)))
+   #:exists 'replace)
 
 (naive-layered 
       (expr dgaussian_expr)
@@ -72,5 +81,8 @@
 ;; (plot-file (function gaussian -3 3 #:y-min 0 #:label "y = gaussian(x)")
 ;;            "gaussian-plot.pdf")
 
-(plot (list (axes) (function dg -3 3 #:y-min -1 #:y-max 1 #:label "y = d gaussian / dx")))
+(plot-file (list (axes)
+                 (function dg -3 3 #:y-min -1 #:y-max 1 #:label "y = d gaussian / dx"))
+           "dgaussian-plot.pdf")
+
 
