@@ -1,0 +1,127 @@
+#lang rhombus
+
+export:
+  gaussian_expr
+
+/*
+An expression is either
+ - a literal;
+ - a variable; or
+ - a procedure application of a procedure to a list of arguments
+*/
+
+class Expr():
+  nonfinal
+
+class Lit(val :: Number):
+  extends Expr
+
+class Var(name :: String):
+  extends Expr
+
+class App(name :: String,
+          args :: List.of(Expr)):
+  extends Expr
+
+// Convert an Expr to a pairlist, so we can export to Racket
+fun pairlist_of_expr(e):
+  match e:
+  | Lit(v): v
+  | Var(s): s
+  | App(p, args):
+      PairList[p, & List.map(args, pairlist_of_expr)]
+
+
+def gaussian:
+  App("exp",
+      [App("neg",
+           [App("div",
+                [App("mul", [Var("x"), Var("x")]),
+                 Lit(2)])
+            ])
+       ])
+
+def gaussian_expr = pairlist_of_expr(gaussian)
+
+def libMaths:
+  {
+    // Arithmetic 
+   "add": fun(x, y): x + y, 
+   "sub": fun(x, y): x - y,
+   "neg": fun(x): -x,
+   "mul": fun(x, y): x * y,
+   "div": fun(x, y): x / y,
+   // Exponential
+   "exp": math.exp
+  }
+
+fun eval(e :: Expr, env :: Map, prims :: Map):
+  match e
+  | Lit(v): 
+      v
+  | Var(s): 
+      env[s]
+  | App(p, args):
+      def arg_vals:
+        args.map(eval(_, env, prims))
+      prims[p](& arg_vals)
+
+// String interpolation with @-notation
+println(@str{gaussian(0) = @eval(gaussian, {"x": 0}, libMaths)})
+
+def libDeriv:
+  {
+    "add": fun(u, v): [Lit(1), Lit(1)],
+    "sub": fun(u, v): [Lit(1), Lit(-1)],
+    "neg": fun(u):    [Lit(-1)],
+    "mul": fun(u, v): [v, u],
+    "div":
+      fun(u, v):
+        [App("div", [Lit(1), v]),
+         App("neg",
+             [App("div",
+                  [u, App("mul",
+                          [v, v])])])],
+    "exp": fun(u):    [App("exp", [u])]
+  }
+
+// reduce + over es
+// es must have at least one element
+fun sum_of_exprs(es):
+  match es
+  | [e]: e
+  | [e, &rest]:
+      App("add",
+          [e, sum_of_exprs(rest)])
+
+fun mul(e1, e2):
+  App("mul", [e1, e2])  
+
+fun deriv(e :: Expr, var :: String, derivs :: Map):
+  match e
+  | Lit(v):
+      Lit(0)
+  | Var(s):
+      if s == var
+      | Lit(1)
+      | Lit(0)
+  | App(p, args):
+      // dps is a list of derivatives 
+      let dps = derivs[p](& args)
+      let des
+        = args.map(deriv(_, var, derivs))
+      Function.map(mul, dps, des)
+        |> sum_of_exprs 
+     
+def dgaussian = deriv(gaussian, "x", libDeriv)
+
+def dgaussian_expr = pairlist_of_expr(dgaussian)
+
+println(@str{dgaussian(0) = @eval(dgaussian, {"x": 0}, libMaths)})
+
+def dg = fun(x): eval(dgaussian, {"x": x}, libMaths)
+
+export:
+  dgaussian_expr
+  dg
+

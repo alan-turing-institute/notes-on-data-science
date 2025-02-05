@@ -7,6 +7,7 @@
          (only-in racket/draw the-color-database)
          plot)
 
+(require "eval.rhm")
 
 (define col-for-app (send the-color-database find-color "dark gray"))
 (define col-for-lit (send the-color-database find-color "blue"))
@@ -26,36 +27,50 @@
 (define (var val)
   (tree-layout #:pict (text-node-pict (symbol->string val) col-for-var)))
 
+#|
 (define (app xs)
   (apply tree-layout
          (tree-edge (tree-layout #:pict (text-node-pict (format "~a" (car xs)) col-for-proc))
                     #:edge-color "gray")
          (map (λ (e) (tree-edge (expr e) #:edge-color "gray")) (cdr xs))
          #:pict (text-node-pict "App" col-for-app)))
+|#
+
+(define (app xs)
+  (apply tree-layout
+         (map (λ (e) (tree-edge (expr e) #:edge-color "gray")) (cdr xs))
+         #:pict (text-node-pict (format "~a" (car xs)) col-for-proc)))
+
 
 ;; -> tree-layout?
-
 (define (expr e)
   (cond
     [(pair? e)   (app e)]
+    [(string? e) (var (string->symbol e))]
     [(symbol? e) (var e)]
     [else        (lit e)]))
 
 
-(with-output-to-file "tree.pdf"
+(with-output-to-file "gaussian-tree.pdf"
   (thunk
    (write-bytes
     (convert 
      (naive-layered 
-      (expr '(exp (neg (div (pow x 2) 2))))
+      (expr gaussian_expr)
       #:x-spacing 5)
-     'pdf-bytes))
-   )
-  #:exists 'replace)
+    'pdf-bytes)))
+   #:exists 'replace)
 
 
-(define (gaussian x)
-  (exp (- (/ (expt x 2) 2))))
+(naive-layered 
+      (expr dgaussian_expr)
+      #:x-spacing 5)
 
-(plot-file (function gaussian -3 3 #:y-min 0 #:label "y = gaussian(x)")
-           "gaussian-plot.pdf")
+;; (define (gaussian x)
+;;   (exp (- (/ (expt x 2) 2))))
+;; 
+;; (plot-file (function gaussian -3 3 #:y-min 0 #:label "y = gaussian(x)")
+;;            "gaussian-plot.pdf")
+
+(plot (list (axes) (function dg -3 3 #:y-min -1 #:y-max 1 #:label "y = d gaussian / dx")))
+
