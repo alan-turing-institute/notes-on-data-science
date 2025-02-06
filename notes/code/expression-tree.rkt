@@ -66,11 +66,11 @@
       (expr dgaussian_expr)
       #:x-spacing 5)
 
-;; (define (gaussian x)
-;;   (exp (- (/ (expt x 2) 2))))
-;; 
-;; (plot-file (function gaussian -3 3 #:y-min 0 #:label "y = gaussian(x)")
-;;            "gaussian-plot.pdf")
+(plot-file (list (axes)
+                 (function dg -3 3
+                           #:y-min -1 #:y-max 1
+                           #:label "y = d gaussian / dx"))
+                 "dgaussian-plot.pdf")
 
 (plot (list (axes) (function dg -3 3 #:y-min -1 #:y-max 1 #:label "y = d gaussian / dx")))
 

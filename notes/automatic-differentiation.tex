@@ -81,8 +81,7 @@ expression.\footnote{I do not follow the arguments about why automatic
 
 Here is an example program.\footnote{This program is written in a
   language called Rhombus, a language that is almost, but not quite,
-  entirely unlike Python. Its syntax should, however, be very
-  readable.} Given a real-valued (well, floating-point--valued)
+  entirely unlike Python.} Given a real-valued (well, floating-point--valued)
 argument, it computes a real-valued output, a plot of which is shown
 in figure~\ref{fig:gaussian-plot}.
 \begin{minted}[xleftmargin=\parindent]{python}
@@ -99,29 +98,38 @@ with the \emph{program}.
   \footnotesize
   Expressions follow a familiar syntax:
 \begin{minted}{python}
-1 + 2 * 3
+> 1 + 2 * 3
+7
 \end{minted}
   Definitions of variables use \cd{def} and are immutable by default:
 \begin{minted}{python}
-def x = 1 + 2 * 3
+> def x = 1 + 2 * 3
 \end{minted}
   Functions are defined by \cd{fun} and may be anonymous (like
   ``lambdas''):
 \begin{minted}{python}
-fun add1(x): x + 1
-fun (x): x + 1
+> fun add1(x): x + 1
+> add1(3)
+4
+> (fun (x): x + 1)(3)
+4
 \end{minted}
-  Lists and maps (dictionaries) look like Python:
+  Lists (zero-indexed) and maps (dictionaries) look like Python:
 \begin{minted}{python}
-[1, 2, 3]
-{"a": 1, "b": 2} 
+> def xs = [1, 2, 3]
+> xs[1]
+2
+> def ms = {"a": 1, "b": 2}
+> ms["b"]
+2
 \end{minted}
   Classes are defined a bit like in Python but with less mucking about
   with \cd{__init__}:
 \begin{minted}{python}
-class Lit(val)
-def literal_two = Lit(2)
-literal_two.val 
+> class Lit(val)
+> def literal_two = Lit(2)
+> literal_two.val
+2
 \end{minted}
 \end{marginfigure}
 
@@ -193,12 +201,11 @@ def gaussian:
        ])
 \end{minted}
 Figure~\ref{fig:expression-tree-gaussian} shows this AST as, well, a
-tree, which is perhaps slightly more readable than the data structure
-as the leaves are simply written as their textual representations.
+tree, which is perhaps slightly more readable than the data structure.
  \begin{marginfigure}
   \caption{A tree, representing the expression denoted by
     ``\cd{gaussian}'' in the main text. Leaf nodes are simply
-    labelled with their values; and procedure application nodes are
+    labelled with their values; procedure application nodes are
     labelled with the procedure.\label{fig:expression-tree-gaussian}}
   \centering
   \includegraphics{images/gaussian-tree.pdf}
@@ -290,7 +297,9 @@ primitive maths functions, just enough to be able to evaluate
 
 \begin{marginfigure}
   \caption{A library of derivatives of primitive
-    procedures.\label{fig:deriv-library}}
+    procedures. The functions in this library should be called with
+    the arguments to the term being differentiated; the result is a
+    list of the derivatives with respect to each argument.\label{fig:deriv-library}}
   \footnotesize
 \begin{minted}{python}
 def libDeriv:
@@ -385,22 +394,23 @@ fun deriv(e, var, derivs):
         |> sum_of_exprs 
 \end{minted}
 \end{marginfigure}
-The usual notation here is problematic in several ways. The expression
+We remark that, although eq.~\eqref{eq:chain-rule} is the usual
+notation, that notation is problematic in several ways. The expression
 $f(u(x), v(x))$ means ``the value of the function $f$ given arguments
 $u(x)$ and $v(x)$,'' which is not a suitable object of which to take a
 derivative. What is really meant by the left-hand side is something
-like, ``$dg/dx$ where $g(x) = f(u(x),v(x))$.
+like, ``$dg/dx$ where $g(x) = f(u(x),v(x))$.''
 
 On the right-hand side, we have other problems. The expression
-$\partial f/\partial u$ is odd since, apparently, $u$ is a function, and we don't
-mean to take the derivative of $f$ with respect to a
-function. Instead, what is meant is ``the partial derivative of $f$
-with respect to its first argument, evaluated at the point where its
-arguments are $u(x)$ and~$v(x)$.''
+$\partial f/\partial u$ is peculiar since $u$ is a function, and we don't mean to
+take the derivative of $f$ with respect to a function. Instead, what
+is meant is ``the partial derivative of $f$ with respect to its first
+argument, evaluated at the point where its arguments are $u(x)$
+and~$v(x)$.''
 
 At any rate, \cd{deriv(e, "x")} is a sum of the terms (those on the
-right-hand side of eq.~\eqref{eq:chain-rule}), each of which is of the
-form
+right-hand side of eq.~\eqref{eq:chain-rule}), each of which is a
+product:
 \begin{minted}[escapeinside=||,mathescape=true]{python}
 App("mul", [|$p^{(i)}$|, deriv(|$e_i$|, "x")])
 \end{minted}
@@ -434,9 +444,8 @@ and then passing that function to a standard plotting library.
 
 It would seem that it merely remains to enlarge the library of
 primitive functions, along with their derivatives, until it captures
-all the kinds of expressions one might wish to use. This enlargement
-introduces no new ideas and so on the face of it the subject is now
-complete.
+all the expressions one might wish to use. This enlargement introduces
+no new ideas and so on the face of it the subject is now complete.
 
 However, there are several gaps in the program. For one thing, writing
 expressions is extremely inconvenient! In some sense, we are manually
@@ -445,13 +454,13 @@ it should be straightforward to create a parser for the ``expression
 language'' and have it produce the \cd{Expr} value.
 
 Still, there is a subtle point here, which is that somehow there are
-now \emph{two} languages to think about. One is the ``host'' language,
-Rhombus in the examples above but perhaps Python or Julia in practice,
-in which one normally does one's work. But now there is also a little
-``guest'' language, the ``expression language'' in which we write the
-functions that we wish to differentiate. Even if there were a parser
-for a nicer version of this language, it would still be a different
-language.
+now \emph{two} languages to think about. One is the ``host''
+language---Rhombus in the examples above but perhaps Python or Julia in
+practice---in which one normally does one's work. But now there is also
+a little ``guest'' language, the ``expression language'' in which we
+write the functions that we wish to differentiate. Even if there were
+a parser for a nicer version of this language, it would still be a
+different language.
 
 And that raises some obvious questions: what is the definition of this
 ``guest'' language? What features should it have? Do we have to import
@@ -461,10 +470,34 @@ language were the same as the host language: is that possible?
 \begin{figure}[ht]
   \caption{The AST for \cd{dgaussian}.\label{fig:dgaussian-tree}}
   \centering
-  \includegraphics[width=\marginparwidth]{images/dgaussian-tree.pdf}
+  \includegraphics[width=0.8\textwidth]{images/dgaussian-tree.pdf}
 \end{figure}
 
+A second observation is that we have implemented \cd{eval()} as an
+interpreter on \emph{top} of the host language. Almost certainly, our
+implementation is not performant, being at least one layer away from a
+compiled language, and possibly two.
 
+Another problem is apparent on looking at
+figure~\ref{fig:dgaussian-tree}. This is the AST of the result of
+differentiating the original expression and has 32 nodes compared to
+the original~7. There are some immediate optimisations we might try,
+such as replacing \cd{App("mul", 1, |$v$|)} by $v$, and it would be
+straightforward to implement those. There are also subtler
+inefficiences. Some of the subtrees occur more than once: Really,
+these subtrees should be shared, so that they are not computed more
+than once. Along similar lines, this tree contains, as a subtree, the
+entirety of the original expression. In the usual case where we wish
+to compute, for some function, both the value of the function and its
+derivative, there will be duplication of the calculation.
+
+But perhaps none of this matters as much as yet another
+inefficiency. And that is that, typically, we do not want only the
+derivative with respect to a \emph{single} variable, as we have
+implemented here, but with respect to \emph{many} variables. In
+applications, ``many'' might mean ``billions.'' (They are the
+parameters of the model.) The \cd{eval()} procedure already allows
+differentiation with respect to any variable;
 
 
 \section{The rest of the story}
