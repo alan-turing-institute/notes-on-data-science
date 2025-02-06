@@ -25,7 +25,8 @@
 %% Usually 4 "big columns", each of 4 text cols plus 1 gutter col;
 %% plus an additional gutter on the left.
 \usepackage[top=2.82cm, bottom=2.82cm, left=1cm, textwidth=11cm, marginparsep=1cm, marginparwidth=7cm]{geometry}
-\usepackage[Ragged, size=footnote, shape=up]{sidenotesplus}
+\usepackage[Ragged, size=footnote, shape=up, alerton]{sidenotesplus}
+\usepackage[dvipsnames]{xcolor}
 %% We used to use a two-column layout
 % \setlength{\columnsep}{1cm}
 \title{Automatic differentiation}
@@ -85,8 +86,8 @@ Here is an example program.\footnote{This program is written in a
 argument, it computes a real-valued output, a plot of which is shown
 in figure~\ref{fig:gaussian-plot}.
 \begin{minted}[xleftmargin=\parindent]{python}
-fun gaussian(x):
-  math.exp(-x**2/2)
+fun g(x):
+  exp(-x*x/2)
 \end{minted}
 This program computes the function $e^{-x^2/2}$. We wish to obtain its
 derivative with respect to~$x$. We could of course
@@ -136,15 +137,49 @@ with the \emph{program}.
 If we are to write a program which takes, as input, a \emph{program},
 we had better be able to represent a program as data. Consider the
 expression in the body of the procedure definition, namely
-\cd{math.exp(-x**2/2)}. What is a good representation of this
-expression, suitable for programmatic transformation? It is the
-representation that one obtains after parsing the expression according
-to the grammar of the language, producing what is sometimes known as
-an \emph{abstract syntax tree}, or AST.
+\cd{exp(-x*x/2)}. What is a good representation of this
+expression, suitable for programmatic transformation? 
 
-Expressions, like this one, are made up of literal values (like
-\cd{2}), variables (like \cd{x}) and procedure applications (like
-\cd{exp(...)}). 
+There seem to be several different kinds of object in this expression:
+among them are numbers, variables, operators, and functions. However,
+there is one important abstraction that we should make right away, and
+that is to observe that operators are really functions in
+disguise. Instead of writing, say, \cd{x/2}, we could have written
+\cd{div(x,2)} for some suitably defined function, \cd{div}. Operators
+are a syntactic convenience, used partly to make expressions in code
+look more like their conventional mathematical form, but semantically
+they are functions.\footnote{Usually this simplification happens in a
+  way that is not accessible to the programmer but in Python the
+  functions corresponding to operators \emph{are} visible: they are
+  things like ``\cd{__add__}''.}
+
+Here, then, is a possible definition of expressions, like this one. An
+\emph{expression} is either:
+\begin{enumerate}
+\item A \emph{literal}, such as \cd{2}, \cd{3.142}, or \cd{0} (we
+  shall only deal with literal numbers);
+\item A \emph{variable}, such as \cd{x}, \cd{y}, or \cd{z}; or
+\item A \emph{procedure application}, such as \cd{div(x,2)}, where the
+  terms in parentheses are themselves expressions.
+\end{enumerate}
+% Here's how one parses \cd{exp(-x*x/2)} according to this
+% definition. First, we write the operators as functions to obtain
+% \begin{minted}{python}
+% \cd{exp(neg(div(mul(x,x),2)))}
+% \end{minted}
+% Notice that this is a much more uniform notation! Then:
+% \begin{itemize}
+% \item \cd{x} is a variable, hence an expression.
+% \item Since \cd{x} is an expression, both arguments of \cd{mul(x,x)}
+%   are expressions, so \cd{mul(x,x)} is a procedure application, hence
+%   an expression.
+% \item \cd{2} is a literal, hence an expression.
+% \item So both arguments of \cd{div} in \cd{div(mul(x,x),2)} are
+%   expressions; so the whole term is a procedure application, hence an
+%   expression.
+% \item So \cd{neg(div(mul(x,x),2))} is an expression.
+% \item So \cd{exp(neg(div(mul(x,x),2)))} is an expression.
+% \end{itemize}
 \begin{marginfigure}
   \caption{Rhombus class definitions for the construction of an
     abstract syntax tree. These definitions introduce classes for
@@ -167,29 +202,11 @@ class App(name :: String,
   extends Expr
 \end{minted}
 \end{marginfigure}
-Here is a grammar for simple expressions made up of these
-components. An \emph{expression} is either:
-\begin{enumerate}
-\item A literal number, such as \cd{2}, \cd{3.142}, or \cd{0};
-\item A variable, such as \cd{x}, \cd{y}, or \cd{z}; or
-\item A procedure application, such as \cd{div(x,2)}, where the terms
-  in parentheses are themselves expressions.
-\end{enumerate}
-One might imagine that there are also operators (like
-\cd{-}, \cd{**}, and~\cd{/}) but in fact these are not a new thing but
-merely a convenient way to write what is effectively a procedure
-application. For example, an expression like \cd{2/3} will be
-converted into, say, \cd{div(2, 3)} in the abstract syntax
-tree.\footnote{Usually this happens in a way that is not accessible to
-  the programmer but in Python the functions corresponding to
-  operators \emph{are} visible: they are things like
-  ``\cd{__add__}''.}
-
-A suitable set of class definitions is shown in
-figure~\ref{fig:class-defs}. With these class definitions, literal
-\cd{2} is represented by \cd{Lit(2)}; the variable \cd{x} by
-\cd{Var("x")}; and the expression in the body of \cd{gaussian} is
-represented by
+A suitable set of class definitions that captures this definition of
+an expression is shown in figure~\ref{fig:class-defs}. The base class
+is \cd{Expr}, with subclasses \cd{Lit}, \cd{Var}, and \cd{App} for the
+three kinds of expression. With these class definitions, the
+expression in the body of \cd{g} is represented by the value:
 \begin{minted}{python}
 def gaussian:
   App("exp",
@@ -200,8 +217,11 @@ def gaussian:
             ])
        ])
 \end{minted}
-Figure~\ref{fig:expression-tree-gaussian} shows this AST as, well, a
-tree, which is perhaps slightly more readable than the data structure.
+Figure~\ref{fig:expression-tree-gaussian} shows a slightly different
+view of the same data structure, which is perhaps slightly more
+readable than the definition just above. Because the data structure
+represents an abstraction over the surface syntax of the programming
+language, it is known as an \emph{abstract syntax tree}, or~AST.
  \begin{marginfigure}
   \caption{A tree, representing the expression denoted by
     ``\cd{gaussian}'' in the main text. Leaf nodes are simply
@@ -212,26 +232,28 @@ tree, which is perhaps slightly more readable than the data structure.
 \end{marginfigure}
 
 The AST is more convenient than the surface syntax for the purpose of
-programmatic transformation; that is why the first step of a compiler
+programmatic transformation: that is why the first step of a compiler
 or interpreter is to convert the surface syntax to an AST.\@ However,
-it is true that the AST is not very convenient to read or write
+it is also true that the AST is not very convenient to read or write
 directly. One might hope for a serialisable format that is both easy
 for the computer to parse \emph{and} easy for people to read and
 write. We will come back to this point later.
 
-Notice what is missing from the above. An \cd{Expr} is a data
-structure for expressions but not for general programs. We don't have
-a way to express bindings, for example, nor can we express function
-definitions. However, we can certainly represent \emph{some}
-interesting mathematical functions as a data structure. Before trying
-to differentiate these expressions we should probably try
-\emph{evaluate} them. That is, we should write a program which takes,
-as input, an object of type \cd{Expr} and produces a value.
+It is worth noticing what is missing from the above. An \cd{Expr} is a
+data structure for expressions but not for general programs. We don't
+have a way to express bindings, for example, nor can we express
+function definitions.
+
+However, we can certainly represent \emph{some} interesting
+mathematical functions as a data structure. Before trying to
+differentiate these expressions we should probably try \emph{evaluate}
+them. That is, we should write a program which takes, as input, an
+object of type \cd{Expr} and produces a value.
 
 \subsection{Evaluating programs}
 
-\begin{marginfigure}
-  \caption[Eval procedure]{A procedure to evaluate an expression,~\cd{e}.}
+\begin{marginfigure}<0pt>
+  \caption[Eval procedure]{A procedure to evaluate an expression,~\cd{e}.\label{fig:eval}}
 \footnotesize
 \begin{minted}{python}
 fun eval(e, env, prims):
@@ -254,12 +276,25 @@ the name of a primitive (i.e., built in) function.
 \item To evaluate \cd{Var(|$s$|)}, look up the value of the
   variable~$s$;\label{item:eval-var}
 \item To evaluate \cd{App(|$p$|, [|$e_1, e_2, \dotsc$|])} first
-  evaluate the expressions $e_1$, $e_2$, \dots, then look
-  up $p$ in the set of primitive functions, then apply that function to
-  the values of the arguments.\label{item:eval-app}
+  evaluate the expressions $e_1$, $e_2$, \dots, then look up $p$ in
+  the set of primitive functions, then apply that primitive function
+  to the values of the arguments.\label{item:eval-app}
 \end{enumerate}
+It is reasonably straightforward to translate these rules into code;
+the result is the procedure \cd{eval}, shown in
+figure~\ref{fig:eval}. The procedure takes two extra arguments, in
+addition to the expression to be evaluated. The first, \cd{env}, is
+required because of rule (\ref{item:eval-var}), in which the value of
+the variables is to be ``looked up.'' To implement this idea,
+\cd{eval} is passed an ``environment,'' \cd{env}, which is a map from
+variables to values.\footnote{Up to now, and for the rest of
+  Section~\ref{sec:introduction}, we are considering only expressions
+  containing a single variable, so carrying this environment around
+  may seem excessive, but it will become important later.} For
+example, the Rhombus expression \cd{{"x": 3}} is a map, which maps the
+variable \cd{"x"} to the value~\cd{3}.
 
-\begin{marginfigure}|2ex|
+\begin{marginfigure}<0pt>
   \caption{A small set of primitive procedures, suitable for use as
     the argument \cd{prims} to the \cd{eval} procedure.\label{fig:prims}}
 \footnotesize
@@ -276,17 +311,14 @@ def libMaths:
    "exp": math.exp
   }
 \end{minted}
-\end{marginfigure}Rule (\ref{item:eval-var}) implies that we will need some sort of
-environment containing a mapping from variables to values. Up to now,
-and for the rest of Section~\ref{sec:introduction}, we are considering
-only expressions containing a single variable, so carrying this
-environment around may seem excessive, but it will become important
-later.
-
-Rule (\ref{item:eval-app}) implies we will need a collection of
-primitive procedures already known to our
-evaluator. Figure~\ref{fig:prims} is a (very) small library of
-primitive maths functions, just enough to be able to evaluate
+\end{marginfigure}
+The third argument, \cd{prims}, is required by rule
+(\ref{item:eval-app}). Certain parts of the expression are functions
+that are ``built in,'' that is, known to the evaluatory. These are
+called ``primitive functions,'' to distinguish them from
+progammer-defined functions (which our current syntax does not
+support). Figure~\ref{fig:prims} is a (very) small library of
+primitive maths functions, enough to be able to evaluate
 \cd{gaussian}:
 \begin{minted}{python}
 > eval(gaussian, {"x": 0}, libMaths)
@@ -295,34 +327,12 @@ primitive maths functions, just enough to be able to evaluate
 
 \subsection{Differentiating programs}
 
-\begin{marginfigure}
-  \caption{A library of derivatives of primitive
-    procedures. The functions in this library should be called with
-    the arguments to the term being differentiated; the result is a
-    list of the derivatives with respect to each argument.\label{fig:deriv-library}}
-  \footnotesize
-\begin{minted}{python}
-def libDeriv:
-  {
-    "add": fun(u, v): [Lit(1), Lit(1)],
-    "sub": fun(u, v): [Lit(1), Lit(-1)],
-    "neg": fun(u): [Lit(-1)],
-    "mul": fun(u, v): [v, u],
-    "div": 
-      fun(u, v):
-        [App("div", [Lit(1), v]),
-         App("neg",
-             [App("div",
-                  [u, App("mul",
-                          [v, v])])])],
-    "exp": fun(u): [App("exp", [u])]
-  }
-\end{minted}
-\end{marginfigure}
-Here is our goal, given the context we have developed so far. We are
-given a value of type \cd{Expr}. We would like to write a program
-\cd{deriv :: (Expr, String) -> Expr}, such that \cd{deriv(e, "x")} is an expression
-for the derivative of~\cd{e} with respect to~$x$.
+Here is a restatement of our goal, given the context we have developed
+so far. We are given a value, \cd{e}, of type \cd{Expr}. We would like
+to write a program \cd{deriv :: (Expr, String) -> Expr}, such that
+\cd{deriv(e, "x")} is an expression for the derivative of~\cd{e} with
+respect to~$x$.
+
 % \begin{marginfigure}
 %   \caption{Rules of differentiation.\label{fig:differentiation}}
 %   \footnotesize
@@ -340,8 +350,7 @@ for the derivative of~\cd{e} with respect to~$x$.
 %   \end{equation*}
 % \end{marginfigure}
 
-Suppose \cd{e} is an \cd{Expr}. There are three possibilities
-for~\cd{e}.
+Suppose \cd{e} is an \cd{Expr}. There are three kinds of expression..
 
 First, \cd{e} may be a literal constant, \cd{Lit(|$v$|)}. Since the
 derivative of a constant is zero, the derivative is \cd{Lit(0)}.
@@ -394,12 +403,13 @@ fun deriv(e, var, derivs):
         |> sum_of_exprs 
 \end{minted}
 \end{marginfigure}
-We remark that, although eq.~\eqref{eq:chain-rule} is the usual
-notation, that notation is problematic in several ways. The expression
-$f(u(x), v(x))$ means ``the value of the function $f$ given arguments
-$u(x)$ and $v(x)$,'' which is not a suitable object of which to take a
-derivative. What is really meant by the left-hand side is something
-like, ``$dg/dx$ where $g(x) = f(u(x),v(x))$.''
+We remark that, although eq.~\eqref{eq:chain-rule} is written with the
+usual notation, the usual notation is problematic in several ways. For
+one thing, the expression $f(u(x), v(x))$ means ``the value of the
+function $f$ given arguments $u(x)$ and $v(x)$,'' which is not a
+suitable object of which to take a derivative. What is really meant by
+the left-hand side is something like, ``$dg/dx$ where
+$g(x) = f(u(x),v(x))$.''
 
 On the right-hand side, we have other problems. The expression
 $\partial f/\partial u$ is peculiar since $u$ is a function, and we don't mean to
@@ -408,13 +418,37 @@ is meant is ``the partial derivative of $f$ with respect to its first
 argument, evaluated at the point where its arguments are $u(x)$
 and~$v(x)$.''
 
-At any rate, \cd{deriv(e, "x")} is a sum of the terms (those on the
-right-hand side of eq.~\eqref{eq:chain-rule}), each of which is a
-product:
+At any rate, eq.~\ref{eq:chain-rule} tells us that \cd{deriv(e, "x")}
+is a sum of terms (those on the right-hand side of
+eq.~\eqref{eq:chain-rule}), each of which is a product:
 \begin{minted}[escapeinside=||,mathescape=true]{python}
 App("mul", [|$p^{(i)}$|, deriv(|$e_i$|, "x")])
 \end{minted}
 
+\begin{marginfigure}<0pt>
+  \caption{A library of derivatives of primitive
+    procedures. The functions in this library should be called with
+    the arguments to the term being differentiated; the result is a
+    list of the derivatives with respect to each argument.\label{fig:deriv-library}}
+  \footnotesize
+\begin{minted}{python}
+def libDeriv:
+  {
+    "add": fun(u, v): [Lit(1), Lit(1)],
+    "sub": fun(u, v): [Lit(1), Lit(-1)],
+    "neg": fun(u): [Lit(-1)],
+    "mul": fun(u, v): [v, u],
+    "div": 
+      fun(u, v):
+        [App("div", [Lit(1), v]),
+         App("neg",
+             [App("div",
+                  [u, App("mul",
+                          [v, v])])])],
+    "exp": fun(u): [App("exp", [u])]
+  }
+\end{minted}
+\end{marginfigure}
 In this expression, $p^{(i)}$ is an AST representing the derivative of
 $p$ with respect to its $i$th argument, evaluated at
 $(e_1, e_2, \dotsc)$. To compute $p^{(i)}$ we consult a library of
@@ -428,19 +462,20 @@ Here is the derivative of \cd{gaussian}:
 0
 \end{minted}
 A plot of \cd{dgaussian} is shown in figure~\ref{fig:dgaussian-plot}.
-That plot was obtained by creating an ``normal'' function:
+The plot was obtained by creating a ``normal'' function:
 \begin{minted}{python}
 fun dg(x):
   eval(deriv(gaussian, "x", libDeriv), {"x": x}, libMaths)
 \end{minted}
 and then passing that function to a standard plotting library.
-\begin{marginfigure}|2ex|
+
+\subsection{The end of the story?}
+\begin{marginfigure}<0pt>
   \caption{A plot of \cd{dgaussian}.\label{fig:dgaussian-plot}}
   \centering
   \includegraphics[width=\marginparwidth]{images/dgaussian-plot.pdf}
 \end{marginfigure}
   
-\subsection{The end of the story?}
 
 It would seem that it merely remains to enlarge the library of
 primitive functions, along with their derivatives, until it captures
@@ -450,8 +485,8 @@ no new ideas and so on the face of it the subject is now complete.
 However, there are several gaps in the program. For one thing, writing
 expressions is extremely inconvenient! In some sense, we are manually
 doing the work of a compiler. Of course, parsing is well understood so
-it should be straightforward to create a parser for the ``expression
-language'' and have it produce the \cd{Expr} value.
+it should be straightforward to create a parser for a little
+``expression language'' and have it produce the \cd{Expr} value.
 
 Still, there is a subtle point here, which is that somehow there are
 now \emph{two} languages to think about. One is the ``host''
@@ -467,11 +502,11 @@ And that raises some obvious questions: what is the definition of this
 wholesale the computer science of compilers and interpreters?  There
 would be less for the programmer to worry about, perhaps, if the guest
 language were the same as the host language: is that possible?
-\begin{figure}[ht]
+\begin{marginfigure}
   \caption{The AST for \cd{dgaussian}.\label{fig:dgaussian-tree}}
   \centering
-  \includegraphics[width=0.8\textwidth]{images/dgaussian-tree.pdf}
-\end{figure}
+  \includegraphics[width=\marginparwidth]{images/dgaussian-tree.pdf}
+\end{marginfigure}
 
 A second observation is that we have implemented \cd{eval()} as an
 interpreter on \emph{top} of the host language. Almost certainly, our
@@ -480,25 +515,34 @@ compiled language, and possibly two.
 
 Another problem is apparent on looking at
 figure~\ref{fig:dgaussian-tree}. This is the AST of the result of
-differentiating the original expression and has 32 nodes compared to
-the original~7. There are some immediate optimisations we might try,
-such as replacing \cd{App("mul", 1, |$v$|)} by $v$, and it would be
-straightforward to implement those. There are also subtler
-inefficiences. Some of the subtrees occur more than once: Really,
-these subtrees should be shared, so that they are not computed more
-than once. Along similar lines, this tree contains, as a subtree, the
-entirety of the original expression. In the usual case where we wish
-to compute, for some function, both the value of the function and its
-derivative, there will be duplication of the calculation.
+differentiating the original expression. It has 32 nodes compared to
+the original~7, many of them unnecessary. There are some immediate
+optimisations we might try, such as replacing \cd{App("mul", 1,
+  |$v$|)} by $v$, and it would be straightforward to implement
+those.
+
+However, there are other inefficiences that are harder to remove. Some
+of the subtrees occur more than once: really, these subtrees should be
+shared, so that they are not computed more than once. Along similar
+lines, this tree contains, as a subtree, the \emph{entirety} of the
+original expression. In the usual case where we wish to compute, for
+some function, both the value of the function and its derivative,
+there will be duplication of the calculation.
 
 But perhaps none of this matters as much as yet another
-inefficiency. And that is that, typically, we do not want only the
-derivative with respect to a \emph{single} variable, as we have
-implemented here, but with respect to \emph{many} variables. In
+inefficiency. And that is that, typically, we do not want the
+derivative with respect only to a \emph{single} variable. Typical
+functions---typical in machine learning, anyway---depend on \emph{many}
+variables, and we want the derivative with respect to all of them. In
 applications, ``many'' might mean ``billions.'' (They are the
-parameters of the model.) The \cd{eval()} procedure already allows
-differentiation with respect to any variable;
+parameters of the model.) The \cd{deriv()} procedure already allows
+differentiation with respect to multiple variables but it will produce
+a new expression for each one. Crucially, nearly all of those trees
+will have shared subtrees and will be recomputed as many times as
+there are variables.
 
+The rest of the story will be about what we do about these gaps in the
+program.
 
 \section{The rest of the story}
 
