@@ -557,6 +557,33 @@ program.
 \item \dots
 \end{enumerate}
 
+
+\section{Reverse mode automatic differentiation}
+
+Figure~\ref{fig:dfgh-tree} illustrates one of the problems described
+earlier. The diagram shows the abstract syntax tree that results from
+running \cd{deriv} on the expression $f(g(h(x)))$. The notation $f'$
+means ``the derivative of $f$ with respect to its argument.'' So the
+AST illustrates the chain rule:
+\begin{marginfigure}
+  \caption{AST of the derivative of $f(g(h(x)))$.\label{fig:dfgh-tree}}
+  \includegraphics[width=0.8\marginparwidth]{./images/dfgh-tree.pdf}
+\end{marginfigure}
+\begin{equation*}
+  \frac{d}{dx} f(g(h(x))) = f'(g(h(x))) \times g'(h(x)) \times h'(x).
+\end{equation*}
+When the chain rule introduces a multiplication, that multiplication
+is shown as ``\cd{*}'' in the diagram, rather than ``\cd{mult}'' for
+reasons that may, possibly, become clear later.
+
+The problem is that $h(x)$ is computed twice. If one also wanted the
+value of $f(g(h(x)))$, as is typical,\footnote{Though, come to think
+  of it, why is it typical?} then $g(h)$ would end up being computed
+twice (and $h(x)$ three times).
+
+
+
+
 \end{document}
 
 Notes on syntax
