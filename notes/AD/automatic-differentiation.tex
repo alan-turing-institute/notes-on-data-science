@@ -59,7 +59,7 @@
   \caption{A plot of $\exp(-x^2/2)$. Our goal is to obtain the
     deriviative of this function.\label{fig:gaussian-plot}}
   \centering
-  \includegraphics[width=\marginparwidth]{images/gaussian-plot.pdf}
+  \includegraphics[width=\marginparwidth]{./images/gaussian-plot.pdf}
 \end{marginfigure}
 Automatic differentiation is the process of programmatically
 transforming a program that computes some function into a program that
@@ -181,10 +181,10 @@ Here, then, is a possible definition of expressions, like this one. An
 % \item So \cd{exp(neg(div(mul(x,x),2)))} is an expression.
 % \end{itemize}
 \begin{marginfigure}
-  \caption{Rhombus class definitions for the construction of an
-    abstract syntax tree. These definitions introduce classes for
-    literals, variables, and procedure applications, all of which are
-    subtypes of expression (indicated by the option ``\cd{extends
+  \caption{\cd{Expr}: Rhombus class definitions for the construction
+    of an abstract syntax tree. These definitions introduce classes
+    for literals, variables, and procedure applications, all of which
+    are subtypes of expression (indicated by the option ``\cd{extends
       Expr}''). The operator ``\cd{::}'' introduces an optional type
     annotation.\label{fig:class-defs}}\footnotesize
 \begin{minted}{python}
@@ -228,7 +228,7 @@ language, it is known as an \emph{abstract syntax tree}, or~AST.
     labelled with their values; procedure application nodes are
     labelled with the procedure.\label{fig:expression-tree-gaussian}}
   \centering
-  \includegraphics{images/gaussian-tree.pdf}
+  \includegraphics{./images/gaussian-tree.pdf}
 \end{marginfigure}
 
 The AST is more convenient than the surface syntax for the purpose of
@@ -253,7 +253,8 @@ object of type \cd{Expr} and produces a value.
 \subsection{Evaluating programs}
 
 \begin{marginfigure}<0pt>
-  \caption[Eval procedure]{A procedure to evaluate an expression,~\cd{e}.\label{fig:eval}}
+  \caption[Eval procedure]{\cd{eval}: A procedure to evaluate an
+    expression,~\cd{e}.\label{fig:eval}}
 \footnotesize
 \begin{minted}{python}
 fun eval(e, env, prims):
@@ -295,7 +296,7 @@ example, the Rhombus expression \cd{{"x": 3}} is a map, which maps the
 variable \cd{"x"} to the value~\cd{3}.
 
 \begin{marginfigure}<0pt>
-  \caption{A small set of primitive procedures, suitable for use as
+  \caption{\cd{libMaths}: A small set of primitive procedures, suitable for use as
     the argument \cd{prims} to the \cd{eval} procedure.\label{fig:prims}}
 \footnotesize
 \begin{minted}{python}
@@ -372,7 +373,7 @@ arguments, which are themselves functions of~$x$. The chain rule is:
 \end{equation}
 
 \begin{marginfigure}
-  \caption{A procedure to calculate the derivative of an
+  \caption{\cd{deriv}: A procedure to calculate the derivative of an
     expression. \cd{sum_of_exprs} and \cd{mul} are helper functions to
     generate particular expressions.\label{fig:deriv}}
   \footnotesize%
@@ -426,7 +427,7 @@ App("mul", [|$p^{(i)}$|, deriv(|$e_i$|, "x")])
 \end{minted}
 
 \begin{marginfigure}<0pt>
-  \caption{A library of derivatives of primitive
+  \caption{\cd{libDeriv}: A library of derivatives of primitive
     procedures. The functions in this library should be called with
     the arguments to the term being differentiated; the result is a
     list of the derivatives with respect to each argument.\label{fig:deriv-library}}
@@ -471,22 +472,22 @@ and then passing that function to a standard plotting library.
 
 \subsection{The end of the story?}
 \begin{marginfigure}<0pt>
-  \caption{A plot of \cd{dgaussian}.\label{fig:dgaussian-plot}}
+  \caption{A plot of the derivative of the gaussian.\label{fig:dgaussian-plot}}
   \centering
-  \includegraphics[width=\marginparwidth]{images/dgaussian-plot.pdf}
+  \includegraphics[width=\marginparwidth]{./images/dgaussian-plot.pdf}
 \end{marginfigure}
   
-
 It would seem that it merely remains to enlarge the library of
 primitive functions, along with their derivatives, until it captures
 all the expressions one might wish to use. This enlargement introduces
 no new ideas and so on the face of it the subject is now complete.
 
-However, there are several gaps in the program. For one thing, writing
-expressions is extremely inconvenient! In some sense, we are manually
-doing the work of a compiler. Of course, parsing is well understood so
-it should be straightforward to create a parser for a little
-``expression language'' and have it produce the \cd{Expr} value.
+However, there are several gaps in this program. For one thing,
+writing expressions is extremely inconvenient! In some sense, we are
+manually doing the work of a compiler. Of course, parsing is well
+understood so it should be straightforward to create a parser for a
+little ``expression language'' and have it produce the \cd{Expr}
+value.
 
 Still, there is a subtle point here, which is that somehow there are
 now \emph{two} languages to think about. One is the ``host''
@@ -502,11 +503,11 @@ And that raises some obvious questions: what is the definition of this
 wholesale the computer science of compilers and interpreters?  There
 would be less for the programmer to worry about, perhaps, if the guest
 language were the same as the host language: is that possible?
-\begin{marginfigure}
+\begin{figure*}[h]
   \caption{The AST for \cd{dgaussian}.\label{fig:dgaussian-tree}}
   \centering
-  \includegraphics[width=\marginparwidth]{images/dgaussian-tree.pdf}
-\end{marginfigure}
+  \includegraphics[width=\textwidth]{./images/dgaussian-tree.pdf}
+\end{figure*}
 
 A second observation is that we have implemented \cd{eval()} as an
 interpreter on \emph{top} of the host language. Almost certainly, our
@@ -518,8 +519,7 @@ figure~\ref{fig:dgaussian-tree}. This is the AST of the result of
 differentiating the original expression. It has 32 nodes compared to
 the original~7, many of them unnecessary. There are some immediate
 optimisations we might try, such as replacing \cd{App("mul", 1,
-  |$v$|)} by $v$, and it would be straightforward to implement
-those.
+  |$v$|)} by $v$, and it would be straightforward to implement those.
 
 However, there are other inefficiences that are harder to remove. Some
 of the subtrees occur more than once: really, these subtrees should be
@@ -531,7 +531,7 @@ there will be duplication of the calculation.
 
 But perhaps none of this matters as much as yet another
 inefficiency. And that is that, typically, we do not want the
-derivative with respect only to a \emph{single} variable. Typical
+derivative only with respect to a \emph{single} variable. Typical
 functions---typical in machine learning, anyway---depend on \emph{many}
 variables, and we want the derivative with respect to all of them. In
 applications, ``many'' might mean ``billions.'' (They are the
@@ -544,26 +544,26 @@ there are variables.
 The rest of the story will be about what we do about these gaps in the
 program.
 
-\section{The rest of the story}
+\section{The rest of the story (tbd)}
 
 \begin{enumerate}
-\item Examples: Logistic regression, Gaussian mixture models (one parameter)
-\item Multivariate functions
-\item Examples: Logistic regression, Gaussian mixture models (multiparameter)
+\item Sharing, let-bindings, maybe ANF. (Simple JAX example.)
+\item Applications: Logistic regression, Gaussian mixture models
+\item ``Duals''
+\item Vectors! Linear maps! Differential geometry!
 \item What the ML people do 
-\item Differential geometry
 \item More general programs
 \item Conal Elliot's stuff
 \item \dots
 \end{enumerate}
 
 
-\section{Reverse mode automatic differentiation}
+\section{Expression sharing}
 
 Figure~\ref{fig:dfgh-tree} illustrates one of the problems described
 earlier. The diagram shows the abstract syntax tree that results from
 running \cd{deriv} on the expression $f(g(h(x)))$. The notation $f'$
-means ``the derivative of $f$ with respect to its argument.'' So the
+means ``the derivative of $f$ with respect to its argument.'' So this
 AST illustrates the chain rule:
 \begin{marginfigure}
   \caption{AST of the derivative of $f(g(h(x)))$.\label{fig:dfgh-tree}}
@@ -580,6 +580,8 @@ The problem is that $h(x)$ is computed twice. If one also wanted the
 value of $f(g(h(x)))$, as is typical,\footnote{Though, come to think
   of it, why is it typical?} then $g(h)$ would end up being computed
 twice (and $h(x)$ three times).
+
+
 
 
 

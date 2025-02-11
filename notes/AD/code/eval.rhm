@@ -2,6 +2,12 @@
 
 export:
   gaussian_expr
+  g
+  
+export:
+  dgaussian_expr
+  dg
+
 
 /*
 An expression is either
@@ -114,14 +120,9 @@ fun deriv(e :: Expr, var :: String, derivs :: Map):
         |> sum_of_exprs 
      
 def dgaussian = deriv(gaussian, "x", libDeriv)
-
 def dgaussian_expr = pairlist_of_expr(dgaussian)
 
 println(@str{dgaussian(0) = @eval(dgaussian, {"x": 0}, libMaths)})
 
 def dg = fun(x): eval(dgaussian, {"x": x}, libMaths)
-
-export:
-  dgaussian_expr
-  dg
-
+def g = fun(x): eval(gaussian, {"x": x}, libMaths)
