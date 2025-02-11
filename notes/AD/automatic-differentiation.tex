@@ -567,7 +567,7 @@ means ``the derivative of $f$ with respect to its argument.'' So this
 AST illustrates the chain rule:
 \begin{marginfigure}
   \caption{AST of the derivative of $f(g(h(x)))$.\label{fig:dfgh-tree}}
-  \includegraphics[width=0.8\marginparwidth]{./images/dfgh-tree.pdf}
+  \includegraphics[width=\marginparwidth]{./images/dfgh-tree.pdf}
 \end{marginfigure}
 \begin{equation*}
   \frac{d}{dx} f(g(h(x))) = f'(g(h(x))) \times g'(h(x)) \times h'(x).
@@ -587,21 +587,6 @@ twice (and $h(x)$ three times).
 
 
 \end{document}
-
-Notes on syntax
-Notes:
-\begin{itemize}
-\item \cd{env["x"]} looks up the variable represented by \cd{"x"}
-  in the environment.
-\item \cd{(prims["neg"])(2)} looks up the function \cd{"neg"} in
-  the primitives set and applies the function to the value~2.
-\item \cd{eval(_, env, prims)} is a procedure of one argument,
-  represented by the placeholder underscore.
-\item \cd{args.map(eval(_, env, prims))} maps the function
-  \cd{eval(_, env, prims)} over all expressions in \cd{args},
-  returning a list. 
-\end{itemize}
-
 
 % Local Variables:
 % TeX-command-extra-options: "-shell-escape"
