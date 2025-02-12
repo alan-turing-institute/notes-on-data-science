@@ -24,9 +24,9 @@
     (convert 
      (naive-layered 
       (expr->tree
-       '("*" ("f'" ("g" ("h" x)))
-             ("*" ("g'" ("h" x))
-                  ("*" ("h'" x)
+       '("×" ("f'" ("g" ("h" x)))
+             ("×" ("g'" ("h" x))
+                  ("×" ("h'" x)
                        1))))
       #:x-spacing 5)
      'pdf-bytes)))
