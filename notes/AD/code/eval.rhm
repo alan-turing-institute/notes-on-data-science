@@ -8,6 +8,8 @@ export:
   dgaussian_expr
   dg
 
+export:
+  ddg
 
 /*
 An expression is either
@@ -117,7 +119,20 @@ fun deriv(e :: Expr, var :: String, derivs :: Map):
       let des
         = args.map(deriv(_, var, derivs))
       Function.map(mul, dps, des)
-        |> sum_of_exprs 
+        |> sum_of_exprs
+
+fun sum(xs):
+  def mutable total = 0
+  for (x in xs):
+    total := total + x
+  total
+
+fun count_nodes(e :: Expr):
+  match e
+  | Lit(v): 1
+  | Var(s): 1 
+  | App(p, args):
+      1 + sum(Function.map(count_nodes, args))  
      
 def dgaussian = deriv(gaussian, "x", libDeriv)
 def dgaussian_expr = pairlist_of_expr(dgaussian)
@@ -126,3 +141,6 @@ println(@str{dgaussian(0) = @eval(dgaussian, {"x": 0}, libMaths)})
 
 def dg = fun(x): eval(dgaussian, {"x": x}, libMaths)
 def g = fun(x): eval(gaussian, {"x": x}, libMaths)
+
+def ddgaussian = deriv(dgaussian, "x", libDeriv)
+def ddg = fun(x): eval(ddgaussian, {"x": x}, libMaths)

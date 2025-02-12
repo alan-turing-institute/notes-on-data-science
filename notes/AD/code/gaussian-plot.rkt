@@ -17,7 +17,12 @@
  (list (axes)
        (function dg -3 3
                  #:y-min -1 #:y-max 1
-                 #:label "y = dg(x)"))
+                 #:label "y = dg(x)")
+       (function ddg -3 3
+                 #:y-min -1 #:y-max 1
+                 #:style 'long-dash
+                 #:color 'blue
+                 #:label "y = ddg(x)"))
  "../images/dgaussian-plot.pdf")
 
 

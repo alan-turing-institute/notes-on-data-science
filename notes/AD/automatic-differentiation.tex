@@ -468,11 +468,15 @@ The plot was obtained by creating a ``normal'' function:
 fun dg(x):
   eval(deriv(gaussian, "x", libDeriv), {"x": x}, libMaths)
 \end{minted}
-and then passing that function to a standard plotting library.
+and then passing that function to a standard plotting library. A nice
+feature of our work so far is that the output of \cd{deriv} is also
+an expression and so \cd{deriv} can be applied to \emph{that} to
+obtain the second derivative.
 
 \subsection{The end of the story?}
 \begin{marginfigure}<0pt>
-  \caption{A plot of the derivative of the gaussian.\label{fig:dgaussian-plot}}
+  \caption{A plot of the derivative and second derivative of the
+    gaussian.\label{fig:dgaussian-plot}}
   \centering
   \includegraphics[width=\marginparwidth]{./images/dgaussian-plot.pdf}
 \end{marginfigure}
@@ -517,9 +521,10 @@ compiled language, and possibly two.
 Another problem is apparent on looking at
 figure~\ref{fig:dgaussian-tree}. This is the AST of the result of
 differentiating the original expression. It has 32 nodes compared to
-the original~7, many of them unnecessary. There are some immediate
-optimisations we might try, such as replacing \cd{App("mul", 1,
-  |$v$|)} by $v$, and it would be straightforward to implement those.
+the original~7, many of them unnecessary. (And the second derivative
+has 193 nodes.) There are some immediate optimisations we might try,
+such as replacing \cd{App("mul", 1, |$v$|)} by $v$, and it would be
+straightforward to implement those.
 
 However, there are other inefficiences that are harder to remove. Some
 of the subtrees occur more than once: really, these subtrees should be
@@ -561,19 +566,31 @@ program.
 \section{Expression sharing}
 
 We have so far constructed a very simple language, without even a
-surface syntax. All we have is an abstract syntax tree amd that is
-described by its representation as a data structure in Rhombus.
+surface syntax. All we have is an abstract syntax tree, described by
+its representation as a data structure in Rhombus.
 
 Here is one way of describing the language as a data structure,
 without reference to a particular host language. 
-\newcommand{\nt}[1]{\langle\operatorname{\textit{#1}}\rangle}
+\newcommand{\nonterminal}[1]{\langle\operatorname{\textit{#1}}\rangle}
+\newcommand{\lit}{\nonterminal{lit}}
+\newcommand{\var}{\nonterminal{var}}
+\newcommand{\prim}{\nonterminal{prim}}
+\newcommand{\expr}{\nonterminal{expr}}
+
 \begin{equation}
   \label{eq:lang0}
   \begin{aligned}
-    \nt{lit} & ::= 2 
+%    \lit & ::= 2 \mid 3.1 \mid 0.02 \mid \dotsb \\
+%    \var & ::= x \mid y | \dotsb \\
+%    \prim & ::= \operatorname{add} \mid \operatorname{mul} \mid \dotsb \\
+    \expr & ::=
+            \begin{aligned}[t]
+              & \lit \\
+              & \mid \var   \\
+              & \mid \prim \; \expr \; \dotsc
+            \end{aligned}
   \end{aligned}
 \end{equation}
-
 
 Figure~\ref{fig:dfgh-tree} illustrates one of the problems described
 earlier. The diagram shows a schematic version of the abstract syntax
