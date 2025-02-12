@@ -315,7 +315,7 @@ def libMaths:
 \end{marginfigure}
 The third argument, \cd{prims}, is required by rule
 (\ref{item:eval-app}). Certain parts of the expression are functions
-that are ``built in,'' that is, known to the evaluatory. These are
+that are ``built in,'' that is, known to the evaluator. These are
 called ``primitive functions,'' to distinguish them from
 progammer-defined functions (which our current syntax does not
 support). Figure~\ref{fig:prims} is a (very) small library of
@@ -351,7 +351,7 @@ respect to~$x$.
 %   \end{equation*}
 % \end{marginfigure}
 
-Suppose \cd{e} is an \cd{Expr}. There are three kinds of expression..
+Suppose \cd{e} is an \cd{Expr}. There are three possibilities.
 
 First, \cd{e} may be a literal constant, \cd{Lit(|$v$|)}. Since the
 derivative of a constant is zero, the derivative is \cd{Lit(0)}.
@@ -419,7 +419,7 @@ is meant is ``the partial derivative of $f$ with respect to its first
 argument, evaluated at the point where its arguments are $u(x)$
 and~$v(x)$.''
 
-At any rate, eq.~\ref{eq:chain-rule} tells us that \cd{deriv(e, "x")}
+At any rate, eq.~\eqref{eq:chain-rule} tells us that \cd{deriv(e, "x")}
 is a sum of terms (those on the right-hand side of
 eq.~\eqref{eq:chain-rule}), each of which is a product:
 \begin{minted}[escapeinside=||,mathescape=true]{python}
@@ -459,7 +459,7 @@ figure~\ref{fig:deriv-library}.
 Here is the derivative of \cd{gaussian}:
 \begin{minted}{python}
 > def dgaussian = deriv(gaussian, "x", libDeriv)
-> eval(dgaussian, {"x': 0}, libMaths)
+> eval(dgaussian, {"x": 0}, libMaths)
 0
 \end{minted}
 A plot of \cd{dgaussian} is shown in figure~\ref{fig:dgaussian-plot}.
