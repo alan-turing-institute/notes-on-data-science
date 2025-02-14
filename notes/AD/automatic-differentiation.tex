@@ -565,29 +565,6 @@ program.
 
 \section{Expression sharing}
 
-We have so far constructed a very simple language, without even a
-surface syntax. All we have is an abstract syntax tree, described by
-its representation as a data structure in Rhombus.
-
-Here is one way of describing the language as a data structure,
-without reference to a particular host language. 
-\newcommand{\nonterminal}[1]{\langle\operatorname{\textit{#1}}\rangle}
-\newcommand{\lit}{\nonterminal{lit}}
-\newcommand{\var}{\nonterminal{var}}
-\newcommand{\prim}{\nonterminal{prim}}
-\newcommand{\expr}{\nonterminal{expr}}
-
-\begin{equation*}
-  \begin{aligned}
-%    \lit & ::= 2 \mid 3.1 \mid 0.02 \mid \dotsb \\
-%    \var & ::= x \mid y | \dotsb \\
-%    \prim & ::= \operatorname{add} \mid \operatorname{mul} \mid \dotsb \\
-    \expr  ::= {} & \lit &&& \text{(literal)} \\
-             \mid {} & \var  &&& \text{(variable)} \\
-             \mid {} & \prim \; \expr \; \dotsc &&& \text{(application)}
-  \end{aligned}
-\end{equation*}
-
 Figure~\ref{fig:dfgh-tree} illustrates one of the problems described
 earlier. The diagram shows a schematic version of the abstract syntax
 tree that one would obtain by running \cd{deriv} on the expression
@@ -612,8 +589,76 @@ then $g(h)$ would also end up being computed twice (and $h(x)$ three
 times).
 
 
+\section{Appendix: My language so far and how to differentiate it}
 
+\newcommand{\nonterminal}[1]{\langle\textit{#1}\rangle}
+\newcommand{\num}{\nonterminal{num}}
+\newcommand{\var}{\nonterminal{var}}
+\newcommand{\prim}{\nonterminal{prim}}
+\newcommand{\expr}{\nonterminal{expr}}
+\newcommand{\terminal}[1]{\texttt{#1}}
+\newcommand{\proc}[1]{\terminal{#1}}
 
+In the following, $\num$ stands for (real?)\ numbers, $\var$ for
+variables, and $\prim$ for primitive functions. Variables are $x$,
+$y$, etc. Primitives are add, sub, mul, and so on, and come with an
+arity; we might use $p$, $q$ etc for a particular, but arbitrary,
+primitive. Likewise $E$, $F$, etc are particular, but arbitrary
+expressions.
+
+\subsection{Language 0 (only application)}
+
+\begin{equation*}
+  \begin{aligned}
+%    \lit & ::= 2 \mid 3.1 \mid 0.02 \mid \dotsb \\
+%    \var & ::= x \mid y | \dotsb \\
+%    \prim & ::= \operatorname{add} \mid \operatorname{mul} \mid \dotsb \\
+    \expr  ::= {} & \num &&& \text{(literal)} \\
+             \mid {} & \var  &&& \text{(variable)} \\
+             \mid {} & ( \prim \; \expr \; \dotsc ) &&& \text{(application)}
+  \end{aligned}
+\end{equation*}
+
+An expression that does not contain a variable is said to be
+\emph{closed}.
+
+The differentiation operator, $D\colon \var\times\expr \to \expr$ is a
+transformation operator on expressions. $D_x(E)$ is an expression that
+is the derivative of $E$ with respect to~$x$. In this section we give
+the rules for computing $D_x(E)$.
+
+We need built-in rules for the derivatives of the built-in primitives
+with respect to their arguments. A primitive of arity $n$ has $n$
+derivatives, one for each argument. Each derivative is a function,
+also of arity $n$, but not necessarily a primitive. This is a problem,
+because we don't have functions in the language. For now, we solve
+this problem by writing these derivatives as functions in the host
+language: they take, as arguments, expressions, and substitute those
+expressions into the appropriate placeholders.  
+
+For $p$ a primitive of arity $n$, and for any $i\in\{1, \dotsc, n\}$ we
+denote by $[D_ip]$ the function of arity $n$, whose arguments are
+expressions, such that $[D_ip](E_1, E_2, \dotsc)$ is an $\expr$ which
+computes the derivative of $p$ with respect to its $i$th argument. 
+
+Also, to write down the chain rule 
+
+The rules are as follows. Here, $n$ is a~$\num$.
+\begin{equation*}
+  \begin{aligned}
+    D_x \colon n & \mapsto 0 \\
+    D_x \colon y & \mapsto
+            \begin{cases}
+              0 & x \neq y \\
+              1 & x = y
+            \end{cases}
+            \\
+    D_x \colon (p\; E_1\; E_2\; \dotsc)
+                 &\mapsto \bigoplus_i
+                   (\proc{mul}\; [D_ip](E_1, E_2, \dotsc)\;  
+                   D_x(E_i))
+  \end{aligned}
+\end{equation*}
 
 
 \end{document}
