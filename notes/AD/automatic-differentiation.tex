@@ -577,20 +577,16 @@ without reference to a particular host language.
 \newcommand{\prim}{\nonterminal{prim}}
 \newcommand{\expr}{\nonterminal{expr}}
 
-\begin{equation}
-  \label{eq:lang0}
+\begin{equation*}
   \begin{aligned}
 %    \lit & ::= 2 \mid 3.1 \mid 0.02 \mid \dotsb \\
 %    \var & ::= x \mid y | \dotsb \\
 %    \prim & ::= \operatorname{add} \mid \operatorname{mul} \mid \dotsb \\
-    \expr & ::=
-            \begin{aligned}[t]
-              & \lit \\
-              & \mid \var   \\
-              & \mid \prim \; \expr \; \dotsc
-            \end{aligned}
+    \expr  ::= {} & \lit &&& \text{(literal)} \\
+             \mid {} & \var  &&& \text{(variable)} \\
+             \mid {} & \prim \; \expr \; \dotsc &&& \text{(application)}
   \end{aligned}
-\end{equation}
+\end{equation*}
 
 Figure~\ref{fig:dfgh-tree} illustrates one of the problems described
 earlier. The diagram shows a schematic version of the abstract syntax
