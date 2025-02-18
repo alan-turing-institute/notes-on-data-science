@@ -598,13 +598,16 @@ times).
 \newcommand{\expr}{\nonterminal{expr}}
 \newcommand{\terminal}[1]{\texttt{#1}}
 \newcommand{\proc}[1]{\terminal{#1}}
+\newcommand{\lt}{\proc{let}}
 
 In the following, $\num$ stands for (real?)\ numbers, $\var$ for
 variables, and $\prim$ for primitive functions. Variables are $x$,
-$y$, etc. Primitives are add, sub, mul, and so on, and come with an
-arity; we might use $p$, $q$ etc for a particular, but arbitrary,
-primitive. Likewise $E$, $F$, etc are particular, but arbitrary
-expressions.
+$y$, etc. The set of primitives must include add and mul, and may
+include others such sub, div, exp, and so on. Primitives come with an
+arity.
+
+We might use $p$, $q$ etc for a particular, but arbitrary, primitive,
+and likewise $E$, $F$, etc, are particular, but arbitrary expressions.
 
 \subsection{Language 0 (only application)}
 
@@ -618,45 +621,91 @@ expressions.
              \mid {} & ( \prim \; \expr \; \dotsc ) &&& \text{(application)}
   \end{aligned}
 \end{equation*}
+where
+\begin{equation*}
+  \begin{aligned}
+    \prim ::= {}& \proc{add} \mid \proc{mul} \mid \dotsb; \quad\text{and} \\
+    \num ::= {}& 0 \mid 1 \mid \dotsb.
+  \end{aligned}
+\end{equation*}
 
 An expression that does not contain a variable is said to be
 \emph{closed}.
 
-The differentiation operator, $D\colon \var\times\expr \to \expr$ is a
-transformation operator on expressions. $D_x(E)$ is an expression that
-is the derivative of $E$ with respect to~$x$. In this section we give
-the rules for computing $D_x(E)$.
+The differentiation operator, $D\colon \var\times\expr \to \expr$ transforms
+expressions. $D_x(E)$ is that expression representing the derivative
+of $E$ with respect to~$x$. In this section we give the rules for
+computing $D_x(E)$.
 
-We need built-in rules for the derivatives of the built-in primitives
-with respect to their arguments. A primitive of arity $n$ has $n$
-derivatives, one for each argument. Each derivative is a function,
-also of arity $n$, but not necessarily a primitive. This is a problem,
-because we don't have functions in the language. For now, we solve
-this problem by writing these derivatives as functions in the host
-language: they take, as arguments, expressions, and substitute those
-expressions into the appropriate placeholders.  
+The first two kinds of expression are easy. Suppose $n$ is
+a~$\num$. Then
+\begin{equation*}
+  D_x \colon n \mapsto 0.
+\end{equation*}
+Now suppose $y$ is a variable. Then
+\begin{equation*}
+  D_x \colon y \mapsto
+  \begin{cases}
+    0 & y \neq x \\
+    1 & y = x.
+  \end{cases}
+\end{equation*}
+To differentiate an application some additional machinery is required.
+
+First, we need built-in rules for the derivatives of the built-in
+primitives. A primitive of arity $n$ has $n$ derivatives, one for each
+argument. Each derivative is a function, also of arity $n$; however,
+this function may not be a primitive. That is a problem, because
+functions are not part of the language. For now we solve this problem
+by writing these derivatives as functions in the \emph{host} language
+which evaluate their arguments at ``compile-time:'' they take, as
+arguments, expressions, and substitute those expressions into the
+appropriate placeholders.
 
 For $p$ a primitive of arity $n$, and for any $i\in\{1, \dotsc, n\}$ we
-denote by $[D_ip]$ the function of arity $n$, whose arguments are
-expressions, such that $[D_ip](E_1, E_2, \dotsc)$ is an $\expr$ which
-computes the derivative of $p$ with respect to its $i$th argument. 
+denote by $[D_ip]$ that function of arity $n$ such that
+$[D_ip](E_1, E_2, \dotsc)$ is an $\expr$ which computes the derivative
+of $p$ with respect to its $i$th argument.
 
-Also, to write down the chain rule 
+In addition, when the chain rule is applied to a function of multiple
+arguments, the result contains a sum over terms. However, our
+expression language may contain only binary addition, $\proc{add}$. We
+define another function in the host language which reduces the sum
+over $\proc{add}$:
+\begin{equation*}
+  \bigoplus_i E_i = (\proc{add}\; E_1\; (\proc{add}\; E_2\; \dotsb (\proc{add}\;
+  E_{n-1}\; E_n))). 
+\end{equation*}
+Notice that each $E_i$ is an $\expr$, but $\oplus$ itself is not an
+$\expr$; it is a function in the host language that computes an
+expression.
 
-The rules are as follows. Here, $n$ is a~$\num$.
+Finally, then, the derivative of an application is
 \begin{equation*}
   \begin{aligned}
-    D_x \colon n & \mapsto 0 \\
-    D_x \colon y & \mapsto
-            \begin{cases}
-              0 & x \neq y \\
-              1 & x = y
-            \end{cases}
-            \\
     D_x \colon (p\; E_1\; E_2\; \dotsc)
-                 &\mapsto \bigoplus_i
+                 \mapsto \bigoplus_i
                    (\proc{mul}\; [D_ip](E_1, E_2, \dotsc)\;  
                    D_x(E_i))
+  \end{aligned}
+\end{equation*}
+
+\subsection{Language 1: Add let-binding}
+
+\begin{equation*}
+  \begin{aligned}
+    \expr  ::= {} & \num &&& \text{(literal)} \\
+             \mid {} & \var  &&& \text{(variable)} \\
+             \mid {} & ( \prim \; \expr \; \dotsc ) &&& \text{(application)}
+    \\
+             \mid {} & (\lt\; \var\; \expr\; \expr) &&& \text{(let binding)}
+  \end{aligned}
+\end{equation*}
+where
+\begin{equation*}
+  \begin{aligned}
+    \prim ::= {}& \proc{add} \mid \proc{mul} \mid \dotsb; \quad\text{and} \\
+    \num ::= {}& 0 \mid 1 \mid \dotsb.
   \end{aligned}
 \end{equation*}
 
