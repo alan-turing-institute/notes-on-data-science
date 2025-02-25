@@ -21,7 +21,7 @@ An expression is either
 class Expr():
   nonfinal
 
-class Lit(val :: Number):
+class Num(val :: Number):
   extends Expr
 
 class Var(name :: String):
@@ -34,7 +34,7 @@ class App(name :: String,
 // Convert an Expr to a pairlist, so we can export to Racket
 fun pairlist_of_expr(e):
   match e:
-  | Lit(v): v
+  | Num(v): v
   | Var(s): s
   | App(p, args):
       PairList[p, & List.map(args, pairlist_of_expr)]
@@ -45,7 +45,7 @@ def gaussian:
       [App("neg",
            [App("div",
                 [App("mul", [Var("x"), Var("x")]),
-                 Lit(2)])
+                 Num(2)])
             ])
        ])
 
@@ -63,15 +63,15 @@ def libMaths:
    "exp": math.exp
   }
 
-fun eval(e :: Expr, env :: Map, prims :: Map):
+Fun eval(e :: Expr, env :: Map, prims :: Map):
   match e
-  | Lit(v): 
+  | Num(v): 
       v
   | Var(s): 
       env[s]
   | App(p, args):
-      def arg_vals:
-        args.map(eval(_, env, prims))
+      let arg_vals
+        = args.map(eval(_, env, prims))
       prims[p](& arg_vals)
 
 // String interpolation with @-notation
@@ -79,13 +79,13 @@ println(@str{gaussian(0) = @eval(gaussian, {"x": 0}, libMaths)})
 
 def libDeriv:
   {
-    "add": fun(u, v): [Lit(1), Lit(1)],
-    "sub": fun(u, v): [Lit(1), Lit(-1)],
-    "neg": fun(u):    [Lit(-1)],
+    "add": fun(u, v): [Num(1), Num(1)],
+    "sub": fun(u, v): [Num(1), Num(-1)],
+    "neg": fun(u):    [Num(-1)],
     "mul": fun(u, v): [v, u],
     "div":
       fun(u, v):
-        [App("div", [Lit(1), v]),
+        [App("div", [Num(1), v]),
          App("neg",
              [App("div",
                   [u, App("mul",
@@ -107,12 +107,13 @@ fun mul(e1, e2):
 
 fun deriv(e :: Expr, var :: String, derivs :: Map):
   match e
-  | Lit(v):
-      Lit(0)
-  | Var(s):
+  | Num(_):
+      Num(0)
+  | Var(s) when s == var: Num(1)
+
       if s == var
-      | Lit(1)
-      | Lit(0)
+      | Num(1)
+      | Num(0)
   | App(p, args):
       // dps is a list of derivatives 
       let dps = derivs[p](& args)
@@ -129,7 +130,7 @@ fun sum(xs):
 
 fun count_nodes(e :: Expr):
   match e
-  | Lit(v): 1
+  | Num(v): 1
   | Var(s): 1 
   | App(p, args):
       1 + sum(Function.map(count_nodes, args))  
