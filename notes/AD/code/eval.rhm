@@ -63,7 +63,7 @@ def libMaths:
    "exp": math.exp
   }
 
-Fun eval(e :: Expr, env :: Map, prims :: Map):
+fun eval(e :: Expr, env :: Map, prims :: Map):
   match e
   | Num(v): 
       v
@@ -93,16 +93,16 @@ def libDeriv:
     "exp": fun(u):    [App("exp", [u])]
   }
 
-// reduce + over es
+// Reduce + over es
 // es must have at least one element
-fun sum_of_exprs(es):
+fun sumEs(es):
   match es
   | [e]: e
   | [e, &rest]:
       App("add",
-          [e, sum_of_exprs(rest)])
+          [e, sumEs(rest)])
 
-fun mul(e1, e2):
+fun mulE(e1, e2):
   App("mul", [e1, e2])  
 
 fun deriv(e :: Expr, var :: String, derivs :: Map):
@@ -110,17 +110,13 @@ fun deriv(e :: Expr, var :: String, derivs :: Map):
   | Num(_):
       Num(0)
   | Var(s) when s == var: Num(1)
-
-      if s == var
-      | Num(1)
-      | Num(0)
+  | Var(_): Num(0)
   | App(p, args):
-      // dps is a list of derivatives 
+      // dps is a list of derivatives, one for each argument 
       let dps = derivs[p](& args)
-      let des
+      let dargs
         = args.map(deriv(_, var, derivs))
-      Function.map(mul, dps, des)
-        |> sum_of_exprs
+      Function.map(mulE, dps, dargs) |> sumEs
 
 fun sum(xs):
   def mutable total = 0
@@ -134,7 +130,8 @@ fun count_nodes(e :: Expr):
   | Var(s): 1 
   | App(p, args):
       1 + sum(Function.map(count_nodes, args))  
-     
+
+
 def dgaussian = deriv(gaussian, "x", libDeriv)
 def dgaussian_expr = pairlist_of_expr(dgaussian)
 
@@ -145,3 +142,4 @@ def g = fun(x): eval(gaussian, {"x": x}, libMaths)
 
 def ddgaussian = deriv(dgaussian, "x", libDeriv)
 def ddg = fun(x): eval(ddgaussian, {"x": x}, libMaths)
+
