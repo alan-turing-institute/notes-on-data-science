@@ -598,7 +598,10 @@ times).
 \newcommand{\expr}{\nonterminal{expr}}
 \newcommand{\terminal}[1]{\texttt{#1}}
 \newcommand{\proc}[1]{\terminal{#1}}
-\newcommand{\lt}{\proc{let}}
+\newcommand{\Tlt}{\proc{let}}
+\newcommand{\Teq}{\proc{=}}
+\newcommand{\Tin}{\proc{in}}
+\newcommand{\mklet}[3]{\Tlt\;#1\;\Teq\;#2\;\Tin\;#3}
 
 In the following, $\num$ stands for (real?)\ numbers, $\var$ for
 variables, and $\prim$ for primitive functions. Variables are $x$,
@@ -618,7 +621,7 @@ and likewise $E$, $F$, etc, are particular, but arbitrary expressions.
 %    \prim & ::= \operatorname{add} \mid \operatorname{mul} \mid \dotsb \\
     \expr  ::= {} & \num &&& \text{(literal)} \\
              \mid {} & \var  &&& \text{(variable)} \\
-             \mid {} & ( \prim \; \expr \; \dotsc ) &&& \text{(application)}
+             \mid {} & \prim \; \expr \; \dotsc  &&& \text{(application)}
   \end{aligned}
 \end{equation*}
 where
@@ -673,7 +676,7 @@ expression language may contain only binary addition, $\proc{add}$. We
 define another function in the host language which reduces the sum
 over $\proc{add}$:
 \begin{equation*}
-  \bigoplus_i E_i = (\proc{add}\; E_1\; (\proc{add}\; E_2\; \dotsb (\proc{add}\;
+  \oplus_i E_i \isdef (\proc{add}\; E_1\; (\proc{add}\; E_2\; \dotsb (\proc{add}\;
   E_{n-1}\; E_n))). 
 \end{equation*}
 Notice that each $E_i$ is an $\expr$, but $\oplus$ itself is not an
@@ -684,7 +687,7 @@ Finally, then, the derivative of an application is
 \begin{equation*}
   \begin{aligned}
     D_x \colon (p\; E_1\; E_2\; \dotsc)
-                 \mapsto \bigoplus_i
+                 \mapsto \oplus_i
                    (\proc{mul}\; [D_ip](E_1, E_2, \dotsc)\;  
                    D_x(E_i))
   \end{aligned}
@@ -696,9 +699,9 @@ Finally, then, the derivative of an application is
   \begin{aligned}
     \expr  ::= {} & \num &&& \text{(literal)} \\
              \mid {} & \var  &&& \text{(variable)} \\
-             \mid {} & ( \prim \; \expr \; \dotsc ) &&& \text{(application)}
+             \mid {} & \prim \; \expr \; \dotsc  &&& \text{(application)}
     \\
-             \mid {} & (\lt\; \var\; \expr\; \expr) &&& \text{(let binding)}
+             \mid {} & \mklet{\var}{\expr}{\expr} &&& \text{(let binding)}
   \end{aligned}
 \end{equation*}
 where
