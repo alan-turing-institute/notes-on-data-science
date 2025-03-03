@@ -109,8 +109,10 @@ fun deriv(e :: Expr, var :: String, derivs :: Map):
   match e
   | Num(_):
       Num(0)
-  | Var(s) when s == var: Num(1)
-  | Var(_): Num(0)
+  | Var(s):
+      if s == var
+      | Num(1)
+      | Num(0)
   | App(p, args):
       // dps is a list of derivatives, one for each argument 
       let dps = derivs[p](& args)
