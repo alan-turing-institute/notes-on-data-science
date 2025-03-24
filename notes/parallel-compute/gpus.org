@@ -1,0 +1,40 @@
+#+title: GPUs
+
+
+
+* My Apple M2 (24 GB RAM)
+
+** System Information
+
+- Number of cores: 10
+
+** clinfo (selected)
+
+- Max compute units: 10
+- Max work item dimensions: 3
+- Max work item sizes: \(256\times  256\times 256\)
+- Max work group size: 256
+- Preferred work group size multiple: 32
+- Global memory size: 16 GiB.
+- Max memory allocation: 3 GiB  
+- Local memory size: 32 KiB
+- Max const buffer size: 1024 MiB
+- Max size of kernel argument: 4 KiB
+  
+** Other
+
+From
+https://www.eatyourbytes.com/applecpu-detail/apple-m2-10-core-gpu/,
+
+- 16 Execution Units per core
+- 8 ALUs per Execution Unit.
+
+  
+* H100
+
+** NVIDIA
+
+- 144 Streaming Multiprocessors
+- 128 FP32 CUDA Cores per SM
+- 4 sub-SMs? per SM, 32 CUDA Cores per sub-SM.
+  
