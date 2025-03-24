@@ -713,7 +713,26 @@ where
 \end{equation*}
 
 
+
+
 \end{document}
+
+f(g(h(x)))
+
+ANF: 
+
+0 let x0 = x in
+1   let h0 = h(x0) in
+2     let g0 = g(h0) in
+3       let f0 = f(g0) in
+4         f0
+
+D_x [let z = H in G] = ∂_x G + (∂_z G) (D_x H) 
+        
+0: 0 + 1 . (∂_(x0) G)
+1: 0 + (∂_(h0) ...) h'(x0)
+
+
 
 % Local Variables:
 % TeX-command-extra-options: "-shell-escape"
