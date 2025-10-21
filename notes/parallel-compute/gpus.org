@@ -1,5 +1,12 @@
 #+title: GPUs
 
+* Terminology
+
+| NVIDIA                   | Apple          | AMD               | Intel | Other? |
+|--------------------------+----------------+-------------------+-------+--------|
+| Streaming Multiprocessor | Core           | Compute Unit?     |       |        |
+| ?                        | Execution Unit | Stream Processor? |       |        |
+| CUDA Core                | ALUs           |                   |       |        |
 
 
 * My Apple M2 (24 GB RAM)
@@ -29,7 +36,22 @@ https://www.eatyourbytes.com/applecpu-detail/apple-m2-10-core-gpu/,
 - 16 Execution Units per core
 - 8 ALUs per Execution Unit.
 
-  
+* My Apple M3 Pro (36 GB RAM)
+
+** clinfo (selected)
+
+- Max compute units: 14
+- Max work item dimensions: 3
+- Max work item sizes: \(256\times  256\times 256\)
+- Max work group size: 256
+- Preferred work group size multiple: 32
+- Global memory size: 27 GiB.
+- Max memory allocation: 5 GiB  
+- Local memory size: 32 KiB
+- Max const buffer size: 1024 MiB
+- Max size of kernel argument: 4 KiB
+
+
 * H100
 
 ** NVIDIA
