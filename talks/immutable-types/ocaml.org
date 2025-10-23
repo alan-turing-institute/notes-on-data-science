@@ -1,0 +1,12 @@
+#+title: Five little programs in OCaml
+
+
+
+
+1. int, bool, and string
+
+   Draw some circles.
+
+   not, length, 
+
+
