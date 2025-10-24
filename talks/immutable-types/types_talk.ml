@@ -7,11 +7,16 @@ let is_zero = ((=) 0) ;;
     A philosophy of programming:
     
     1. To program is to describe a computation.
-    
     2. To compute is to calculate the value of a function.
-
     3. Functions turn inputs into outputs.
 
+    For example: the "square" program:
+
+    ( 3 ) ----[ square ]---> ( 9 )
+
+    
+    
+    
  *)
 
 
@@ -27,8 +32,10 @@ let is_zero = ((=) 0) ;;
     - [true] and [false] are the only values of type [bool]
     - ["hello"] is a value of type [string]
 
+    Values can be given names, using the special syntax, let
+    
  *)
-
+ 
 
 (** III --------------------------------------------------------
     
@@ -42,12 +49,16 @@ let is_zero = ((=) 0) ;;
     [pred : int -> int]
     [is_zero : int -> bool]
     [string_of_int : int -> string]
+
+    [solve_advent_of_code : string -> string] <-- We want to create this!
         
  *)
 
 
 (** IV ---------------------------------------------------------
 
+    Program 1
+    
     To "program" all we need to do is to combine the built-in
     functions to make new functions.
 
@@ -55,12 +66,19 @@ let is_zero = ((=) 0) ;;
 
  *)
 
-let is_nonzero n =
-  not (is_zero n)
 
-let add2 n =
-  succ (succ n)
+(** V ----------------------------------------------------------
 
+    Making new types. 
 
+    - Types that are isomorphic to (but not identical to!) an existing
+    type
 
+    - Product types
+
+    - Sum types
+    
+ *)
+
+type port = Port of int
 

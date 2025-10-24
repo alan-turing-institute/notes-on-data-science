@@ -10,6 +10,7 @@ Advent of Code 2022, Day 1.
 
 #+begin_src ocaml
   string_of_int 12 ;;
+  int_of_string 13 ;;
   
   succ 0 ;;
   pred 1 ;;
@@ -18,6 +19,8 @@ Advent of Code 2022, Day 1.
   is_zero 1 ;;
 
   not true ;;
+
+  let foo = 2;;
 #+end_src
 
 In this language, to apply a function to a value, we write the
@@ -33,6 +36,13 @@ function consumes exactly one value.
 Notice that each function consumes a value of a particular type. It
 doesn't make sense to give a string to is_zero, for example, and we
 get an error should we try to do so.
+
+Going back to our advent of code problem, in some sense our input is a
+string (that is, a sequence of characters) and so is our output. So we
+are going to write a function that consumes a value of type string and
+produces a value of type string. 
+
+We can give names to values.
 
 * IV Constructing new functions
 
@@ -56,16 +66,57 @@ keyword `let`:
     succ (succ n)
 #+end_src
 
-We're saying: to apply is_nonzero to some value, let's call it n,
-first apply is_zero to n, then apply not to the result of that.
+We're saying: to apply ~is_nonzero~ to some value, let's call it ~n~,
+first apply ~is_zero~ to ~n~, then apply ~not~ to the result of that.
 
 Great! We've written a program!
 
 You might wonder why we needed the n at all. There's not much else we
 can do, so far, other than compose two functions. Couldn't we have
-written something like not ∘ is_zero ? That's a special symbol,
-meaning 
+written something like ~not ∘ is_zero~? We might return to this.
 
+
+* V Constructing new types
+
+** New versions of existing types
+
+Computers communicate with each other through "ports". A port is
+identified by a number. If we wanted to write programs that dealt with
+ports, we might like to have a type whose values are ports but which
+really is exactly the same as an ~int~. 
+
+#+begin_src ocaml
+  type port = Port of int
+#+end_src
+
+This creates an entirely new type, called ~port~, that is an identical
+copy of ~int~. You can get hold of a value of type ~port~ like this:
+~Port 8080~. The name that starts with a capital letter is a data
+constructor: it constructs a value of type port given a value of type
+int. It's the only way to get a value of type port. A port is not an
+int: you can't use a port where an int is expected:
+
+#+begin_src ocaml
+  succ (Port 8080)
+#+end_src
+
+How do you get the ~int~ out of a ~Port~? There are several ways, but
+the one we will use is with ~match~.
+
+#+begin_src ocaml
+  let p = Port 8080 ;;
+
+  match p with
+    (Port n) -> n ;;
+#+end_src
+
+This says, "p should be a Port n, for some n. Give back the n". 
+
+It's a little odd that getting values into ~port~, using the
+constructor, looks like a function, but getting them out seems to
+involve special syntax.
+
+** Products
 
 
 
