@@ -1,12 +1,71 @@
 #+title: Five little programs in OCaml
 
+* I Philosophy
+
+Advent of Code 2022, Day 1.
+
+* II Values
+
+* III Example functions
+
+#+begin_src ocaml
+  string_of_int 12 ;;
+  
+  succ 0 ;;
+  pred 1 ;;
+  
+  is_zero 0 ;;
+  is_zero 1 ;;
+
+  not true ;;
+#+end_src
+
+In this language, to apply a function to a value, we write the
+function, then a space, then the value.
+
+Other languages do this differently. Some languages write parentheses
+around the argument. Some languages wrap the whole expression in
+parentheses. That's because in the those languages some functions
+consume more than one value at once and without the parentheses are
+necessary to surround the multiple values. But in OCaml, every
+function consumes exactly one value.
+
+Notice that each function consumes a value of a particular type. It
+doesn't make sense to give a string to is_zero, for example, and we
+get an error should we try to do so.
+
+* IV Constructing new functions
+
+What we have so far is a calculator. The essence of programming,
+according to the philosophy of this talk, consists in building new
+functions. How can we make new functions?
+
+One immediate way is to compose two existing functions, one after the
+other, by using one function to consume the output of another. For
+example, we could say, is_nonzero should be a function that first
+applies is_zero, then applies not. 
+
+In this language, we make a function and give it a name using the
+keyword `let`:
+
+#+begin_src ocaml
+  let is_nonzero n =
+    not (is_zero n)
+
+  let add2 n =
+    succ (succ n)
+#+end_src
+
+We're saying: to apply is_nonzero to some value, let's call it n,
+first apply is_zero to n, then apply not to the result of that.
+
+Great! We've written a program!
+
+You might wonder why we needed the n at all. There's not much else we
+can do, so far, other than compose two functions. Couldn't we have
+written something like not ∘ is_zero ? That's a special symbol,
+meaning 
 
 
-
-1. int, bool, and string
-
-   Draw some circles.
-
-   not, length, 
 
 

@@ -55,6 +55,12 @@ let is_zero = ((=) 0) ;;
 
  *)
 
+let is_nonzero n =
+  not (is_zero n)
+
+let add2 n =
+  succ (succ n)
+
 
 
 
