@@ -1,0 +1,31 @@
+# -*- org-hide-emphasis-markers: t; -*- 
+#+PROPERTY: header-args    :tangle yes
+
+#+title: How to program
+#+author: James Geddes
+
+* Notes to self
+
+- Switch to light mode.
+- ~open Int~
+
+* What is a program?
+
+* Overview
+
+* Values and their types
+* I.   Product types: A * B
+* II.  Function types: A -> B
+* III. Sum types: A | B
+* IV.  Algebraic data types: int_list
+* V.   Advent of Code
+
+
+* End
+
+- Values
+  - 1, 2, 3, ... : int
+  - "hello", ... : string
+  - true, false  : bool
+
+ 
