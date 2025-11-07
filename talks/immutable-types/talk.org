@@ -9,16 +9,20 @@
 - Switch to light mode.
 - ~open Int~
 
+
 * What is a program?
 
 * Overview
 
 * Values and their types
-* I.   Product types: A * B
-* II.  Function types: A -> B
-* III. Sum types: A | B
-* IV.  Algebraic data types: int_list
-* V.   Advent of Code
+
+* Five little programs
+** I.   Product types: A * B
+** II.  Function types: A -> B
+** III. Sum types: A | B
+** IV.  Algebraic data types: int_list
+** V.   Advent of Code
+
 
 
 * End
