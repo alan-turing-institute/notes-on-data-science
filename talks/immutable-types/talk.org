@@ -11,15 +11,56 @@
 
 * What is a program?
 
+[...]
+
+Let's agree that a program is a thing that takes an input and produces
+an output.
+
+Let's suppose we take an extreme stance on this view, and we're only
+going to allow ourselves to make programs out of other programs of
+this type. And see how far we can get.
+
+
 * Overview
 
 * Values and their types
+** What we know so far
+
+A program turns inputs into outputs.
+
+** Examples
+
 * I.   Product types: A * B
+** What we know so far
+
+- ~int~, ~bool~, and ~string~ are types. 
+- ~3~ is an ~int~; ~true~ is a ~bool~; ~"Hello"~ is a ~string~
+
+** Making new types
+
+
+
 * II.  Function types: A -> B
+
 * III. Sum types: A | B
-* IV.  Algebraic data types: int_list
+
+* IV.  Algebraic data types: int_list and int list
+
+** What we know so far
+
+
+
+
+
 * V.   Advent of Code
 
+The input is an (~int list) list~.  
+
+#+begin_src ocaml
+  type 'a list = Empty
+               | Cons 'a * ('a list) 
+    
+#+end_src
 
 * End
 
