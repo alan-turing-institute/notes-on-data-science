@@ -23,12 +23,16 @@ let rec map f xs =
 let rec fold f acc xs =
   match xs with
   | Nil -> acc
-  | Cons (first, rest) -> f first (fold f acc rest)
+  | Cons (first, rest) ->
+     f first (fold f acc rest)
 
-let sum = fold Int.add 0 
+let sum = fold Int.add 0
 
 let list_max = fold Int.max Int.min_int
 
+let () = list_max (map sum puzzle_input)
+         |> string_of_int
+         |> print_endline
 
 
     

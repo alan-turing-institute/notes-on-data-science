@@ -195,11 +195,11 @@ arithmetic easier: We can write ~2 + 3~ and ~2 = 3~.
 
 ** Product types
 
-Alright. We still can't write very interesting programs. In
-particular, we can't solve the advent of code puzzle. If we could
-solve the advent of code puzzle, it would look a bit like this. The
+Alright.  We still can't write very interesting programs.  In
+particular, we can't solve the advent of code puzzle.  If we could
+solve the advent of code puzzle, it would look a bit like this.  The
 input and output are of course strings, but to do anything useful will
-need to think of the input in a more structured way. In particular,
+need to think of the input in a more structured way.  In particular,
 it's a collection of groups of numbers.
 
 We want to be able to talk about values that are “collections of other
@@ -244,12 +244,22 @@ compiler.
 ** Sum types
 
 Here's a new type, a copy of ~int~. It could be used to hold values
-that represent computer networking ports.
+that represent computer networking ports, which are designated by
+integers. Making it a separate type helps to catch errors, because it
+means that you can't use an ~int~ where a ~port~ is wanted. 
 
 Suppose we want a function that converts a port to its well-known
 name, as a string. It will be something like:
 
-Sometimess there isn't a well-known name. What should we return? It
+#+begin_src ocaml
+  let name_of_port p =
+    match p with
+    | 20 -> "FTP"
+    | 80 -> "HTTP"
+    | _  -> ?? (* What goes here? *)
+#+end_src
+
+Sometimes there isn't a well-known name. What should we return? It
 feels wrong to return a string -- the return value is supposed to be
 the name of a well-known type.
 
@@ -259,11 +269,11 @@ Here's a type that can hold a string, or a special value, created with
 #+begin_src ocaml
   type stringoption =
     | None
-    | Some of string
+    | Some of string ;;
 #+end_src
 
 #+begin_src ocaml
-  let portName p =
+  let name_of_port p =
     match p with
     | 20 -> Some "FTP"
     | 80 -> Some "HTTP"
@@ -271,17 +281,37 @@ Here's a type that can hold a string, or a special value, created with
 #+end_src
 
 
-
-
-
-
-
-
-
 * Advent of Code
 
+With one more type we can write interesting programs.  We need a type
+that can hold "some ints, but we don't know how many ints at
+compile-time."
+
+Here it is:
 
 
+
+We're going to build this type out of pairs.  It will be roughly like
+this:
+
+#+begin_src ocaml
+  (10, (20, (30, Nil)))
+#+end_src
+
+That's three ints: 10, 20, and 30.  We are trying to say "this is a
+pair.  The first element of the pair is the first element of the list.
+The second element of the pair is the rest of the list."  The special
+value Nil means "an empty list."
+
+Here's the definition. The name Cons, short for "construct" is
+traditional. 
+
+#+begin_src ocaml
+  type int_list = Nil
+                | Cons of (int * int_list)
+#+end_src
+
+Here are some intlists.
 
 
 
