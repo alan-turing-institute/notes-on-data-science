@@ -7,32 +7,13 @@
 * Notes to self
 
 - Switch to light mode.
-- ~open Int~
+- ~open Int~ (or not)
+- Prettify symbols mode
+- See hide-emphasis-markers at top
+
+* Introduction
 
 
-* What is a program?
-
-[...]
-
-Let's agree that a program is a thing that takes an input and produces
-an output.
-
-Let's suppose we take an extreme stance on this view, and we're only
-going to allow ourselves to make programs out of other programs of
-this type. And see how far we can get.
-
-
-* Overview
-
-* Values and their types
-** What we know so far
-
-A program turns inputs into outputs.
-
-** Examples
-
-* I.   Product types: A * B
-** What we know so far
 
 - ~int~, ~bool~, and ~string~ are types. 
 - ~3~ is an ~int~; ~true~ is a ~bool~; ~"Hello"~ is a ~string~

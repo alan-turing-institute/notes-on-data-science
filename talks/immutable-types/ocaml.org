@@ -1,323 +1,290 @@
-#+title: How to write programs
-#+PROPERTY: header-args    :tangle yes
+#+title: Five little programs in OCaml
+#+PROPERTY: header-args    :tangle yes :comments org
+#+options: toc:nil
 
+* Introduction [15 mins?]
 
-* I Philosophy
+This is part three of my on-again, off-again series of talks about
+functional programming. I've enjoyed thinking about these so thank you
+for giving me the opportunity to talk again.
 
-As you know, there is a group in the Turing known as REG. You may have
-seen one of them. If you looked at their computer screen, you will
-likely find that they are doing something called “programming.”
+We write programs. Sometimes we teach other people to program. One
+question you might wonder about is, what /is/ a program?
 
-Perhaps you have watched a REG person “programming” and thought, that
-looks like fun. Perhaps you have even thought to yourself, I wish /I/
-could program. Well, today I thought I would tell you how to program.
+Let me describe two complementary ways to think about what a computer
+program is.
 
-Before I can tell you /how/ to program, I had better just explain
-/what/ it is that they are doing. What /is/ a program?
+- One way, which is perhaps the usual way, starts by acknowledging
+  that there are, in this world, things called computers, and we wish
+  to make them do stuff. Real computers are, at heart, Turing
+  machines. They execute a small number of built-in
+  instructions. These built-in instructions are very primitive. They
+  include: reading or writing a memory location; and branching to a
+  different part of the sequence depending on the value of those
+  memory locations. That's pretty much it.
 
-Let me give you an example that I hope will make it clear. Once a
-year, in December, many people in REG stop whatever inessential
-activity they are doing, and devote their time to the extremely
-important task of solving a series of programming challenges, known as
-Advent of Code. Programmers all over the world undertake these
-challenges and it is critical that they do so. For, if a programmer is
-unable to complete these challenges they will lose their progamming
-license and then there will be nothing for it but to become a manager.
-
-Here is the first challenge from a few years ago.
-
-https://adventofcode.com/2022/day/1
-
-There are a lot of words here so let me clarify the puzzle. You are
-given a series of numbers, like these, separated into groups by blank
-lines. This is the /puzzle input/. The task is to first find the sum
-of the numbers in each group, and then to find the largest such sum;
-that is the answer. In this example, the answer is 24000.
-
-To solve this puzzle, one writes a program. When run, that program
-takes, as its input, these numbers and produces, as output, the
-required answer. That is, it computes the required answer.
-
-Of course, it would be silly if the program *always* produced the same
-answer whatever input it was given. The program must be flexible
-enough to compute the answers corresponding to other possible
-inputs. Indeed, these numbers are just an example to help you
-understand the puzzle, they are not the real input. The real input is
-here.
-
-So we can see that a program is a kind of description of a
-computation. And a computation is a process which consumes some input
-and produces some output. If you are mathematically inclined, you will
-recognise this as a function. A program is a description of the steps
-involved in computing a function.
-
-In fact, in programming, we use the word "function" for exactly this
-kind of thing: a little program that consumes a value and produces a
-value. To program is to describe how to compute a function. 
-
-
-* II Values
-
-Alright, let's learn a programming language!
-
-The very first thing we need to know is what kind of things can our
-program consume and produce? Such things are called /values/.
-
-The philosophy of this talk is:
-
-- Every value is the value of some type;
-- Functions map types to types;
-- Programs are functions
+- A program is a sequence of these instructions. To learn to program
+  is, in part, to learn how to choose and arrange the appropriate
+  sequence of these instructions so that, after the computer has
+  executed them, the thing you want to happen will have happened.
+ 
+- It's very painful to write a program with such primitive
+  instructions, as you will know if you've ever written
+  assembly. Higher-level programming languages are there to make it
+  easier to produce the sequence of instructions. They add convenience
+  features like names for memory locations, procedures, and for loops.
   
+- So learning to program also involves learning the various
+  convenience and abstraction facilities provided by your favourite
+  programming language.
+
+- Now I'd like to tell you about another way to think about
+  programming. Although it seems ridiculous, I'd like you to forget,
+  for a moment, that real, physical, computers exist. I want to ask,
+  what is a computation actually /for/?
+
+- Every year, some of us try the Advent of Code programming
+  puzzles.
+
+- Here's an example https://adventofcode.com/2022/day/1
+
+- To solve these puzzles, one must write a program which, given some
+  puzzle input, produces the solution as output. The program has to
+  consume the puzzle input and emit the answer. That is, it computes a
+  function.
+
+- The puzzle /describes/ a function: It tells you /how/ the output
+  should be related to the input. But it does not explain how to
+  /compute/ the outupt. That's why it's a puzzle! Writing a program
+  means explicitly describing the steps required to compute the value
+  of this function.
+
+- So we might ask, can we describe this process, of computing the
+  value of a function, without reference to real computers? It turns
+  out that there is such a way. One starts with primitive functions --
+  ones that are very simple -- together with ways to combine these
+  primitive funtions to make more complex ones.
+  
+- On this view, learning to program has two parts, just as before:
+  - First, what kinds of things are allowed as the inputs to and
+    outputs from a program, and how does one construct more complex
+    functions out of simpler ones? 
+  - And second, what facilities does your programming language provide
+    to make this process easier?
+
+- Just like before, the first part is the hardest, because it's
+  conceptual.
+
+I'd like to tell you a little bit about the first part. That is, what
+is it like to program, if we think of programming as an exercise in
+creating functions?
+
+I will use the language OCaml because it has a strong functional
+core. OCaml will probably be unfamiliar to you, both because its
+syntax is slightly different from Python but also because its
+underlying philosophy is functional. I'll try to use just that part of
+OCaml that illustrates these functional ideas.
 
 
-* III Example functions
+* Types and programs
 
-#+begin_src ocaml :tangle yes
-  string_of_int 12 ;;
-  int_of_string 13 ;;
+** Built-ins
 
-  succ 0 ;;
-  pred 1 ;;
+[First slide]
 
-  is_zero 0 ;;
-  is_zero 1 ;;
+I will start by describing some of the built-in, primitive functions
+in OCaml.
 
-  not true ;;
+Dijsktra once said that the art of programming is the art of
+organising complexity.
 
-  let foo = 2;;
-#+end_src
+One of the ways that OCaml manages complexity is to restrict the kinds
+of things that can be inputs to, and outputs from, a particular
+function. An input to, our output from, a function, is a value; and
+every value has a type. Every function accepts only values of a
+certain type and produces only values of a certain type. So we need to
+know what types there are. Here are three built-in types.
 
-In this language, to apply a function to a value we write the
-function, then a space, then the value.
+[Show some examples of int, bool, and string.]
 
-Other languages do this differently. Some languages write parentheses
-around the argument. Some languages wrap the whole expression in
-parentheses. That's because in the those languages some functions
-consume more than one value at once and without the parentheses are
-necessary to surround the multiple values. But in OCaml, every
-function consumes exactly one value.
-
-Notice that each function consumes a value of a particular type. It
-doesn't make sense to give a string to ~is_zero~, for example, and we
-get an error should we try to do so.
-
-Going back to our advent of code problem, in some sense our input is a
-string (that is, a sequence of characters) and so is our output. So we
-are going to write a function that consumes a value of type string and
-produces a value of type string. 
-
-We can give names to values.
-
-
-* IV Constructing new functions
-
-What we have so far is a really a calculator. But the essence of
-programming, according to the philosophy of this talk, consists in
-building new functions. How can we make new functions?
-
-One obvious way is to compose two existing functions, one after the
-other, by using one function to consume the output of another. For
-example, we could say, ~is_nonzero~ is the function that first applies
-~is_zero~, then applies ~not~.
-
-In this language, we make a function and give it a name at the same
-time using the keyword ~let~:
+The language also provides us with some built-in functions which work
+with these built-in types. Here are some examples.
 
 #+begin_src ocaml
-  let is_nonzero n =
-    not (is_zero n)
+  string_of_int 12
 
-  let add2 n =
-    succ (succ n)
+  succ 0
+  pred 1
+
+  not true
 #+end_src
 
-We're saying: to apply ~is_nonzero~ to some value, let's call it ~n~,
-first apply ~is_zero~ to ~n~, then apply ~not~ to the result of
-that. To apply ~add2~ to some value, call it ~n~, apply ~succ~ to ~n~,
-then apply ~succ~ to that.
+In Python, you might be used to writing parentheses around the
+arguments to a function, but OCaml simply uses a space. Parentheses
+are instead used for grouping.
 
-Great! We've written two programs!
+We can make other functions out of these built-in functions by
+applying one function to the output of another. For example,
 
-You might wonder why we needed the ~n~ at all. There's not much else we
-can do, so far, other than compose two functions. Couldn't we have
-written something like ~not ∘ is_zero~? We might return to this.
+#+begin_src ocaml
+  (* Program 1 *)
+  
+  let add2 x =
+    succ (succ x) 
+#+end_src
 
-I think you can see that we can write some programs but not very
-many. All the programs we can write so far are the composition of a
-sequence of built-in functions, one after another. That feels
-limiting.
+~let~ is a keyword. It defines what you mean by ~add2 x~, which
+is to apply ~succ~ to ~x~ and then to apply ~succ~ to the result. We
+had to group the argument to the outer ~succ~ otherwise OCaml would
+attempt to apply ~succ~ to ~succ~.
 
+OCaml programs are checked by the compiler to ensure that functions
+are only applied to values of the correct type. If we apply ~succ~ to
+something that the compiler cannot prove is an ~int~, the result is a
+compiler error. Not all functional languages are like this, but OCaml
+is.
 
-* V Product types
+** Function types
 
-You might have noticed a problem.
+Well, now we can write lots of programs! But not very interesting
+ones. Only boring ones like ~add2~ and ~string_of_int~ of ~add2~.
 
-So far we have three types: ~int~, ~bool~, and ~string~. And every
-value is a value of some type. But the input to the Advent of Code
-puzzle is certainly neither an ~int~ nor a ~bool~. Perhaps it is a
-~string~? Really, we want to be able to think of it as “a collection
-of groups of ints.”
+We've talked about three kinds of entity in an OCaml program. There
+are functions; functions consume and emit values; and values have
+types. The picture shows some types and some functions.
+
+It turns out that in a functional language, functions are themselves
+values. Perhaps this is one of the defining features of a functional
+language. What I mean is that functions can consume functions and emit
+functions. In some sense, we write programs that create programs. 
+
+If functions are values, they must have a type.
+
+The type of ~succ~ is ~int->int~. It's a function that consumes an
+~int~ and produces an ~int~. All functions from ~int~ s to ~int~ s are
+values of this type.
+
+One could imagine a function that consumes an ~int~ and produces a
+value of type ~int->int~. You would give this function a number, and
+it would return a function waiting for another number.
+
+This is how OCaml defines addition.
+
+#+begin_src ocaml
+  add 2 3
+#+end_src
+
+Remember, space means function application. And function application
+associates to the left, so this is the same as ~(add 2) 3~.
+
+Here's an alternative way to define ~add2~:
+
+#+begin_src ocaml
+  (* Program 2 *)
+
+  let add2 = (add 2)
+#+end_src
+
+Another example of this kind of thing is ~equal~, which is used to
+compare two ~int~ s.
+
+And of course, since functions are values, ~add~ itself has a type.  
+
+By the way, just like Python, OCaml has some syntax that makes
+arithmetic easier: We can write ~2 + 3~ and ~2 = 3~.
+
+** Product types
+
+Alright. We still can't write very interesting programs. In
+particular, we can't solve the advent of code puzzle. If we could
+solve the advent of code puzzle, it would look a bit like this. The
+input and output are of course strings, but to do anything useful will
+need to think of the input in a more structured way. In particular,
+it's a collection of groups of numbers.
 
 We want to be able to talk about values that are “collections of other
 values.”
 
-Luckily, OCaml comes with a way to make types containing two
-values. The types are called product types. The value is a pair. For
-example:
+OCaml comes with a way to make types containing two values. The types
+are called product types. The value is called a pair. For example:
 #+begin_src ocaml
-  (3, "widgets") 
+  (true, "widgets") 
 #+end_src
-That is a single value, of type ~int * string~. It is a pair of an
-~int~ and a ~string~. The parentheses are special syntax to construct
+That is a single value, of type ~bool * string~. It is a pair of an
+~bool~ and a ~string~. The parentheses are special syntax to construct
 values of this type.
+
+Pairs come already equipped with two special functions, ~fst~ and
+~snd~. They pull out the first and second elements.
+
+#+begin_src ocaml
+  fst (true, "widgets")
+#+end_src
 
 One can make products of any type. You can make products of types that
 are themselves products. This product is a pair of an ~int~ and a pair
-of a ~string~ and a ~bool~. There are three values in it.
+of a ~int~ and a ~int~. There are three values in it.
 
-OCaml has a convenience for products of three or more types, which is
-called a tuple. We won't use tuples. However, once one has products of
-many types, one might ask, what is the product of /no/ types? That is
-a special type, called ~unit~. There is only one value of type
-~unit~.  
+This is great, because maybe we can use tuples for the Advent of
+Code. We could represent the groups of ~int~ s as a pair, or as three
+things, or four things, however many there are.
+
+But this doesn't quite work. The problem is that we don't know, in
+advance, how many numbers there will be in a group. We need a type
+that is “either a number, or a pair of numbers, or three numbers, or
+...”.
+
+Of course, you will immediately think of a list or a vector. And
+indeed OCaml does have lists. But ... it's worthwhile seeing if we
+could have created them if the language did not have them. I think
+languages are powerful to the extent that they let you add what look
+like new language features as a library; that is, without changing the
+compiler.
+
+** Sum types
+
+Here's a new type, a copy of ~int~. It could be used to hold values
+that represent computer networking ports.
+
+Suppose we want a function that converts a port to its well-known
+name, as a string. It will be something like:
+
+Sometimess there isn't a well-known name. What should we return? It
+feels wrong to return a string -- the return value is supposed to be
+the name of a well-known type.
+
+Here's a type that can hold a string, or a special value, created with
+~None~:
+
 #+begin_src ocaml
-  ()
+  type stringoption =
+    | None
+    | Some of string
 #+end_src
 
-
-* VI Function types
-
-There's a question that has perhaps been bothering you. Every function
--- every program -- consumes a single argument. So how are we supposed
-to add two numbers? That seems like a pretty fundamental thing to want
-to compute.
-
-Well, the answer has probably occured to you. The function ~add~
-should take a single argument that is a pair. For example, to add two
-integers, obviously you should write:
 #+begin_src ocaml
-  Int.add (1, 2)
-#+end_src
-
-Well, that doesn't work! It turns out OCaml doesn't do things this
-way. To understand what it does do, it's necessary to make a little
-digression.
-
-Let's look back at ~succ~. ~succ~ is a name for the function.
-#+begin_src ocaml
-  succ
-#+end_src
-The type of ~succ~ is ~int -> int~. That means "the type of functions
-which consume an ~int~ and return an ~int~." And ~succ~ is certainy of
-type since it does consume an ~int~ and return an ~int~. So functions
-have types. That is, functions are also values.
-
-We've been drawing types as circles and functions as arrows, and
-that's correct; but it turns out that functions are also values and
-have a type. So those types had better go on the diagram as well.
-
-Here are the types for two of the functions we saw earlier.
-
-But now, ~int->int~ /is/ a type. And functions map types to types. So
-we ought to be able to construct this type, ~int->(int->int)~. That's
-the type of functions that takes an ~int~ and returns a value of type
-~int->int~. That is, it returns a function.
-
-What use is a function that consumes an ~int~ and returns a function?
-Well, here's the actual ~add~ function in OCaml:
-#+begin_src ocaml
-  add;;
-#+end_src
-That's just this type! (Well, there are no parentheses. But the arrow
-is associative to the right.)  ~add~ consumes an ~int~, say ~5~. And
-it returns a function. Which function? The function that adds ~5~ to
-its argument.
-#+begin_src ocaml
-  add 5;;
-#+end_src
-And you apply that function in the usual way:
-#+begin_src ocaml
-  (add 5) 3;;
-#+end_src
-In fact, function application is associative to the left, so you don't
-need the parentheses:
-#+begin_src ocaml
-  add 5 3;;
-#+end_src
-
-Why does OCaml do it this way? Maybe they *really* hate
-parentheses. It's common to ML-family languages. Haskell is the same.
-
-Anyway, this is how we write what are effectively function of two
-values in OCaml.
-
-
-* VII New versions of existing types
-
-Computers communicate with each other through "ports". A port is
-identified by a number. If we wanted to write programs that dealt with
-ports, we might like to have a type whose values are ports but which
-are secretly ~ints~.
-
-#+begin_src ocaml
-  type port = Port of int
-#+end_src
-
-This creates an entirely new type, called ~port~, that is an identical
-copy of ~int~. You can get hold of a value of type ~port~ like this: ~Port
-8080~. The name that starts with a capital letter is a /data
-constructor/: it constructs a value of type ~port~ given a value of type
-~int~. It's the only way to get a value of type ~port~. The ~port~ type is a
-copy of the ~int~ type, but it is not an ~int~: you can't use a ~port~ where
-an ~int~ is expected:
-
-#+begin_src ocaml
-  succ (Port 8080)
-#+end_src
-
-How do you get the ~int~ out of a ~Port~? There are several ways, but
-the one we will use is with ~match~.
-
-#+begin_src ocaml
-  let p = Port 8080 ;;
-
-  let int_of_port n = 
+  let portName p =
     match p with
-      (Port n) -> n ;;
+    | 20 -> Some "FTP"
+    | 80 -> Some "HTTP"
+    | _  -> None
 #+end_src
 
-This says, "~p~ should be ~Port n~, for some ~n~. Give back the ~n~". 
 
-Getting values into a ~port~, using the constructor, looks like a
-function, but getting them out seems to involve special syntax. On the
-other hand, getting values of a pair involved special syntax, but
-getting values out of the pair uses functions.
 
-So far, we've seen product types that can hold two values of different
-types. There is another type that may seem less familiar. That is a
-type that can hold a value that can come from several other types, but
-remembers which one it came from.
 
-#+begin_src ocaml
-  type length = Metres of int | Centimetres of int
 
-  let l = Metres 2
-#+end_src
 
-This type holds either metres or feet. To get a value out of this
-type, we use ~match~ again. 
 
-#+begin_src ocaml :results output
-  let length_in_centimetres l =
-    match l with
-    | Metres m -> 100 * m
-    | Centimetres c -> c 
-#+end_src
 
-#+RESULTS:
 
-* Inductive data types
+* Advent of Code
+
+
+
+
+
+
 
 
 

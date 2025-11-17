@@ -1,24 +1,34 @@
-type 'a list = Empty
+type 'a list = Nil
              | Cons of 'a * 'a list
 
-let puzzle : int list list =
-  Cons ( Cons (1000, Cons (2000, Cons (3000, Empty))),
-         Cons ( Cons (4000, Empty),
-                Cons ( Cons (5000, Cons (6000, Empty)),
-                       Cons ( Cons (7000, Cons (8000, Cons (9000, Empty))),
-                              Cons ( Cons (10000, Empty),
-                                     Empty)))))
+(* Convenience function. 10 & 20 & Nil => Cons (10, Cons (20, Nil)) *)
+let (&) x xs = Cons (x, xs)
 
+let puzzle_input : int list list =
+  (1000 & 2000 & 3000 & Nil) &
+    (4000 & Nil) &
+      (5000 & 6000 & Nil) &
+        (7000 & 8000 & 9000 & Nil) &
+          (10000 & Nil) &
+            Nil
+
+
+(* Apply f to every element of xs *)
 let rec map f xs =
   match xs with
-  | Empty -> Empty
+  | Nil -> Nil
   | Cons (first, rest) -> Cons (f first, map f rest)
 
+(* Keep a running total by applying f to it and the next element of xs *)
 let rec fold f acc xs =
   match xs with
-  | Empty -> acc
+  | Nil -> acc
   | Cons (first, rest) -> f first (fold f acc rest)
 
-let sum = fold Int.add 0
+let sum = fold Int.add 0 
 
 let list_max = fold Int.max Int.min_int
+
+
+
+    
