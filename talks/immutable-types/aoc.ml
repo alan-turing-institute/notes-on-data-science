@@ -17,17 +17,22 @@ let puzzle_input : int list list =
 let rec map f xs =
   match xs with
   | Nil -> Nil
-  | Cons (first, rest) -> Cons (f first, map f rest)
+  | Cons (x, rest) -> Cons (f x, map f rest)
 
 (* Keep a running total by applying f to it and the next element of xs *)
-let rec fold f acc xs =
+let rec fold f init xs =
   match xs with
-  | Nil -> acc
-  | Cons (first, rest) -> f first (fold f acc rest)
+  | Nil -> init
+  | Cons (x, rest) ->
+     f x (fold f init rest)
 
-let sum = fold Int.add 0 
+let sum = fold Int.add 0
 
 let list_max = fold Int.max Int.min_int
+
+let () = list_max (map sum puzzle_input)
+         |> string_of_int
+         |> print_endline
 
 
 

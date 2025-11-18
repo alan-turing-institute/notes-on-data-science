@@ -8,6 +8,14 @@ This is part three of my on-again, off-again series of talks about
 functional programming. I've enjoyed thinking about these so thank you
 for giving me the opportunity to talk again.
 
+I'd like to describe a little bit about what it is like to program in
+a functional way. To do that, I will use OCaml, a language with a strong
+functional core. OCaml is quite pragmatic -- there are imperative
+features too.  
+
+What does it even mean to program in a functional way, and why would
+you do that? 
+
 We write programs. Sometimes we teach other people to program. One
 question you might wonder about is, what /is/ a program?
 
@@ -75,16 +83,6 @@ program is.
 - Just like before, the first part is the hardest, because it's
   conceptual.
 
-I'd like to tell you a little bit about the first part. That is, what
-is it like to program, if we think of programming as an exercise in
-creating functions?
-
-I will use the language OCaml because it has a strong functional
-core. OCaml will probably be unfamiliar to you, both because its
-syntax is slightly different from Python but also because its
-underlying philosophy is functional. I'll try to use just that part of
-OCaml that illustrates these functional ideas.
-
 
 * Types and programs
 
@@ -93,7 +91,7 @@ OCaml that illustrates these functional ideas.
 [First slide]
 
 I will start by describing some of the built-in, primitive functions
-in OCaml.
+in OCaml. 
 
 Dijsktra once said that the art of programming is the art of
 organising complexity.
@@ -106,6 +104,10 @@ certain type and produces only values of a certain type. So we need to
 know what types there are. Here are three built-in types.
 
 [Show some examples of int, bool, and string.]
+
+The way I'm going to structure this talk is, I will tell you about
+these built-in types, then explain how you make more interesting types
+from these types.
 
 The language also provides us with some built-in functions which work
 with these built-in types. Here are some examples.
@@ -195,11 +197,11 @@ arithmetic easier: We can write ~2 + 3~ and ~2 = 3~.
 
 ** Product types
 
-Alright. We still can't write very interesting programs. In
-particular, we can't solve the advent of code puzzle. If we could
-solve the advent of code puzzle, it would look a bit like this. The
+Alright.  We still can't write very interesting programs.  In
+particular, we can't solve the advent of code puzzle.  If we could
+solve the advent of code puzzle, it would look a bit like this.  The
 input and output are of course strings, but to do anything useful will
-need to think of the input in a more structured way. In particular,
+need to think of the input in a more structured way.  In particular,
 it's a collection of groups of numbers.
 
 We want to be able to talk about values that are “collections of other
@@ -244,7 +246,9 @@ compiler.
 ** Sum types
 
 Here's a new type, a copy of ~int~. It could be used to hold values
-that represent computer networking ports.
+that represent computer networking ports, which are designated by
+integers. Making it a separate type helps to catch errors, because it
+means that you can't use an ~int~ where a ~port~ is wanted. 
 
 Suppose we want a function that converts a port to its well-known
 name, as a string. It will be something like:
@@ -257,7 +261,7 @@ name, as a string. It will be something like:
     | _  -> ??
 #+end_src
 
-Sometimess there isn't a well-known name. What should we return? It
+Sometimes there isn't a well-known name. What should we return? It
 feels wrong to return a string -- the return value is supposed to be
 the name of a well-known type.
 
@@ -267,25 +271,101 @@ Here's a type that can hold a string, or a special value, created with
 #+begin_src ocaml
   type stringoption =
     | None
-    | Some of string
+    | Some of string ;;
 #+end_src
 
 #+begin_src ocaml
-  let portName p =
+  let name_of_port p =
     match p with
     | 20 -> Some "FTP"
     | 80 -> Some "HTTP"
     | _  -> None
 #+end_src
 
+
 * Advent of Code
 
+With one more type we can write interesting programs.  We need a type
+that can hold "some ints, but we don't know how many ints at
+compile-time."  
 
+Here it is [this is in the code window]:
 
+#+begin_src ocaml
+  type int_list = Nil
+                | Cons of (int * int_list)
+#+end_src
 
+An ~int_list~ is either the empty list, represented traditionally by
+the symbol ~Nil~, or a pair of an ~int~ and an ~int_list~.
 
+If it's a pair, the first element of the pair is the first element of
+the list.  The second element of the pair is the rest of the list."
 
+Notice that this isn't a new way to make types. It's a sum, one branch
+of which is a product.
 
+Here are some ~int_list~ s.
+
+They are cumbersome to write by hand. There is some syntactic sugar
+built-in to OCaml to manage lists, because they are so common. But I'm
+going to stick to this core.
+
+It turns out that two operations on lists are very common. Sometimes
+you want to do the same thing to every element. And sometimes you want
+to "roll-up" the entire list into a single summary.
+
+Suppose you want to add 1 to every element of the list. We know how to
+add 1 to an ~int~.
+
+#+begin_src ocaml
+  let rec list_succ xs =
+    match xs with
+      Nil -> Nil
+    | Cons (first, rest) -> Cons (succ first, list_succ rest)
+#+end_src
+
+It's a pain to write this for every possible thing we might want to do
+to every element of the list. So we abstract out the function:
+
+#+begin_src ocaml
+  (* Program 3 *)
+  
+  let rec map f xs =
+    match xs with
+      Nil -> Nil
+    | Cons (first, rest) -> Cons(f first, map f rest)
+#+end_src
+
+Then we can write ~list_succ~ for example as
+#+begin_src ocaml
+  let list_succ = map succ
+#+end_src
+
+~map~ is a function that makes functions out of other functions!
+
+Another thing we might want to do is to sum up the elements of a list:
+
+#+begin_src ocaml
+  let rec list_sum xs =
+    match xs with
+      Nil -> 0
+    | Cons (first, rest) -> add first (list_sum rest)
+#+end_src
+
+And like before, we can abstract away the add.
+
+#+begin_src ocaml
+  let rec fold g init xs =
+    match xs with
+      Nil -> init
+    | Cons (first, rest) -> g first (fold g init rest)
+#+end_src
+
+So that ~list_sum~ is now
+#+begin_src ocaml
+  let list_sum = fold add 0
+#+end_src
 
 
 
