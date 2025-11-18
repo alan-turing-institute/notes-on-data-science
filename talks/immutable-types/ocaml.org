@@ -249,6 +249,14 @@ that represent computer networking ports.
 Suppose we want a function that converts a port to its well-known
 name, as a string. It will be something like:
 
+#+begin_src ocaml
+  let portName p =
+    match p with
+    | 20 -> "FTP"
+    | 80 -> "HTTP"
+    | _  -> ??
+#+end_src
+
 Sometimess there isn't a well-known name. What should we return? It
 feels wrong to return a string -- the return value is supposed to be
 the name of a well-known type.
@@ -270,15 +278,8 @@ Here's a type that can hold a string, or a special value, created with
     | _  -> None
 #+end_src
 
-
-
-
-
-
-
-
-
 * Advent of Code
+
 
 
 
